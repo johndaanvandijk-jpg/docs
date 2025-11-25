@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Die Wetterstation – Ein Lernmodul zur Sensorintegration und Messdatenerfassung</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- highlight.js (atom-one-dark) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Mathjax -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <!-- p5.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.2/p5.js"></script>
+  <!-- plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+  <!-- highlight.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    /* Styles übernommen aus fotometer.html */
+    :root {
+      --kit-primary-color: #4CAF50;
+      --kit-secondary-color: #45a049;
+      --header-height: 80px;
+      --progressbar-height: 8px;
+      --correct-color: #28a745;
+      --incorrect-color: #dc3545;
+      --font-main: 'Roboto', sans-serif;
+      --font-title: 'Roboto', sans-serif;
+      --section-radius: 18px;
+      --section-shadow: 0 8px 32px rgba(44,62,80,0.08);
+      --section-bg: #fff;
+      --section-margin: 36px;
+      --section-padding: 48px 24px;
+      --emoji-opacity: 0.08;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+      background: linear-gradient(180deg, #f7faf9 0%, #e8f5e9 100%);
+      color: #222;
+      min-height: 100vh;
+    }
+    .kit-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-height);
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.06);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 24px;
+    }
+    .kit-header img {
+      height: 48px;
+      width: 48px;
+      border-radius: 8px;
+      background: #f4f4f4;
+      object-fit: contain;
+    }
+    .kit-header .header-titles {
+      flex: 1;
+      min-width: 0;
+    }
+    .kit-header .header-titles .title {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--kit-primary-color);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .kit-header .header-titles .subtitle {
+      font-size: 1rem;
+      color: #555;
+      font-weight: 400;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .progress-container {
+      position: fixed;
+      top: var(--header-height);
+      left: 0; right: 0;
+      height: var(--progressbar-height);
+      background: #e0e0e0;
+      z-index: 101;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--kit-primary-color);
+      transition: width 0.2s;
+    }
+    main {
+      margin-top: calc(var(--header-height) + var(--progressbar-height) + 24px);
+      padding-bottom: 48px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .content-section {
+      background: var(--section-bg);
+      border-radius: var(--section-radius);
+      box-shadow: var(--section-shadow);
+      margin-bottom: var(--section-margin);
+      padding: var(--section-padding);
+      position: relative;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+      will-change: opacity, transform;
+    }
+    .content-section.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+    .section-emoji {
+      position: absolute;
+      right: 24px;
+      bottom: 18px;
+      font-size: 7rem;
+      opacity: var(--emoji-opacity);
+      pointer-events: none;
+      user-select: none;
+    }
+    h1, h2, h3, h4 {
+      font-family: var(--font-title);
+      color: var(--kit-primary-color);
+      margin-top: 0;
+    }
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.2rem; }
+    .material-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px 0;
+    }
+    .material-list li {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .material-list li i {
+      color: var(--kit-primary-color);
+      font-size: 1.1em;
+    }
+    /* Responsive */
+    @media (max-width: 700px) {
+      main { padding: 0 4vw; }
+      .content-section { padding: 32px 8px; }
+      .kit-header { padding: 0 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="kit-header" role="banner" aria-label="Modultitel und Fortschrittsanzeige">
+    <img src="Media/Images/NWTLOGO.png" alt="NWT Logo" />
+    <div class="header-titles">
+      <div class="title">Die Wetterstation</div>
+      <div class="subtitle">Ein Lernmodul zur Sensorintegration und Messdatenerfassung</div>
+    </div>
+  </header>
+  <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+  <main>
+    <!-- Einführung -->
+    <section class="content-section" id="intro">
+      <div class="section-emoji">🌦️</div>
+      <h1>Die Wetterstation</h1>
+      <p class="lead">Ein Lernmodul zur Sensorintegration und Messdatenerfassung</p>
+      <p><strong>Autor:</strong> John van Dijk</p>
+      <p><strong>Lizenzhinweis:</strong> CC BY-SA 4.0</p>
+      <p>
+        Dieses Modul baut auf den Kalibrierkenntnissen aus Modul 1 auf und erweitert die Sensorik um Temperatur- und Solarsensoren. Ziel ist die systematische Erfassung von Messreihen und deren Vergleich mit realen Wetterdaten. Die technische Befähigung steht im Vordergrund: Lehrkräfte lernen, wie man verschiedene Sensoren am Microcontroller betreibt und die Daten sinnvoll auswertet.
+      </p>
+      <div class="quiz-block" style="background:#e8f5e9;">
+        <i class="fa-solid fa-circle-info"></i>
+        Dieses Modul richtet sich an Fortgeschrittene, die bereits mit LDR und Spannungsteiler vertraut sind.
+      </div>
+      <h2>Vorbereitung & Werkzeuge</h2>
+      <ul class="material-list">
+        <li><i class="fa-solid fa-download"></i> Arduino IDE installieren: <a href="https://www.arduino.cc/en/software" target="_blank" rel="noopener">arduino.cc/en/software</a></li>
+        <li><i class="fa-solid fa-download"></i> CH340-Treiber (falls benötigt): <a href="https://sparks.gogo.co.nz/ch340.html" target="_blank" rel="noopener">sparks.gogo.co.nz/ch340.html</a></li>
+        <li><i class="fa-solid fa-bread-slice"></i> Breadboard verstehen: <a href="https://learn.sparkfun.com/tutorials/how-to-use-a-breadboard/all" target="_blank" rel="noopener">SparkFun Breadboard Guide</a></li>
+      </ul>
+      <h3 style="margin-top:28px; margin-bottom:10px;">Benötigte Materialien</h3>
+      <ul class="material-list">
+        <li><i class="fa-solid fa-microchip"></i> Arduino Microcontroller (Uno / Nano etc.)</li>
+        <li><i class="fa-solid fa-bread-slice"></i> Breadboard</li>
+        <li><i class="fa-solid fa-grip-lines"></i> Jumper Kabel</li>
+        <li><i class="fa-solid fa-temperature-high"></i> Temperatursensor (z.B. TMP36, DS18B20)</li>
+        <li><i class="fa-solid fa-solar-panel"></i> Kleine Solarzelle</li>
+        <li><i class="fa-solid fa-ruler-horizontal"></i> Widerstände</li>
+        <li><i class="fa-solid fa-memory"></i> SD-Kartenmodul oder PC für Datenlogging</li>
+      </ul>
+    </section>
+    <!-- 1. Technische Grundlagen: Sensoren am Microcontroller -->
+    <section class="content-section" id="grundlagen">
+      <div class="section-emoji">🌡️</div>
+      <h2>1. Technische Grundlagen: Sensoren am Microcontroller</h2>
+      <h3>1.1. Temperatursensor</h3>
+      <p>
+        Ein Temperatursensor wie der TMP36 oder DS18B20 misst die Umgebungstemperatur und liefert einen analogen oder digitalen Wert an den Mikrocontroller. Die Auswertung erfolgt über <code>analogRead()</code> oder spezielle Bibliotheken.
+      </p>
+      <h3>1.2. Solarzelle als Sensor</h3>
+      <p>
+        Eine kleine Solarzelle kann als Helligkeitssensor dienen. Sie erzeugt eine Spannung, die proportional zur Lichtintensität ist. Die Messung erfolgt ebenfalls über einen analogen Eingang des Mikrocontrollers.
+      </p>
+      <h3>1.3. Datenlogging</h3>
+      <p>
+        Die erfassten Messwerte (Temperatur, Licht) werden systematisch aufgezeichnet. Dies kann entweder direkt auf eine SD-Karte oder über die serielle Schnittstelle am PC erfolgen. Ziel ist die Erstellung von Messreihen für den Vergleich mit echten Wetterdaten.
+      </p>
+    </section>
+    <!-- 2. Der Messaufbau -->
+    <section class="content-section" id="aufbau">
+      <div class="section-emoji">🧰</div>
+      <h2>2. Der Messaufbau</h2>
+      <p>
+        Der Aufbau der Wetterstation umfasst die Integration von mindestens zwei Sensoren (Temperatur und Solarzelle) auf dem Breadboard. Die Sensoren werden mit dem Arduino verbunden und die Messwerte regelmäßig erfasst.
+      </p>
+      <figure style="border: 1px solid #ccc; padding: 10px; text-align: center; background: #f9f9f9;">
+        <figcaption>
+          <em>Modellhafter Aufbau: Arduino mit Temperatursensor und Solarzelle auf Breadboard</em>
+        </figcaption>
+      </figure>
+      <h4>Test Arduino Code (Platzhalter)</h4>
+      <p>
+        Beispielcode zur Erfassung von Temperatur und Lichtstärke. Die Messwerte werden im Seriellen Monitor ausgegeben.
+      </p>
+      <div class="custom-code-block">
+        <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
+        <pre><code class="language-cpp">
+/*
+  Wetterstation-Test
+  Zweck: Temperatur und Lichtstärke messen und ausgeben.
+*/
+
+// Pins definieren
+const int tempPin = A0; // Temperatursensor an A0
+const int solarPin = A1; // Solarzelle an A1
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  int tempRaw = analogRead(tempPin);
+  int solarRaw = analogRead(solarPin);
+
+  // Temperatur berechnen (TMP36 Beispiel)
+  float voltage = tempRaw * (5.0 / 1023.0);
+  float temperatureC = (voltage - 0.5) * 100.0;
+
+  Serial.print("Temperatur: ");
+  Serial.print(temperatureC);
+  Serial.print(" °C | Licht: ");
+  Serial.println(solarRaw);
+
+  delay(1000);
+}
+        </code></pre>
+      </div>
+      <p style="margin-top:15px;">
+        <strong>Test-Anleitung:</strong> Kopieren Sie den Code in die Arduino IDE, passen Sie die Pin-Belegung ggf. an und laden Sie ihn auf den Arduino. Öffnen Sie den Seriellen Monitor, um die Messwerte zu sehen.
+      </p>
+    </section>
+    <!-- 3. Messwerterfassung & Auswertung -->
+    <section class="content-section" id="messwerterfassung">
+      <div class="section-emoji">📈</div>
+      <h2>3. Messwerterfassung & Auswertung</h2>
+      <p class="lead">
+        Die Wetterstation zeichnet fortlaufend Messwerte auf. Ziel ist die Erstellung von Messreihen, die mit echten Wetterdaten verglichen werden können.
+      </p>
+      <article>
+        <h3>3.1. Messreihen erstellen</h3>
+        <p>
+          Die Messwerte werden über einen längeren Zeitraum aufgezeichnet. Dies kann automatisiert (SD-Karte) oder manuell (Serieller Monitor, Excel) erfolgen.
+        </p>
+      </article>
+      <article>
+        <h3>3.2. Vergleich mit echten Wetterdaten</h3>
+        <p>
+          Die eigenen Messreihen können mit öffentlich verfügbaren Wetterdaten (z.B. von <a href="https://www.wetter.com/" target="_blank">wetter.com</a>) verglichen werden. Ziel ist die Bewertung der Genauigkeit und die Diskussion möglicher Fehlerquellen.
+        </p>
+      </article>
+      <article>
+        <h3>3.3. Ansätze zur Optimierung</h3>
+        <ul>
+          <li><strong>Sensorplatzierung:</strong> Die Position der Sensoren beeinflusst die Messgenauigkeit. <em>Optimierung:</em> Feste Montage und Schutz vor direkter Sonneneinstrahlung.</li>
+          <li><strong>Datenlogging:</strong> Automatisierte Speicherung der Messwerte erhöht die Auswertbarkeit. <em>Optimierung:</em> Einsatz eines SD-Kartenmoduls oder Anbindung an einen PC.</li>
+          <li><strong>Vergleichsdaten:</strong> Nutzung von Online-Wetterdaten zur Validierung der eigenen Messungen.</li>
+        </ul>
+      </article>
+    </section>
+    <!-- ... weitere Sektionen wie Quiz, Troubleshooting, Ausblick ... -->
+  </main>
+  <footer>
+    <div>CC BY Lizenz, Andreas Sexauer, Zentrum für Mediales Lernen am Karlsruher Institut für Technologie (KIT).</div>
+    <div><small>Dieses Lernmodul wurde mithilfe von künstlicher Intelligenz (KI) konzipiert und programmiert.</small></div>
+  </footer>
+  <script>
+    // Progressbar
+    const progressBar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      progressBar.style.width = progress + '%';
+    });
+    // Section Observer
+    const sections = document.querySelectorAll('.content-section');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.15 });
+    sections.forEach(sec => observer.observe(sec));
+    // highlight.js
+    hljs.highlightAll();
+  </script>
+  <script>
+    // Copy-to-Clipboard for custom code blocks
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.custom-code-block .copy-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const code = btn.parentElement.querySelector('pre code');
+          if (!code) return;
+          let text = code.innerText.replace(/^\s*\n/, '').replace(/\s*$/, '');
+          navigator.clipboard.writeText(text).then(function() {
+            btn.classList.add('copied');
+            btn.innerHTML = '<i class="fa fa-check"></i> Kopiert!';
+            setTimeout(function() {
+              btn.classList.remove('copied');
+              btn.innerHTML = '<i class="fa fa-copy"></i>';
+            }, 1200);
+          });
+        });
+      });
+    });
+  </script>
+</body>

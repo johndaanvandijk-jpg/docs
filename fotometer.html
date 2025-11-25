@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vom LDR zum Fotometer – Ein Lernmodul zur Sensorkalibrierung und quantitativen Messdatenauswertung</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- highlight.js (atom-one-dark) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Mathjax -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <!-- p5.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.2/p5.js"></script>
+  <!-- plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+  <!-- highlight.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    :root {
+      --kit-primary-color: #4CAF50;
+      --kit-secondary-color: #45a049;
+      --header-height: 80px;
+      --progressbar-height: 8px;
+      --correct-color: #28a745;
+      --incorrect-color: #dc3545;
+      --font-main: 'Roboto', sans-serif;
+      --font-title: 'Roboto', sans-serif;
+      --section-radius: 18px;
+      --section-shadow: 0 8px 32px rgba(44,62,80,0.08);
+      --section-bg: #fff;
+      --section-margin: 36px;
+      --section-padding: 48px 24px;
+      --emoji-opacity: 0.08;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+      background: linear-gradient(180deg, #f7faf9 0%, #e8f5e9 100%);
+      color: #222;
+      min-height: 100vh;
+    }
+    .kit-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-height);
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.06);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 24px;
+    }
+    .kit-header img {
+      height: 48px;
+      width: 48px;
+      border-radius: 8px;
+      background: #f4f4f4;
+      object-fit: contain;
+    }
+    .kit-header .header-titles {
+      flex: 1;
+      min-width: 0;
+    }
+    .kit-header .header-titles .title {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--kit-primary-color);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .kit-header .header-titles .subtitle {
+      font-size: 1rem;
+      color: #555;
+      font-weight: 400;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .kit-header .header-btn {
+      background: var(--kit-primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      margin-left: 12px;
+    }
+    .kit-header .header-btn:hover, .kit-header .header-btn:focus {
+      background: var(--kit-secondary-color);
+      transform: scale(1.05);
+    }
+    .progress-container {
+      position: fixed;
+      top: var(--header-height);
+      left: 0; right: 0;
+      height: var(--progressbar-height);
+      background: #e0e0e0;
+      z-index: 101;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--kit-primary-color);
+      transition: width 0.2s;
+    }
+    main {
+      margin-top: calc(var(--header-height) + var(--progressbar-height) + 24px);
+      padding-bottom: 48px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .content-section {
+      background: var(--section-bg);
+      border-radius: var(--section-radius);
+      box-shadow: var(--section-shadow);
+      margin-bottom: var(--section-margin);
+      padding: var(--section-padding);
+      position: relative;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+      will-change: opacity, transform;
+    }
+    .content-section.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+    .section-emoji {
+      position: absolute;
+      right: 24px;
+      bottom: 18px;
+      font-size: 7rem;
+      opacity: var(--emoji-opacity);
+      pointer-events: none;
+      user-select: none;
+    }
+    h1, h2, h3, h4 {
+      font-family: var(--font-title);
+      color: var(--kit-primary-color);
+      margin-top: 0;
+    }
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.2rem; }
+    .material-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px 0;
+    }
+    .material-list li {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .material-list li i {
+      color: var(--kit-primary-color);
+      font-size: 1.1em;
+    }
+    .ldr-simulation-container {
+      margin: 24px 0;
+      background: #f8f8f8;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.04);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #ohmmeter-display-1-1 {
+      background-color: #f4f4f4;
+      border: 2px solid #333;
+      border-radius: 5px;
+      padding: 15px;
+      margin-top: 15px;
+      text-align: center;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #000;
+    }
+    /* ... weitere Styles für Akkordeon, Flip-Karten, Reveal-Boxen, Quiz, Copy-Button, Mermaid, etc. ... */
+    /* Responsive */
+    @media (max-width: 700px) {
+      main { padding: 0 4vw; }
+      .content-section { padding: 32px 8px; }
+      .kit-header { padding: 0 8px; }
+    }
+    .ldr-simulator-container-adv {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background-color: #f7f9fc;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        max-width: 500px;
+        margin: 20px auto;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    .ldr-simulator-container-adv h3,
+    .ldr-simulator-container-adv h4 {
+        margin-top: 0;
+        text-align: center;
+        color: #333;
+    }
+    .slider-group {
+        margin-bottom: 25px;
+        padding: 15px;
+        background: #fff;
+        border-radius: 6px;
+        border: 1px solid #e0e0e0;
+    }
+    .slider-group label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: #005a9c;
+    }
+    .slider-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 0.9em;
+    }
+    .slider-wrapper input[type="range"] {
+        flex-grow: 1;
+        cursor: pointer;
+    }
+    /* Anzeige für R1-Wert */
+    [classid="r1-value-display"] { 
+        text-align: center;
+        margin-top: 10px;
+        font-size: 0.9em;
+        color: #444;
+    }
+    .circuit-info-adv {
+        font-size: 0.9em;
+        color: #555;
+        background-color: #e9ecef;
+        padding: 10px 15px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+    .circuit-info-adv p {
+        margin: 4px 0;
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+    .data-display-adv {
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        padding: 10px 15px;
+        border-radius: 6px;
+    }
+    .data-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+    .data-display-adv p {
+        margin: 12px 0;
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.1em;
+    }
+    .data-display-adv hr {
+        border: 0;
+        border-top: 1px dashed #ccc;
+        margin: 10px 0;
+    }
+    .data-display-adv strong {
+        color: #d9534f; /* Auffällige Farbe für Ergebnisse */
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        font-size: 1.1em;
+    }
+    /* Custom Code Block Styles */
+    .custom-code-block {
+      background: #e8f5e9;
+      color: #222;
+      border: 1.5px solid var(--kit-primary-color);
+      border-radius: 8px;
+      padding: 18px 18px 12px 18px;
+      margin: 18px 0;
+      position: relative;
+      font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+      overflow-x: auto;
+    }
+    .custom-code-block pre {
+      margin: 0;
+      background: transparent;
+      color: inherit;
+      font-size: 1em;
+      overflow-x: auto;
+    }
+    .custom-code-block .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: var(--kit-primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .custom-code-block .copy-btn:hover, .custom-code-block .copy-btn:focus {
+      background: var(--kit-secondary-color);
+      color: #fff;
+    }
+    .custom-code-block .copy-btn.copied {
+      background: #388e3c;
+      color: #fff;
+    }
+    /* Tooltip Styles */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+    }
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 320px;
+      background-color: #333;
+      color: #fff;
+      text-align: left;
+      border-radius: 8px;
+      padding: 12px;
+      position: absolute;
+      z-index: 10;
+      bottom: 110%;
+      left: 50%;
+      margin-left: -160px; /* Half of the width */
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transform: translateY(10px);
+    }
+    .tooltip .tooltiptext h4 {
+        color: var(--kit-primary-color);
+        margin-top: 0;
+        margin-bottom: 8px;
+        font-size: 1.1rem;
+    }
+    .tooltip .tooltiptext p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin: 0;
+    }
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <header class="kit-header" role="banner" aria-label="Modultitel und Fortschrittsanzeige">
+    <img src="Media/Images/NWTLOGO.png" alt="NWT Logo" />
+    <div class="header-titles">
+      <div class="title">Vom LDR zum Fotometer</div>
+      <div class="subtitle">Ein Lernmodul zur Sensorkalibrierung und quantitativen Messdatenauswertung</div>
+    </div>
+
+  </header>
+  <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+  <main>
+    <!-- Einführung -->
+    <section class="content-section" id="intro">
+      <div class="section-emoji">📚</div>
+      <h1>Vom LDR zum Fotometer</h1>
+      <p class="lead">Ein Lernmodul zur Sensorkalibrierung und quantitativen Messdatenauswertung</p>
+      <p><strong>Autor:</strong> John van Dijk</p>
+      <p><strong>Lizenzhinweis:</strong> CC BY-SA 4.0</p>
+      <p>
+        Der Fokus dieser Webseite liegt auf der technischen Befähigung: Sie liefert das notwendige Know-how, um einen funktionierenden optischen Sensor zu bauen, diesen am Microcontroller zu betreiben und – entscheidend für den naturwissenschaftlichen Unterricht – die Rohdaten in nutzbare Messwerte zu übersetzen. Genau diese technische Kompetenz ist die Voraussetzung, um die <a href="https://lehrerfortbildung-bw.de/u_matnatech/nwt/gym/bp2016/fb5/7_ue9/2_foto/" target="_blank" rel="noopener">UE Fotometer</a> erfolgreich durchzuführen.
+      </p>
+      <div class="quiz-block" style="background:#e8f5e9;">
+        <i class="fa-solid fa-circle-info"></i>
+        Dieses Modul richtet sich an Einsteiger*innen. Falls du ganz neu bist, folge bitte der Vorbereitung unten.
+      </div>
+      <h2>Vorbereitung & Werkzeuge</h2>
+      <ul class="material-list">
+        <li><i class="fa-solid fa-download"></i> Arduino IDE installieren: <a href="https://www.arduino.cc/en/software" target="_blank" rel="noopener">arduino.cc/en/software</a></li>
+        <li><i class="fa-solid fa-download"></i> CH340-Treiber (falls benötigt): <a href="https://sparks.gogo.co.nz/ch340.html" target="_blank" rel="noopener">sparks.gogo.co.nz/ch340.html</a></li>
+        <li><i class="fa-solid fa-bread-slice"></i> Breadboard verstehen: <a href="https://learn.sparkfun.com/tutorials/how-to-use-a-breadboard/all" target="_blank" rel="noopener">SparkFun Breadboard Guide</a></li>
+      </ul>
+
+      <h3 style="margin-top:28px; margin-bottom:10px;">Benötigte Materialien</h3>
+      <ul class="material-list">
+        <li><i class="fa-solid fa-microchip"></i> Arduino Microcontroller (Uno / Nano etc.)</li>
+        <li><i class="fa-solid fa-bread-slice"></i> Breadboard</li>
+        <li><i class="fa-solid fa-grip-lines"></i> Jumper Kabel</li>
+        <li><i class="fa-regular fa-lightbulb"></i> LED (weiß)</li>
+        <li><i class="fa-solid fa-ruler-horizontal"></i> Widerstände</li>
+        <li><i class="fa-solid fa-wave-square"></i> LDR (Fotowiderstand)</li>
+        <li><i class="fa-regular fa-square"></i> Transparenter kleiner Flüssigkeitsbehälter</li>
+      </ul>
+    </section>
+    <!-- 1. Technische Grundlagen: LDR am Microcontroller -->
+    <section class="content-section" id="grundlagen">
+      <div class="section-emoji">💡</div>
+      <h2>1. Technische Grundlagen: LDR am Microcontroller</h2>
+      <h3>1.1. Funktionsprinzip LDR</h3>
+      <p>
+        Ein LDR (<b>Light Dependent Resistor</b>, auch Fotowiderstand genannt) ist ein elektronisches Bauteil, dessen Widerstand sich mit der Helligkeit ändert. 
+        Je mehr Licht auf den LDR fällt, desto kleiner wird sein elektrischer Widerstand. Im Dunkeln ist der Widerstand sehr hoch (bis zu 200 kΩ), bei starkem Licht sinkt er auf wenige hundert Ohm.
+        <br>
+        <b>Merke:</b> <i>Der Zusammenhang ist <u>invers</u>: Viel Licht → kleiner Widerstand, wenig Licht → großer Widerstand.</i>
+      </p>
+      <div style="
+              display: flex; 
+              justify-content: center; /* Zentriert horizontal */
+              align-items: center;     /* Zentriert vertikal */
+             width: 100%; 
+              min-height: 50vh;         /* Sorgt dafür, dass der Wrapper die ganze Bildschirmhöhe einnimmt */
+              padding: 24px; 
+              box-sizing: border-box;  /* Stellt sicher, dass Padding die Höhe/Breite nicht sprengt */
+             background-color: #f4f4f4; /* Nur zur Demo */
+               ">
+       <div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+        <img src="Media/Images/LDRneu.jpeg" alt="Foto eines LDR" style="max-width: 300px; height: auto;border: 1px solid #ccc; padding: 5px;">
+        
+          
+          <svg viewBox="0 0 100 100" style="width: 300px; height: auto; border: 1px solid #ccc; padding: 5px;">
+            <line x1="10" y1="10" x2="10" y2="90" stroke="black" stroke-width="0.5"/>
+            
+            
+            <text x="5" y="50" font-size="5" dominant-baseline="middle" text-anchor="end" transform="rotate(-90, 5, 50)">Widerstand (Ω)</text>
+            <line x1="10" y1="90" x2="90" y2="90" stroke="black" stroke-width="0.5"/>
+            <text x="15" y="95" font-size="5" dominant-baseline="middle" text-anchor="middle">Dunkel</text>
+            <text x="85" y="95" font-size="5" dominant-baseline="middle" text-anchor="middle">Hell</text>
+            <text x="50" y="98" font-size="5" dominant-baseline="middle" text-anchor="middle">Lichtintensität</text>
+            <path d="M 15 15 Q 20 90 90 90" fill="none" stroke="#d9534f" stroke-width="2"/>
+          </svg>
+        </div>
+      </div>
+      <h3 style="margin-top:32px;">1.2. Der Spannungsteiler</h3>
+      <p>
+        Ein <b>Spannungsteiler</b> ist eine einfache Schaltung aus zwei Widerständen, mit der man eine Eingangsspannung in eine kleinere Ausgangsspannung umwandeln kann.
+        <br>
+        Im Fotometer wird der LDR mit einem festen Widerstand in Reihe geschaltet. Die Ausgangsspannung zwischen den beiden Widerständen hängt davon ab, wie hell es ist – und damit vom Widerstand des LDR.
+        <br>
+        <b>Formel (mit Herleitung beim Überfahren):</b>
+        <div class="tooltip" style="display: inline-block; border-bottom: 1px dotted #333; text-align: center;">
+            \( V_{out} = V_{in} \cdot \frac{R_{LDR}}{R1 + R_{LDR}} \)
+            <span class="tooltiptext">
+                <h4>Herleitung der Formel</h4>
+                <p>
+                    Die Formel basiert auf dem Ohmschen Gesetz \(U = R \cdot I\).
+                    <br>1. <strong>Gesamtwiderstand:</strong> \(R_{ges} = R1 + R_{LDR}\)
+                    <br>2. <strong>Gesamtstrom:</strong> \(I = \frac{V_{in}}{R_{ges}} = \frac{V_{in}}{R1 + R_{LDR}}\)
+                    <br>3. <strong>Spannung am LDR (\(V_{out}\)):</strong> \(V_{out} = R_{LDR} \cdot I\)
+                    <br>4. <strong>Einsetzen:</strong> \(V_{out} = R_{LDR} \cdot \frac{V_{in}}{R1 + R_{LDR}}\)
+                </p>
+            </span>
+        </div>
+        <br>
+        <b> So kann der Mikrocontroller die Helligkeit als Spannung messen!</b>
+        <br>
+        
+      </p>
+      <div style="
+              display: flex; 
+              justify-content: center; /* Zentriert horizontal */
+              align-items: center;     /* Zentriert vertikal */
+             width: 100%; 
+              min-height: 50vh;         /* Sorgt dafür, dass der Wrapper die ganze Bildschirmhöhe einnimmt */
+              padding: 24px; 
+              box-sizing: border-box;  /* Stellt sicher, dass Padding die Höhe/Breite nicht sprengt */
+             background-color: #f4f4f4; /* Nur zur Demo */
+               ">
+       <div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+       <img src="Media/Images/Spannungsteiler.png" 
+         
+         style="max-width: 100%; height: auto;">
+          </div>
+        </div>
+
+         <figure style="border: 1px solid #ccc; padding: 10px; text-align: center; background: #f9f9f9;">
+        <figcaption>
+          <em>Dies ist die häufigste Schaltung, bei der die Ausgangsspannung steigt, wenn es dunkler wird</em>
+        </figcaption>
+      </figure>
+    
+      <h3 style="margin-top:32px;">1.3. Simulation</h3>
+      <div class="ldr-simulator-container-adv">
+          <h3>⚡ Interaktive LDR-Schaltung (Spannungsteiler)</h3>
+          <p>Experimentieren Sie mit der Lichtstärke und dem Festwiderstand (R1),
+              um zu sehen, wie sich Spannung und ADC-Wert verändern. Optimiere die Sensitivität
+            des Lichtsensors mit verschiedenen R1-Werten.</p>
+      
+          <div class="slider-group">
+              <label for="light-slider-adv"><strong>Lichtintensität</strong></label>
+              <div class="slider-wrapper">
+                  <span>🌙 Dunkel</span>
+                  <input type="range" id="light-slider-adv" min="0" max="100" value="0">
+                  <span>☀️ Hell</span>
+              </div>
+          </div>
+      
+          <div class="slider-group">
+              <label for="fixed-resistor-slider"><strong>Festwiderstand (R1)</strong></label>
+              <div class="slider-wrapper">
+                  <span>1 kΩ</span>
+                  <input type="range" id="fixed-resistor-slider" min="1" max="200" value="10">
+                  <span>200 kΩ</span>
+              </div>
+              <div classid="r1-value-display">Aktuell R1: <strong id="fixed-res-display">...</strong></div>
+          </div>
+      
+          <div class="data-display-adv">
+    <h4>Simulierte Messwerte:</h4>
+    
+    <div class="data-row">
+        <span class="label"><i>R</i><sub>LDR</sub></span>
+        <span class="equals">=</span>
+        <span class="value"><strong id="ldr-res-display">...</strong> </span>
+    </div>
+
+    <div class="data-row">
+        <span class="label"><i>V</i><sub>out</sub></span>
+        <span class="equals">=</span>
+        <span class="value"><strong id="output-volt-display">...</strong> </span>
+    </div>
+
+    <div class="data-row">
+        <span class="label">ADC (0-1023)</span>
+        <span class="equals">=</span>
+        <span class="value"><strong id="adc-value-display">...</strong></span>
+    </div>
+</div>
+          
+
+      
+      <script>
+          document.addEventListener('DOMContentLoaded', function() {
+      
+              // 1. Alle HTML-Elemente holen
+              const lightSlider = document.getElementById('light-slider-adv');
+              const r1Slider = document.getElementById('fixed-resistor-slider');
+      
+              const ldrResDisplay = document.getElementById('ldr-res-display');
+              const fixedResDisplay = document.getElementById('fixed-res-display');
+              const voltDisplay = document.getElementById('output-volt-display');
+              const adcDisplay = document.getElementById('adc-value-display');
+      
+              // 2. Physische Konstanten
+              const V_IN = 5.0;      // 5 Volt Versorgungsspannung
+              const ADC_MAX = 1023;  // 10-Bit ADC (wie Arduino)
+      
+              // 3. Die Hauptfunktion
+              function updateSimulation() {
+                  
+                  // --- INPUTS auslesen ---
+                  
+                  // Lichtlevel (0-100)
+                  const lightLevel = parseFloat(lightSlider.value);
+                  
+                  // Festwiderstand R1 (1-50 kΩ)
+                  const r1_kOhm = parseFloat(r1Slider.value);
+                  
+                  
+                  // --- BERECHNUNGEN ---
+      
+                  // A) LDR-Widerstand (R_LDR) simulieren
+                  // (Exponentielle Abnahme, um realistischer zu sein als linear)
+                  // (100% Licht -> 1 kΩ, 0% Licht -> ~200 kΩ)
+                  const minRes = 1.0;  // kΩ bei max Licht
+                  const maxRes = 200.0; // kΩ bei min Licht
+                  const ldr_kOhm = minRes + (maxRes - minRes) * Math.pow(1 - (lightLevel / 100), 4);
+                  
+                  // B) Spannungsteiler (V_out) berechnen
+                  // V_out = V_in * (R_LDR / (R1 + R_LDR))
+                  const vOut = V_IN * (ldr_kOhm / (r1_kOhm + ldr_kOhm));
+      
+                  // C) ADC-Wert (Analog-Digital-Wandler) berechnen
+                  // (vOut / V_IN) * ADC_MAX
+                  const adcValue = (vOut / V_IN) * ADC_MAX;
+      
+                  
+                  // --- OUTPUTS anzeigen ---
+                  
+                  // LDR-Wert
+                  ldrResDisplay.textContent = `${ldr_kOhm.toFixed(1)} kΩ`;
+                  
+                  // R1-Wert
+                  fixedResDisplay.textContent = `${r1_kOhm.toFixed(0)} kΩ`;
+                  
+                  // Spannung
+                  voltDisplay.textContent = `${vOut.toFixed(2)} V`;
+                  
+                  // ADC-Wert
+                  adcDisplay.textContent = `${Math.round(adcValue)}`;
+              }
+      
+              // 4. Event-Listener an BEIDE Slider hängen
+              lightSlider.addEventListener('input', updateSimulation);
+              r1Slider.addEventListener('input', updateSimulation);
+      
+              // 5. Simulation beim Laden der Seite initialisieren
+              updateSimulation();
+          });
+      </script>
+    </section>
+
+    <section class="content-section" id="aufbau">
+      <div class="section-emoji">🧰</div>
+      <h2>2. Der Messaufbau</h2>
+      <p>
+        Nachdem die elektronischen Grundlagen (LDR und Spannungsteiler) geklärt sind, folgt der Aufbau des Fotometers. 
+        Für die Demonstration des Messprinzips genügt eine stark reduzierte, <strong>modellhafte Anordnung</strong> von nur drei Komponenten. 
+        Wir erweitern dafür einfach den Aufbau aus Teil 1 um eine LED. Die Optimierung dieses Aufbaus wird später zum Gegenstand der Unterrichtseinheit.
+      </p>
+
+
+       <div style="
+              display: flex; 
+              justify-content: center; /* Zentriert horizontal */
+              align-items: center;     /* Zentriert vertikal */
+             width: 100%; 
+              min-height: 50vh;         /* Sorgt dafür, dass der Wrapper die ganze Bildschirmhöhe einnimmt */
+              padding: 24px; 
+              box-sizing: border-box;  /* Stellt sicher, dass Padding die Höhe/Breite nicht sprengt */
+             background-color: #f4f4f4; /* Nur zur Demo */
+               ">
+       <div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+       <img src="Media/Images/Fotometer.png" 
+         
+         style="max-width: 70%; height: auto;">
+          </div>
+        </div>
+
+
+
+
+      <figure style="border: 1px solid #ccc; padding: 10px; text-align: center; background: #f9f9f9;">
+        <figcaption>
+          <em>Fotometer: Probenbehälter in Rot zwischen LDR und LED</em>
+        </figcaption>
+      </figure>
+     <p>
+      Für den Widerstand nach der LED wird 100 Ohm empfohlen. Der Festwiderstand des Spannungsteilers (R1) entscheidet über die Sensitivität des Sensors. Für eine große Spannweite der Messwerte in helleren Umgebungen sind kleinere Widerstände sinnvoll. Hier wurde 2k Ohm verwendet.
+      </p>
+
+    <h4>Test Arduino Code</h4>
+    <p>
+        Um den Aufbau zu testen, benötigen wir einen einfachen Code. Dieser schaltet die Lichtquelle dauerhaft ein 
+        und sendet die gemessenen Helligkeitswerte an den Computer (Serieller Monitor).
+    </p>
+
+    <div class="custom-code-block">
+      <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
+      <pre><code class="language-cpp">
+/*
+  Einfacher Fotometer-Test
+  Zweck: LED einschalten und LDR-Werte im Seriellen Monitor anzeigen.
+*/
+
+// Pins definieren
+const int sensorPin = A3; // Der LDR (Spannungsteiler) hängt an A0
+const int ledPin = 3;     // Die LED (mit Vorwiderstand) hängt an Pin 3
+
+void setup() {
+  // 1. Serielle Kommunikation für die Datenübertragung zum PC starten
+  Serial.begin(9600);
+  
+  // 2. LED konfigurieren und einschalten
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, HIGH); // Dauerlicht an für konstante Messung
+}
+
+void loop() {
+  // 3. Den aktuellen Wert vom Sensor lesen (Bereich 0 bis 1023)
+  int rohwert = analogRead(sensorPin);
+  
+  // 4. Wert zur Kontrolle an den PC senden
+  Serial.print("Aktueller Lichtwert: ");
+  Serial.println(rohwert);
+  
+  // 5. Kurze Pause, damit die Zahlen lesbar bleiben
+  delay(500); 
+}
+      </code></pre>
+    </div>
+
+    <p style="margin-top:15px;">
+        <strong>Test-Anleitung:</strong> Kopieren sie diesen Code in Arduino IDE. Passen Sie eventuell die Pin-Belegung im code an. Laden Sie diesen Code auf den Arduino (Upload) und öffnen Sie den <em>Seriellen Monitor</em> (Lupe oben rechts). 
+        Halten Sie nun einen Gegenstand oder eine gefüllte Küvette zwischen LED und LDR. Der Zahlenwert muss sich deutlich verändern.
+    </p>
+
+    <hr>
+      <p style="margin-top: 15px;">
+        Das Prinzip der <strong>Transmissionsmessung</strong> ist einfach: Je weniger Licht am LDR ankommt (durch Absorption oder Streuung), 
+        desto höher ist die Konzentration der untersuchten Substanz (z.B. Fett im Milchtest oder Farbstoff im Cola-Test).
+      </p>
+      <hr>
+      <h3>Ansätze zur späteren Optimierung</h3>
+      <ul>
+        <li><strong>Fremdlicht (Störfaktor):</strong> Schon das Umgebungslicht verfälscht die Messung massiv.
+          <em>Optimierung:</em> Bau eines <strong>lichtdichten Gehäuses</strong> (z.B. aus schwarz lackiertem Holz oder Karton).</li>
+        <li><strong>Geometrische Stabilität:</strong> Geringfügige Bewegungen von LED oder LDR führen zu Schwankungen im Rohwert.
+          <em>Optimierung:</em> <strong>Feste Montage</strong> der Komponenten und Einhaltung eines konstanten Abstands.</li>
+        <li><strong>Lichtbündelung:</strong> Die LED strahlt diffus ab, was die Messgenauigkeit mindert.
+          <em>Optimierung:</em> Einsatz von <strong>Lochblenden</strong> oder lichtdichten Trennwänden, um den Strahl zu fokussieren.</li>
+        <li><strong>Wellenlänge (Farbe):</strong> Die gewählte LED-Farbe muss zur Probe passen.
+          <em>Optimierung:</em> Auswahl der optimalen LED-Farbe für die spezifische Messung (z.B. rote LED für blaue Flüssigkeiten).</li>
+      </ul>
+    </section>
+
+    <section class="content-section" id="messwerterfassung">
+      <div class="section-emoji">🧪</div>
+      <h2>3. Messwerterfassung & Kalibrierung</h2>
+      <p class="lead">
+        Hier verwandeln wir den Arduino vom einfachen Stromkreis-Bauteil in ein echtes wissenschaftliches Messinstrument.
+      </p>
+
+      <article>
+        <h3>3.1. Das Problem: Der "dumme" Rohwert</h3>
+        <div style="display: flex; gap: 20px; align-items: center;">
+          <div style="flex: 1;">
+            <p>
+              Ihr Arduino liefert über <code>analogRead()</code> einen Wert zwischen <strong>0 und 1023</strong>. 
+              Das ist technisch korrekt, aber physikalisch nutzlos. Ein Wert von "850" sagt nichts darüber aus, 
+              ob die Milch fettarm ist oder wie viel Sirup im Wasser ist.
+            </p>
+        
+          </div>
+          
+        </div>
+      </article>
+
+      <hr>
+
+      <article>
+        <h3>3.2. Die Lösung: Die 2-Punkt-Kalibrierung</h3>
+        <p>
+          Damit der Sensor "versteht", was er sieht, müssen wir ihm die Grenzen der Realität beibringen. 
+          Wir benötigen zwei Referenzpunkte.
+        </p>
+        
+        <div style="display: flex; justify-content: space-around; background: #f4f4f4; padding: 15px; border-radius: 8px;">
+          <div style="text-align: center; width: 30%;">
+            <strong>Schritt 1: Hell</strong><br>
+            Klares Wasser messen.<br>
+            <em>Wert notieren (z.B. 200)</em><br>
+            entspricht <strong>0%</strong>
+          </div>
+          <div style="font-size: 2em;">&rarr;</div>
+          <div style="text-align: center; width: 30%;">
+            <strong>Schritt 2: Dunkel</strong><br>
+            Maximal trübe Lösung messen.<br>
+            <em>Wert notieren (z.B. 300)</em><br>
+            entspricht <strong>100%</strong>
+          </div>
+        </div>
+      </article>
+
+      <article>
+        <h3>3.3. Zwei Wege der Auswertung</h3>
+        <p>
+          Je nach Unterrichtsziel können Sie nun zwei unterschiedliche didaktische Wege einschlagen.
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          
+          <div style="border: 1px solid #ccc; padding: 15px; border-radius: 5px;">
+            <h4 style="color: #2c3e50;">Weg A: Der "Wissenschaftler" (Excel)</h4>
+            <p>
+              <strong>Ziel:</strong> Datenerfassung und Analyse.
+            </p>
+            <p>Der Arduino sendet nur Rohwerte an den PC. Die Schüler erstellen in Excel eine <strong>Kalibrierkurve</strong>.</p>
+            <p><em>Vorteil: Schüler erkennen Messfehler und Nicht-Linearitäten sichtbar.</em></p>
+          </div>
+
+          <div style="border: 1px solid #ccc; padding: 15px; border-radius: 5px;">
+            <h4 style="color: #2c3e50;">Weg B: Der "Automat" (Map)</h4>
+            <p>
+              <strong>Ziel:</strong> Automatisierung.
+            </p>
+            <p>Der Arduino rechnet selbst. Das Gerät zeigt direkt "%" an.</p>
+            <p><em>Vorteil: Das Gerät arbeitet autonom ohne PC und könnte mit den Ergebnissen potentiell eine Pumpe betreiben (UE Neutralisationsautomat).</em></p>
+          </div>
+        </div>
+      </article>
+
+      <article>
+        <h3>3.4. Umsetzung von Weg B </h3>
+        <p>
+          Für Weg B nutzen wir den Befehl <code>map()</code>. Der map()-Befehl verteilt die gemessenen Rohwerte eines Sensors (z.B. \(200\) bis \(380\) proportional auf die angegebene Zielspanne (z.B. \(0\) bis \(100\)).
+        </p>
+
+        <div class="custom-code-block">
+          <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
+          <pre><code class="language-cpp">
+// --- KONFIGURATION (wie in Sektion 2) ---
+const int sensorPin = A3; // Der LDR hängt an A3
+const int ledPin = 3;     // Die LED hängt an Pin 3
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, HIGH); // Licht an
+}
+
+void loop() {
+  // 1. MESSEN (Rohwert erfassen)
+  int rohwert = analogRead(sensorPin);
+
+  // 2. KALIBRIEREN (Hier tragen Sie Ihre gemessenen Grenzwerte ein)
+  // Beispiel: Wasser war hell (niedriger Wert), Sirup war dunkel (hoher Wert)
+  int wertHell = 200;   // Kalibrierwert für 0% Konzentration (Wasser)
+  int wertDunkel = 300; // Kalibrierwert für 100% Konzentration (Sirup)
+
+  // 3. UMRECHNEN (Mapping)
+  // map(Wert, vonMin, vonMax, zuMin, zuMax)
+  int konzentration = map(rohwert, wertHell, wertDunkel, 0, 100);
+
+  // 4. BEGRENZEN (Constrain)
+  // Falls es mal noch heller ist als "Hell", verhindert dies negative %-Werte.
+  konzentration = constrain(konzentration, 0, 100);
+
+  // 5. AUSGABE (Kombiniert für Kontrolle)
+  Serial.print("Rohwert: ");
+  Serial.print(rohwert);
+  Serial.print(" | Konzentration: ");
+  Serial.print(konzentration);
+  Serial.println(" %");
+  
+  delay(500); 
+}
+          </code></pre>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: center; margin: 32px 0;">
+          <h4 style="text-align:center; color:#2c3e50; margin-bottom:18px;">Beispielmessungen: Experiment mit Waldmeistersirup und zugehöriger Serieller Monitor</h4>
+          <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; margin-bottom: 24px;">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <img src="Media/Images/Konz0.jpg" alt="Experiment: 0% Konzentration" style="max-width:220px; width:100%; border-radius:8px; box-shadow:0 2px 8px #0001;">
+              <span style="margin-top:8px; font-size:0.97em; color:#333;">Experiment: klares Wasser</span>
+              <img src="Media/Images/Serial0.png" alt="Serieller Monitor: 0% Konzentration" style="max-width:220px; width:100%; margin-top:10px; border-radius:8px; box-shadow:0 2px 8px #0001;">
+              <span style="margin-top:4px; font-size:0.97em; color:#333;">Serieller Monitor: 0% Konzentration</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <img src="Media/Images/Konz50.jpg" alt="Experiment: 50% Konzentration" style="max-width:220px; width:100%; border-radius:8px; box-shadow:0 2px 8px #0001;">
+              <span style="margin-top:8px; font-size:0.97em; color:#333;">Experiment: Verdünnte Mischung</span>
+              <img src="Media/Images/Serial50.png" alt="Serieller Monitor: 50% Konzentration" style="max-width:220px; width:100%; margin-top:10px; border-radius:8px; box-shadow:0 2px 8px #0001;">
+              <span style="margin-top:4px; font-size:0.97em; color:#333;">Serieller Monitor: &asymp; 50% Konzentration</span>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <img src="Media/Images/Konz100.jpg" alt="Experiment: 100% Konzentration" style="max-width:220px; width:100%; border-radius:8px; box-shadow:0 2px 8px #0001;">
+              <span style="margin-top:8px; font-size:0.97em; color:#333;">Experiment: Sirup </span>
+              <img src="Media/Images/Serial100.png" alt="Serieller Monitor: 100% Konzentration" style="max-width:220px; width:100%; margin-top:10px; border-radius:8px; box-shadow:0 2px 8px #0001;">
+              <span style="margin-top:4px; font-size:0.97em; color:#333;">Serieller Monitor: 100% Konzentration</span>
+            </div>
+          </div>
+        </div>
+
+      </article>
+    </section>
+    <!-- ... weitere Sektionen wie Quiz, Code, Troubleshooting, etc. ... -->
+  </main>
+  <footer>
+    <div>CC BY Lizenz, Andreas Sexauer, Zentrum für Mediales Lernen am Karlsruher Institut für Technologie (KIT).</div>
+    <div><small>Dieses Lernmodul wurde mithilfe von künstlicher Intelligenz (KI) konzipiert und programmiert.</small></div>
+  </footer>
+  <script>
+    // Progressbar
+    const progressBar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      progressBar.style.width = progress + '%';
+    });
+    // Section Observer
+    const sections = document.querySelectorAll('.content-section');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.15 });
+    sections.forEach(sec => observer.observe(sec));
+    // highlight.js
+    hljs.highlightAll();
+  </script>
+  <script>
+    // Copy-to-Clipboard for custom code blocks
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.custom-code-block .copy-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const code = btn.parentElement.querySelector('pre code');
+          if (!code) return;
+          // Remove leading/trailing whitespace and dedent
+          let text = code.innerText.replace(/^\s*\n/, '').replace(/\s*$/, '');
+          // Copy to clipboard
+          navigator.clipboard.writeText(text).then(function() {
+            btn.classList.add('copied');
+            btn.innerHTML = '<i class="fa fa-check"></i> Kopiert!';
+            setTimeout(function() {
+              btn.classList.remove('copied');
+              btn.innerHTML = '<i class="fa fa-copy"></i>';
+            }, 1200);
+          });
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
