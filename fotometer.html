@@ -393,26 +393,61 @@
       <p><strong>Autor:</strong> John van Dijk</p>
       <p><strong>Lizenzhinweis:</strong> CC BY-SA 4.0</p>
       <p>
-        Der Fokus dieses Moduls liegt auf der technischen Befähigung: Sie liefert das notwendige Know-how, um einen funktionierenden optischen Sensor zu bauen, diesen am Microcontroller zu betreiben und – entscheidend für den naturwissenschaftlichen Unterricht – die Rohdaten in nutzbare Messwerte zu übersetzen. Genau diese technische Kompetenz ist die Voraussetzung, um die <a href="https://lehrerfortbildung-bw.de/u_matnatech/nwt/gym/bp2016/fb5/7_ue9/2_foto/" target="_blank" rel="noopener">UE Fotometer</a> erfolgreich durchzuführen.
+       Dieses Modul liefert das technische Fundament für die <a href="..." target="_blank">UE Fotometer</a>: Sie lernen, einen optischen Sensor zu bauen, am Microcontroller zu betreiben und die Rohdaten für den Unterricht nutzbar zu machen.
       </p>
       
-      <h3>Vorbereitung & Werkzeuge</h3>
-      <ul class="material-list">
-        <li><i class="fa-solid fa-download"></i> Arduino IDE installieren: <a href="https://www.arduino.cc/en/software" target="_blank" rel="noopener">arduino.cc/en/software</a></li>
-        <li><i class="fa-solid fa-download"></i> CH340-Treiber (für Arduino-Klone): <a href="https://sparks.gogo.co.nz/ch340.html" target="_blank" rel="noopener">sparks.gogo.co.nz/ch340.html</a></li>
-        <li><i class="fa-solid fa-bread-slice"></i> Breadboard verstehen: <a href="https://learn.sparkfun.com/tutorials/how-to-use-a-breadboard/all" target="_blank" rel="noopener">SparkFun Breadboard Guide</a></li>
-      </ul>
+      <style>
+        /* Kleine Styles für das native <details> Akkordeon */
+        .intro-accordion details {
+          border: 1px solid #e0e0e0;
+          border-radius: 8px;
+          padding: 10px 12px;
+          margin-bottom: 14px;
+          background: #fbfffb;
+        }
+        .intro-accordion summary {
+          list-style: none;
+          font-weight: 600;
+          cursor: pointer;
+          outline: none;
+          padding: 6px 4px;
+          color: var(--kit-primary-color);
+        }
+        .intro-accordion summary::-webkit-details-marker { display: none; }
+        .intro-accordion summary:before {
+          content: "▸";
+          display: inline-block;
+          margin-right: 8px;
+          transform-origin: 6px 6px;
+          transition: transform 0.18s ease;
+        }
+        .intro-accordion details[open] summary:before { transform: rotate(90deg); }
+        .intro-accordion .material-list { margin-top: 8px; }
+      </style>
 
-      <h3 style="margin-top:28px; margin-bottom:10px;">Benötigte Materialien</h3>
-      <ul class="material-list">
-        <li><i class="fa-solid fa-microchip"></i> Arduino Microcontroller (Uno / Nano etc.)</li>
-        <li><i class="fa-solid fa-bread-slice"></i> Breadboard</li>
-        <li><i class="fa-solid fa-grip-lines"></i> Jumper Kabel</li>
-        <li><i class="fa-regular fa-lightbulb"></i> LED (weiß)</li>
-        <li><i class="fa-solid fa-ruler-horizontal"></i> Widerstände</li>
-        <li><i class="fa-solid fa-wave-square"></i> LDR (Fotowiderstand)</li>
-        <li><i class="fa-regular fa-square"></i> Transparenter kleiner Flüssigkeitsbehälter</li>
-      </ul>
+      <div class="intro-accordion">
+        <details open>
+          <summary>Vorbereitung & Werkzeuge</summary>
+          <ul class="material-list">
+            <li><i class="fa-solid fa-download"></i> Arduino IDE installieren: <a href="https://www.arduino.cc/en/software" target="_blank" rel="noopener">arduino.cc/en/software</a></li>
+            <li><i class="fa-solid fa-download"></i> CH340-Treiber (für Arduino-Klone): <a href="https://sparks.gogo.co.nz/ch340.html" target="_blank" rel="noopener">sparks.gogo.co.nz/ch340.html</a></li>
+            <li><i class="fa-solid fa-bread-slice"></i> Breadboard verstehen: <a href="https://learn.sparkfun.com/tutorials/how-to-use-a-breadboard/all" target="_blank" rel="noopener">SparkFun Breadboard Guide</a></li>
+          </ul>
+        </details>
+
+        <details>
+          <summary>Benötigte Materialien</summary>
+          <ul class="material-list">
+            <li><i class="fa-solid fa-microchip"></i> Arduino Microcontroller (Uno / Nano etc.)</li>
+            <li><i class="fa-solid fa-bread-slice"></i> Breadboard</li>
+            <li><i class="fa-solid fa-grip-lines"></i> Jumper Kabel</li>
+            <li><i class="fa-regular fa-lightbulb"></i> LED (weiß)</li>
+            <li><i class="fa-solid fa-ruler-horizontal"></i> Widerstände</li>
+            <li><i class="fa-solid fa-wave-square"></i> LDR (Fotowiderstand)</li>
+            <li><i class="fa-regular fa-square"></i> Transparenter kleiner Flüssigkeitsbehälter</li>
+          </ul>
+        </details>
+      </div>
     </section>
     <!-- 1. Technische Grundlagen: LDR am Microcontroller -->
     <section class="content-section" id="grundlagen">
