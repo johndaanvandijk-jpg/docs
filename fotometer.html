@@ -393,16 +393,13 @@
       <p><strong>Autor:</strong> John van Dijk</p>
       <p><strong>Lizenzhinweis:</strong> CC BY-SA 4.0</p>
       <p>
-        Der Fokus dieser Webseite liegt auf der technischen Befähigung: Sie liefert das notwendige Know-how, um einen funktionierenden optischen Sensor zu bauen, diesen am Microcontroller zu betreiben und – entscheidend für den naturwissenschaftlichen Unterricht – die Rohdaten in nutzbare Messwerte zu übersetzen. Genau diese technische Kompetenz ist die Voraussetzung, um die <a href="https://lehrerfortbildung-bw.de/u_matnatech/nwt/gym/bp2016/fb5/7_ue9/2_foto/" target="_blank" rel="noopener">UE Fotometer</a> erfolgreich durchzuführen.
+        Der Fokus dieses Moduls liegt auf der technischen Befähigung: Sie liefert das notwendige Know-how, um einen funktionierenden optischen Sensor zu bauen, diesen am Microcontroller zu betreiben und – entscheidend für den naturwissenschaftlichen Unterricht – die Rohdaten in nutzbare Messwerte zu übersetzen. Genau diese technische Kompetenz ist die Voraussetzung, um die <a href="https://lehrerfortbildung-bw.de/u_matnatech/nwt/gym/bp2016/fb5/7_ue9/2_foto/" target="_blank" rel="noopener">UE Fotometer</a> erfolgreich durchzuführen.
       </p>
-      <div class="quiz-block" style="background:#e8f5e9;">
-        <i class="fa-solid fa-circle-info"></i>
-        Dieses Modul richtet sich an Einsteiger*innen. Falls du ganz neu bist, folge bitte der Vorbereitung unten.
-      </div>
-      <h2>Vorbereitung & Werkzeuge</h2>
+      
+      <h3>Vorbereitung & Werkzeuge</h3>
       <ul class="material-list">
         <li><i class="fa-solid fa-download"></i> Arduino IDE installieren: <a href="https://www.arduino.cc/en/software" target="_blank" rel="noopener">arduino.cc/en/software</a></li>
-        <li><i class="fa-solid fa-download"></i> CH340-Treiber (falls benötigt): <a href="https://sparks.gogo.co.nz/ch340.html" target="_blank" rel="noopener">sparks.gogo.co.nz/ch340.html</a></li>
+        <li><i class="fa-solid fa-download"></i> CH340-Treiber (für Arduino-Klone): <a href="https://sparks.gogo.co.nz/ch340.html" target="_blank" rel="noopener">sparks.gogo.co.nz/ch340.html</a></li>
         <li><i class="fa-solid fa-bread-slice"></i> Breadboard verstehen: <a href="https://learn.sparkfun.com/tutorials/how-to-use-a-breadboard/all" target="_blank" rel="noopener">SparkFun Breadboard Guide</a></li>
       </ul>
 
@@ -422,11 +419,27 @@
       <div class="section-emoji">💡</div>
       <h2>1. Technische Grundlagen: LDR am Microcontroller</h2>
       <h3>1.1. Funktionsprinzip LDR</h3>
-      <p>
-        Ein LDR (<b>Light Dependent Resistor</b>, auch Fotowiderstand genannt) ist ein elektronisches Bauteil, dessen Widerstand sich mit der Helligkeit ändert. 
-        Je mehr Licht auf den LDR fällt, desto kleiner wird sein elektrischer Widerstand. Im Dunkeln ist der Widerstand sehr hoch (bis zu 200 kΩ), bei starkem Licht sinkt er auf wenige hundert Ohm.
-        <br>
-        <b>Merke:</b> <i>Der Zusammenhang ist <u>invers</u>: Viel Licht → kleiner Widerstand, wenig Licht → großer Widerstand.</i>
+      <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 24px;">
+  <div style="flex: 1; min-width: 300px;">
+    <p style="margin-top: 0;">
+      Ein LDR (<b>Light Dependent Resistor</b>, auch Fotowiderstand genannt) ist ein elektronisches Bauteil, dessen Widerstand sich mit der Helligkeit ändert. 
+    </p>
+    <p>
+      Je mehr Licht auf den LDR fällt, desto kleiner wird sein elektrischer Widerstand. Im Dunkeln ist der Widerstand sehr hoch (bis zu 200 kΩ), bei starkem Licht sinkt er auf wenige hundert Ohm.
+    </p>
+  </div>
+</div>
+
+        
+        <p style="
+    text-align: center; 
+    font-weight: 500; 
+    color: #2c3e50; 
+    background: #e8f5e9; 
+    padding: 12px; 
+    border-radius: 8px;">
+        <i class="fa-regular fa-lightbulb"></i> Der Zusammenhang ist <u>invers</u>: Viel Licht → kleiner Widerstand, wenig Licht → großer Widerstand.
+        </p>
       </p>
       <div style="
               display: flex; 
@@ -456,50 +469,188 @@
         </div>
       </div>
       <h3 style="margin-top:32px;">1.2. Der Spannungsteiler</h3>
-      <p>
-        Ein <b>Spannungsteiler</b> ist eine einfache Schaltung aus zwei Widerständen, mit der man eine Eingangsspannung in eine kleinere Ausgangsspannung umwandeln kann.
-        <br>
-        Im Fotometer wird der LDR mit einem festen Widerstand in Reihe geschaltet. Die Ausgangsspannung zwischen den beiden Widerständen hängt davon ab, wie hell es ist – und damit vom Widerstand des LDR.
-        <br>
-        <b>Formel (mit Herleitung beim Überfahren):</b>
-        <div class="tooltip" style="display: inline-block; border-bottom: 1px dotted #333; text-align: center;">
-            \( V_{out} = V_{in} \cdot \frac{R_{LDR}}{R1 + R_{LDR}} \)
-            <span class="tooltiptext">
-                <h4>Herleitung der Formel</h4>
-                <p>
-                    Die Formel basiert auf dem Ohmschen Gesetz \(U = R \cdot I\).
-                    <br>1. <strong>Gesamtwiderstand:</strong> \(R_{ges} = R1 + R_{LDR}\)
-                    <br>2. <strong>Gesamtstrom:</strong> \(I = \frac{V_{in}}{R_{ges}} = \frac{V_{in}}{R1 + R_{LDR}}\)
-                    <br>3. <strong>Spannung am LDR (\(V_{out}\)):</strong> \(V_{out} = R_{LDR} \cdot I\)
-                    <br>4. <strong>Einsetzen:</strong> \(V_{out} = R_{LDR} \cdot \frac{V_{in}}{R1 + R_{LDR}}\)
-                </p>
-            </span>
-        </div>
-        <br>
-        <b> So kann der Mikrocontroller die Helligkeit als Spannung messen!</b>
-        <br>
-        
-      </p>
+
+<div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 24px;">
+  <div style="flex: 1; min-width: 300px;">
+    <p style="margin-top: 0;">
+      Ein <b>Spannungsteiler</b> ist eine einfache Schaltung aus zwei Widerständen, mit der man eine Eingangsspannung in eine kleinere Ausgangsspannung umwandeln kann.
+    </p>
+    <p>
+      Im Fotometer wird der LDR mit einem festen Widerstand in Reihe geschaltet. Die Ausgangsspannung zwischen den beiden Widerständen hängt davon ab, wie hell es ist – und damit vom Widerstand des LDR.
+    </p>
+  </div>
+</div>
+
+<div style="
+    background: #f8f9fa; 
+    border-left: 4px solid var(--kit-primary-color); 
+    padding: 20px; 
+    margin: 20px 0; 
+    border-radius: 4px; 
+    text-align: center;">
+  
+  <span style="font-size: 0.9rem; color: #666; text-transform: uppercase; letter-spacing: 1px;">Die Formel</span>
+  
+  <div class="tooltip" style="display: block; margin: 15px 0; cursor: help;">
+    <span style="font-size: 1.5rem; font-family: 'Times New Roman', serif;">
+      \( V_{out} = V_{in} \cdot \frac{R_{LDR}}{R1 + R_{LDR}} \)
+    </span>
+    
+    <br>
+    <span style="font-size: 0.8rem; color: var(--kit-primary-color); border-bottom: 1px dashed currentColor;">
+      
+    </span>
+
+    <span class="tooltiptext">
+        <h4>Herleitung der Formel</h4>
+        <p>
+            Ohmsches Gesetz \(U = R \cdot I\).
+            <br>1. <strong>Gesamtwiderstand:</strong> \(R_{ges} = R1 + R_{LDR}\)
+            <br>2. <strong>Gesamtstrom:</strong> \(I = \frac{V_{in}}{R_{ges}} = \frac{V_{in}}{R1 + R_{LDR}}\)
+            <br>3. <strong>Spannung am LDR (\(V_{out}\)):</strong> \(V_{out} = R_{LDR} \cdot I\)
+            <br>4. <strong>Einsetzen:</strong> \(V_{out} = R_{LDR} \cdot \frac{V_{in}}{R1 + R_{LDR}}\)
+        </p>
+    </span>
+  </div>
+</div>
+
+<p style="
+    text-align: center; 
+    font-weight: 500; 
+    color: #2c3e50; 
+    background: #e8f5e9; 
+    padding: 12px; 
+    border-radius: 8px;">
+  <i class="fa-regular fa-lightbulb"></i> So kann der Mikrocontroller die Helligkeit als Spannung messen!
+</p>
       <div style="
-              display: flex; 
-              justify-content: center; /* Zentriert horizontal */
-              align-items: center;     /* Zentriert vertikal */
-             width: 100%; 
-              min-height: 50vh;         /* Sorgt dafür, dass der Wrapper die ganze Bildschirmhöhe einnimmt */
-              padding: 24px; 
-              box-sizing: border-box;  /* Stellt sicher, dass Padding die Höhe/Breite nicht sprengt */
-             background-color: #f4f4f4; /* Nur zur Demo */
-               ">
-       <div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
-       <img src="Media/Images/Spannungsteiler.png" 
-         
-         style="max-width: 100%; height: auto;">
+      display: flex; 
+      justify-content: center; 
+      align-items: center;     
+      width: 100%; 
+      min-height: 50vh;        
+      padding: 24px; 
+      box-sizing: border-box;  
+      background-color: #f4f4f4;
+      flex-direction: column; /* Damit der Hint unter der Karte steht */
+       ">
+
+  <style>
+    /* 1. Container für die Karte: Feste Größe oder responsive relative Größe */
+    .flip-card {
+      background-color: transparent;
+      width: 650px;             /* Vernünftige Breite setzen */
+      max-width: 100%;          /* Damit es auf Handys nicht übersteht */
+      height: 450px;            /* Feste Höhe ist wichtig für den 3D-Effekt */
+      perspective: 1000px;      /* Tiefenwahrnehmung */
+      cursor: pointer;          /* Zeigt an, dass es klickbar ist */
+      margin-bottom: 16px;      /* Platz zum Text darunter */
+    }
+
+    /* 2. Der innere Container, der sich dreht */
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+
+    /* Die Klasse, die per JS hinzugefügt wird */
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    /* 3. Vorder- und Rückseite */
+    .flip-front, .flip-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 12px;      /* Abgerundete Ecken sehen besser aus */
+      overflow: hidden;         /* Damit das Bild nicht über die Ecken ragt */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Kleiner Schatten für Tiefe */
+      background-color: #fff;
+    }
+
+    /* Spezifische Styles für die Rückseite */
+    .flip-back {
+      transform: rotateY(180deg);
+      display: flex;            /* Zentriert den Inhalt der Rückseite */
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* 4. Bild-Styling */
+    .flip-front img, .flip-back img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;       /* Füllt die Karte (schneidet ggf. Ränder ab) */
+      /* Alternativ: object-fit: contain; nutzen, wenn ALLES vom Schaltplan sichtbar sein muss */
+      display: block;
+    }
+
+    /* 5. Hinweis-Text Styling */
+    .flip-hint {
+      font-family: sans-serif;
+      color: #333;
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.8);
+      padding: 8px 16px;
+      border-radius: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+  </style>
+
+  <div class="flip-card" id="flip-spannungs" role="button" tabindex="0" onclick="toggleFlip('flip-spannungs')">
+    <div class="flip-card-inner">
+      
+      <div class="flip-front">
+        <img src="Media/Images/Spannungsteiler.png" alt="Foto der Spannungsteiler-Schaltung" onerror="this.src='https://placehold.co/350x450?text=Foto+Spannungsteiler'">
+      </div>
+      
+      <div class="flip-back">
+        <img src="Media/Images/Schaltplan1.png" alt="Schematischer Aufbau" onerror="this.src='https://placehold.co/350x450?text=Schaltplan'">
+      </div>
+
+    </div>
+  </div>
+
+  <p class="flip-hint">Klicken: Foto ↔ Schaltplan</p>
+
+</div>
+
+<script>
+  function toggleFlip(id){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.classList.toggle('flipped');
+    
+    // Accessibility Update
+    const pressed = el.classList.contains('flipped');
+    el.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+  }
+
+  // Keyboard Support
+  document.addEventListener('keydown', function(e){
+    const active = document.activeElement;
+    if(!active) return;
+    if(active.classList && active.classList.contains('flip-card')){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        toggleFlip(active.id);
+      }
+    }
+  });
+</script>
           </div>
         </div>
 
          <figure style="border: 1px solid #ccc; padding: 10px; text-align: center; background: #f9f9f9;">
         <figcaption>
-          <em>Dies ist die häufigste Schaltung, bei der die Ausgangsspannung steigt, wenn es dunkler wird</em>
+          <em>Bei dieser Schaltung, steigt die Ausgangsspannung wenn es dunkler wird. Wenn der LDR mit dem Widerstand vertauscht werden würde, wäre es umgekehrt</em>
         </figcaption>
       </figure>
     
@@ -624,6 +775,181 @@
       </script>
     </section>
 
+  
+    
+<section class="content-section" id="quiz-r1">
+  <div class="section-emoji">🧠</div>
+  <h2>Teste dein Wissen: Der Widerstands-Optimierer</h2>
+  <p>
+    In der Simulation oben haben Sie gesehen, dass sich die Messung unterschiedlich verhält, wenn man R1 anpasst. 
+    Ziel ist es immer, den <strong>Messbereich maximal auszunutzen</strong>. Das bedeutet: Wir wollen große Sprünge in den Zahlenwerten sehen, wenn sich das Licht ändert.
+  </p>
+  <p>
+    Versuchen Sie, für die folgenden zwei Szenarien den besten Festwiderstand aus dem Labor-Vorrat zu wählen.
+  </p>
+
+  <style>
+    /* Spezifische Styles für das Quiz */
+    .quiz-container {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      margin-top: 24px;
+    }
+    .quiz-scenario {
+      background: #fff;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+    .quiz-scenario h4 {
+      margin-top: 0;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .quiz-option {
+      background: #f9f9f9;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      padding: 16px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      font-weight: 500;
+      color: #555;
+    }
+    .quiz-option:hover {
+      border-color: var(--kit-primary-color);
+      background: #f0fdf4;
+      transform: translateY(-2px);
+    }
+    .quiz-option.selected {
+      border-color: #333;
+      background: #eee;
+    }
+    .quiz-option.correct {
+      border-color: var(--correct-color);
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .quiz-option.wrong {
+      border-color: var(--incorrect-color);
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    .feedback-box {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 8px;
+      display: none; /* Hidden by default */
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .feedback-box.success {
+      background-color: #d4edda;
+      border-left: 5px solid var(--correct-color);
+      color: #155724;
+    }
+    .feedback-box.error {
+      background-color: #f8d7da;
+      border-left: 5px solid var(--incorrect-color);
+      color: #721c24;
+    }
+  </style>
+
+  <div class="quiz-container">
+    
+    <div class="quiz-scenario" id="scenario-1">
+      <h4><i class="fa-solid fa-moon" style="color: #6c757d;"></i> Szenario A: Dunkle Umgebung</h4>
+      <p>
+        Sie bauen ein Fotometer für sehr dicke, dunkle Flüssigkeiten (hohe Trübung). Es kommt nur wenig Licht am Sensor an. 
+        Der LDR hat in dieser Dunkelheit einen <strong>sehr hohen Widerstand (ca. 100 kΩ)</strong>.
+      </p>
+      <p><em>Welchen Festwiderstand (R1) wählen Sie, um Änderungen fein messen zu können?</em></p>
+      
+      <div class="options-grid">
+        <div class="quiz-option" onclick="checkQuiz(1, 1000, this)">1 kΩ (Klein)</div>
+        <div class="quiz-option" onclick="checkQuiz(1, 10000, this)">10 kΩ (Mittel)</div>
+        <div class="quiz-option" onclick="checkQuiz(1, 100000, this)">100 kΩ (Groß)</div>
+      </div>
+      <div class="feedback-box" id="feedback-1"></div>
+    </div>
+
+    <div class="quiz-scenario" id="scenario-2">
+      <h4><i class="fa-solid fa-sun" style="color: #ffc107;"></i> Szenario B: Helle Umgebung</h4>
+      <p>
+        Sie messen im Freien bei Sonnenlicht (Modul 2 Wetterstation) oder direkt an einer starken LED. 
+        Der LDR wird stark beleuchtet und hat einen <strong>sehr kleinen Widerstand (ca. 1 kΩ)</strong>.
+      </p>
+      <p><em>Welchen Festwiderstand (R1) wählen Sie hier für maximale Genauigkeit?</em></p>
+      
+      <div class="options-grid">
+        <div class="quiz-option" onclick="checkQuiz(2, 1000, this)">1 kΩ (Klein)</div>
+        <div class="quiz-option" onclick="checkQuiz(2, 10000, this)">10 kΩ (Mittel)</div>
+        <div class="quiz-option" onclick="checkQuiz(2, 100000, this)">100 kΩ (Groß)</div>
+      </div>
+      <div class="feedback-box" id="feedback-2"></div>
+    </div>
+
+  </div>
+
+  <script>
+    function checkQuiz(scenarioId, value, element) {
+      // Container und Feedback-Elemente finden
+      const container = document.getElementById(`scenario-${scenarioId}`);
+      const feedbackEl = document.getElementById(`feedback-${scenarioId}`);
+      const allOptions = container.querySelectorAll('.quiz-option');
+
+      // Reset Styles
+      allOptions.forEach(opt => {
+        opt.classList.remove('correct', 'wrong', 'selected');
+      });
+
+      // Logik
+      let isCorrect = false;
+      let message = "";
+
+      if (scenarioId === 1) { // Dunkel (LDR ~ 100k)
+        if (value === 100000) {
+          isCorrect = true;
+          message = "<strong>Richtig!</strong> Da der LDR-Widerstand hoch ist, brauchen wir auch einen hohen Gegenspieler ($R_1$). Wäre $R_1$ zu klein (1 kΩ), würde fast die gesamte Spannung am LDR abfallen und wir würden ständig Werte nahe 1023 messen, ohne kleine Änderungen zu sehen.";
+        } else {
+          message = "<strong>Nicht optimal.</strong> Wenn der Widerstand $R_1$ viel kleiner ist als der LDR (der hier ca. 100 kΩ hat), wird das Spannungsteiler-Verhältnis extrem einseitig. Wir brauchen ein 'Gleichgewicht der Kräfte'. Versuchen Sie einen größeren Widerstand.";
+        }
+      } else if (scenarioId === 2) { // Hell (LDR ~ 1k)
+        if (value === 1000) {
+          isCorrect = true;
+          message = "<strong>Exzellent!</strong> Bei starkem Licht sinkt der LDR-Widerstand massiv ab. Damit die Spannung nicht auf fast 0 abfällt, muss auch $R_1$ klein sein. So liegt der Messpunkt wieder in der 'Mitte' des Bereichs und wir können Änderungen gut auflösen.";
+        } else {
+          message = "<strong>Nicht ganz.</strong> Der LDR hat hier nur ca. 1 kΩ. Wenn Sie einen viel größeren Widerstand (10k oder 100k) dagegensetzen, 'gewinnt' der Festwiderstand. Die gemessene Spannung am LDR wäre winzig und Änderungen kaum messbar. Wählen Sie einen kleineren Widerstand.";
+        }
+      }
+
+      // Visualisierung
+      if (isCorrect) {
+        element.classList.add('correct');
+        feedbackEl.className = "feedback-box success";
+        feedbackEl.innerHTML = "<i class='fa-solid fa-check-circle'></i> " + message;
+      } else {
+        element.classList.add('wrong');
+        feedbackEl.className = "feedback-box error";
+        feedbackEl.innerHTML = "<i class='fa-solid fa-circle-xmark'></i> " + message;
+      }
+      
+      // Feedback anzeigen
+      feedbackEl.style.display = "block";
+    }
+  </script>
+</section>
     <section class="content-section" id="aufbau">
       <div class="section-emoji">🧰</div>
       <h2>2. Der Messaufbau</h2>
@@ -634,24 +960,116 @@
       </p>
 
 
-       <div style="
-              display: flex; 
-              justify-content: center; /* Zentriert horizontal */
-              align-items: center;     /* Zentriert vertikal */
-             width: 100%; 
-              min-height: 50vh;         /* Sorgt dafür, dass der Wrapper die ganze Bildschirmhöhe einnimmt */
-              padding: 24px; 
-              box-sizing: border-box;  /* Stellt sicher, dass Padding die Höhe/Breite nicht sprengt */
-             background-color: #f4f4f4; /* Nur zur Demo */
-               ">
-       <div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
-       <img src="Media/Images/Fotometer.png" 
-         
-         style="max-width: 70%; height: auto;">
-          </div>
-        </div>
+ <div style="
+      display: flex; 
+      justify-content: center; 
+      align-items: center;     
+      width: 100%; 
+      min-height: 50vh;        
+      padding: 24px; 
+      box-sizing: border-box;  
+      background-color: #f4f4f4;
+      flex-direction: column;
+       ">
 
+  <style>
+    /* Grundgerüst der Karte */
+    .flip-card {
+      background-color: transparent;
+      width: 650px;             
+      max-width: 100%;          
+      height: 450px;            
+      perspective: 1000px;      
+      cursor: pointer;          
+      margin-bottom: 16px;      
+    }
 
+    /* Der innere Container, der sich dreht */
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+
+    /* Die Klasse, die für die Drehung sorgt */
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    /* Vorder- und Rückseite */
+    .flip-front, .flip-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 12px;      
+      overflow: hidden;         
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
+      background-color: #fff;
+    }
+
+    /* Rückseite gedreht */
+    .flip-back {
+      transform: rotateY(180deg);
+      display: flex;            
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Bilder anpassen */
+    .flip-front img, .flip-back img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;       
+      display: block;
+    }
+
+    /* Hinweis-Text */
+    .flip-hint {
+      font-family: sans-serif;
+      color: #333;
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.8);
+      padding: 8px 16px;
+      border-radius: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+  </style>
+
+  <div class="flip-card" id="flip-fotometer" role="button" tabindex="0" onclick="toggleFlip('flip-fotometer')">
+    <div class="flip-card-inner">
+      
+      <div class="flip-front">
+        <img src="Media/Images/Fotometer.png" alt="Foto Fotometer" onerror="this.src='https://placehold.co/350x450?text=Foto+Fotometer'">
+      </div>
+      
+      <div class="flip-back">
+        <img src="Media/Images/Schaltplan2.png" alt="Schaltplan Fotometer" onerror="this.src='https://placehold.co/350x450?text=Schaltplan+Fotometer'">
+      </div>
+
+    </div>
+  </div>
+
+  <p class="flip-hint">Klicken: Foto ↔ Schaltplan</p>
+
+</div>
+
+<script>
+  // Falls die Funktion oben schon im Code steht, ist das hier eigentlich doppelt, 
+  // schadet aber meistens nicht, solange der Name gleich bleibt.
+  function toggleFlip(id){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.classList.toggle('flipped');
+    
+    const pressed = el.classList.contains('flipped');
+    el.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+  }
+</script>
 
 
       <figure style="border: 1px solid #ccc; padding: 10px; text-align: center; background: #f9f9f9;">
