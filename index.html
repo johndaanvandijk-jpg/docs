@@ -112,84 +112,6 @@
       opacity: 1;
       transform: none;
     }
-    .modul-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-      gap: 32px;
-      margin-top: 36px;
-    }
-    .modul-karte {
-      background: #f8f8f8;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(44,62,80,0.07);
-      padding: 32px 24px 28px 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 340px;
-      position: relative;
-      transition: box-shadow 0.2s, transform 0.2s;
-      border: 1.5px solid #e0e0e0;
-    }
-    .modul-karte:hover, .modul-karte:focus-within {
-      box-shadow: 0 8px 32px rgba(44,62,80,0.13);
-      transform: translateY(-4px) scale(1.02);
-      border-color: var(--kit-primary-color);
-    }
-    .modul-karte h3 {
-      color: var(--kit-primary-color);
-      margin-top: 0;
-      margin-bottom: 10px;
-      font-size: 1.25rem;
-      font-family: var(--font-title);
-    }
-    .modul-karte ul {
-      margin: 12px 0 18px 0;
-      padding-left: 18px;
-      font-size: 1em;
-    }
-    .modul-karte ul li {
-      margin-bottom: 6px;
-    }
-    .modul-karte .button {
-      display: inline-block;
-      background: var(--kit-primary-color);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 22px;
-      font-size: 1.05em;
-      font-weight: 500;
-      text-decoration: none;
-      margin-top: 10px;
-      transition: background 0.2s, transform 0.2s;
-      box-shadow: 0 2px 8px rgba(44,62,80,0.08);
-      cursor: pointer;
-    }
-    .modul-karte .button:hover, .modul-karte .button:focus {
-      background: var(--kit-secondary-color);
-      transform: scale(1.05);
-      color: #fff;
-    }
-    @media (max-width: 900px) {
-      .modul-grid {
-        grid-template-columns: 1fr;
-      }
-      main { padding: 0 4vw; }
-      .lernmodul-uebersicht { padding: 32px 8px; }
-      .kit-header { padding: 0 8px; }
-    }
-    h2 {
-      font-family: var(--font-title);
-      color: var(--kit-primary-color);
-      font-size: 1.7rem;
-      margin-top: 0;
-    }
-    h3 {
-      font-family: var(--font-title);
-      color: var(--kit-primary-color);
-      font-size: 1.2rem;
-    }
     .section-emoji {
       position: absolute;
       right: 24px;
@@ -199,6 +121,262 @@
       pointer-events: none;
       user-select: none;
     }
+    .modul-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px; /* Etwas mehr Luft zwischen den Karten */
+      margin-top: 36px;
+    }
+
+    .modul-karte {
+      background: #fff; /* Weisser Hintergrund für sauberen Look */
+      border-radius: 16px;
+      overflow: hidden; /* Wichtig, damit das Bild oben nicht übersteht */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(0,0,0,0.05); /* Zarter Rand */
+    }
+
+    .modul-karte:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+      border-color: var(--kit-primary-color); /* Grüner Rand bei Hover */
+    }
+
+    /* DAS BANNER BILD OBEN */
+    .karte-banner {
+      height: 140px; /* Feste Höhe für den Banner-Bereich */
+      background-color: #e0e0e0; /* Platzhalter-Farbe */
+      background-size: cover;    /* Bild füllt den Bereich aus */
+      background-position: center;
+      position: relative;
+    }
+    
+    /* Optional: Ein feiner Strich unten am Bild zur Trennung */
+    .karte-banner::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(to right, var(--kit-primary-color), var(--kit-secondary-color));
+      opacity: 0.8;
+    }
+
+    /* DER INHALT UNTEN */
+    .karte-content {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1; /* Füllt den restlichen Platz */
+    }
+
+    .tagline {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .modul-karte h3 {
+      margin: 0 0 12px 0;
+      color: #333; /* Dunkler Text auf weißem Grund */
+      font-size: 1.4rem;
+      line-height: 1.3;
+    }
+
+    .ziel-ue-link {
+      display: inline-block;
+      font-size: 0.9rem;
+      color: var(--kit-primary-color);
+      text-decoration: none;
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+    .ziel-ue-link:hover {
+      text-decoration: underline;
+    }
+
+    /* TOGGLE BUTTON (Pfeil) - öffnet nun Modal */
+    .toggle-trigger {
+      background: #f9f9f9;
+      border: none;
+      color: #555;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-radius: 8px;
+      margin-top: auto; /* Drückt den Button ganz nach unten */
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .toggle-trigger:hover {
+      background: #f0f0f0;
+      color: #222;
+    }
+    .toggle-icon {
+      transition: transform 0.3s ease;
+    }
+
+    /* DETAILS: werden nicht mehr im Fluss angezeigt, sondern in einem Modal geöffnet */
+    .karte-details {
+      display: none; /* Versteckt im DOM, belegt keinen Platz */
+    }
+
+    .karte-details p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .karte-details ul {
+      padding-left: 0;
+      list-style: none;
+      margin-bottom: 20px;
+    }
+    .karte-details ul li {
+      color: #444;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+      display: flex;
+      gap: 8px;
+    }
+    .karte-details ul li i {
+      color: var(--kit-primary-color);
+    }
+
+    .start-button {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: var(--kit-primary-color);
+      color: white;
+      text-decoration: none;
+      padding: 12px 0;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .start-button:hover {
+      background: var(--kit-secondary-color);
+      transform: translateY(-2px);
+    }
+
+    /* Erweiterte Karte-Details (Modul 1) */
+    .karte-details-erweitert {
+      display: none; /* Standardmäßig verstecken; wird für Modal geklont und sichtbar gemacht */
+      font-size: 0.95rem;
+      color: #234;
+    }
+    .karte-details-erweitert .detail-header .intro-text {
+      margin: 0 0 12px 0;
+      color: #0b3f35;
+    }
+    .karte-details-erweitert .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+    .karte-details-erweitert .grid-item h5 {
+      margin: 0 0 8px 0;
+      color: #00876C;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .karte-details-erweitert .grid-item ul {
+      padding-left: 18px;
+      margin: 0;
+    }
+    .karte-details-erweitert .highlight-bg {
+      background: linear-gradient(180deg, rgba(0,135,108,0.06), rgba(0,135,108,0.03));
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .karte-details-erweitert .projekt-beschreibung {
+      margin: 0;
+      color: #333;
+    }
+    .karte-details-erweitert .detail-footer {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      align-items: center;
+    }
+    .karte-details-erweitert .meta-tag {
+      background: #f3f7f5;
+      color: #075745;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .karte-details-erweitert .hardware-tag {
+      background: rgba(0,135,108,0.08);
+      color: #004b3d;
+    }
+    .karte-details-erweitert .source-link {
+      margin-top: 10px;
+      color: #666;
+      font-size: 0.85rem;
+    }
+
+    /* MODAL STYLES */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal.open {
+      display: flex;
+    }
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(2px);
+    }
+    .modal-dialog {
+      position: relative;
+      max-width: 800px;
+      width: calc(100% - 48px);
+      max-height: calc(100vh - 120px);
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      overflow: auto;
+      z-index: 1001;
+      padding: 20px 24px;
+    }
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: #666;
+    }
+    .modal-content p { margin-top: 0; }
+    .modal .start-button { width: auto; display: inline-block; padding: 10px 16px; }
+
   </style>
 </head>
 <body>
@@ -217,54 +395,168 @@
       <p>
         Dieser Aufbaukurs ist in vier aufeinander aufbauende Module unterteilt, die Ihnen die technische und didaktische Sicherheit geben sollen, komplexe NWT-Unterrichtseinheiten durchzuführen. Jedes Modul baut auf den Kompetenzen des vorherigen auf.
       </p>
+
+
       <div class="modul-grid">
-        <article class="modul-karte" id="modul-1">
-          <h3>Modul 1: Das Fotometer (Einstieg)</h3>
-          <p>
-            <strong>Grundlagen der Messtechnik.</strong> Hier lernen Sie, wie man mit einem <abbr title="Light Dependent Resistor">LDR</abbr> und einer LED einen optischen Sensor baut und Rohwerte über den Spannungsteiler in aussagekräftige Konzentrationen umrechnet.
-          </p>
-          <ul>
-            <li><strong>Technik-Schwerpunkt:</strong> Arduino, LDR, LED, Kalibrierung.</li>
-            <li><strong>Ziel-UE:</strong> <a href="https://lehrerfortbildung-bw.de/u_matnatech/nwt/gym/bp2016/fb5/7_ue9/2_foto/">UE Fotometer</a> .</li>
-          </ul>
-          <a href="fotometer.html" class="button">Zum Modul 1 starten &rarr;</a>
-        </article>
-        <article class="modul-karte" id="modul-2">
-          <h3>Modul 2: Die Wetterstation (Erweiterung)</h3>
-          <p>
-            <strong>Erweiterung der Sensorik.</strong> Aufbauend auf den Kalibrierkenntnissen aus Modul 1, integrieren Sie neue Sensoren (Temperatur, Solarzelle) und lernen die systematische Erfassung von Messreihen für den Vergleich mit realen Daten.
-          </p>
-          <ul>
-            <li><strong>Technik-Schwerpunkt:</strong> Temperatursensor, Solarzelle als Sensor, Datenlogging.</li>
-            <li><strong>Ziel-UE:</strong> <a href="https://lehrerfortbildung-bw.de/u_matnatech/nwt/gym/bp2016/fb5/6_ue8/4_wetter/">UE Wetterapp-Test</a> .</li>
-          </ul>
-          <a href="wetterstation.html" class="button">Zum Modul 2 starten &rarr;</a>
-        </article>
-        <article class="modul-karte" id="modul-3">
-          <h3>Modul 3: CAD & Gehäuse (Konstruktion)</h3>
-          <p>
-            <strong>Von der Schaltung zum fertigen Produkt.</strong> Sie verlassen die Steckplatine und konstruieren ein praktikables Gehäuse für Ihre Wetterstation. Dies ist die notwendige Vorbereitung, um später bewegliche Elemente (wie Motoren) zu integrieren.
-          </p>
-          <ul>
-            <li><strong>Technik-Schwerpunkt:</strong> CAD-Grundlagen, Slicing, 3D-Druck-Ablauf.</li>
+<article class="modul-karte" id="modul-1">
+      <div class="karte-banner" style="background-image: url('Media/Images/LDRBanner.png');"></div>
+      
+      <div class="karte-content">
+        <span class="tagline">Grundlagen der Messtechnik</span>
+        <h3>Modul 1: Das Fotometer</h3>
+        
+        <a href="https://lehrerfortbildung-bw.de/u_matnatech/nwt/gym/bp2016/fb5/7_ue9/2_foto/" target="_blank" class="ziel-ue-link">
+          <i class="fa-solid fa-link"></i> Ziel-UE: Fotometer
+        </a>
+<a href="fotometer.html" class="start-button">Modul starten 🚀</a>
+
+
+        <button class="toggle-trigger" onclick="openModal('modul-1')">
+          <span class="toggle-text">Vorschau & Ablauf</span>
+        </button>
+        
+<div class="karte-details-erweitert">
+          <div class="detail-header">
+            <p class="intro-text">
+              <strong>Der Einstieg in die Sensorik:</strong> Bauen Sie einen optischen Sensor, der "sehen" kann, wie trüb eine Flüssigkeit ist oder wie stark eine Farbe konzentriert ist. 
+            </p>
+          </div>
+
+          <div class="detail-grid">
             
-          </ul>
-          <a href="cad_gehaeuse.html" class="button">Zum Modul 3 starten &rarr;</a>
-        </article>
-        <article class="modul-karte" id="modul-4">
-          <h3>Modul 4: Die Solarnachführung (Synthese)</h3>
+            <div class="grid-item">
+              <h5><i class="fa-solid fa-microchip"></i> Ihr Technik-Gewinn</h5>
+              <ul class="fa-ul">
+                <li><span class="fa-li"><i class="fa-solid fa-check"></i></span><strong>Spannungsteiler:</strong> Warum wir LDR und Widerstand kombinieren müssen.</li>
+                <li><span class="fa-li"><i class="fa-solid fa-check"></i></span><strong>Analoge Werte:</strong> Was der Arduino eigentlich misst (0-1023).</li>
+                <li><span class="fa-li"><i class="fa-solid fa-check"></i></span><strong>Kalibrierung:</strong> Wie man abstrakte Zahlen in echte Einheiten umrechnet.</li>
+              </ul>
+            </div>
+
+            <div class="grid-item highlight-bg">
+              <h5><i class="fa-solid fa-school"></i> Das Schulprojekt: "Milch-Detektiv"</h5>
+              <p class="projekt-beschreibung">
+                Ihre Schüler:innen bauen ein Fotometer, um den Fettgehalt von verdünnter Milch zu messen. Sie erstellen Verdünnungsreihen und Kalibrierkurven – ein ideales Beispiel für quantitatives Arbeiten in NWT.
+              </p>
+            </div>
+
+          </div>
+
+          <div class="detail-footer">
+            <span class="meta-tag"><i class="fa-solid fa-clock"></i> ca. 45-90 min</span>
+            <span class="meta-tag"><i class="fa-solid fa-layer-group"></i> Modul 1 von 4</span>
+            <span class="meta-tag hardware-tag"><i class="fa-solid fa-screwdriver-wrench"></i> Benötigt: Arduino, LDR, LED, Widerstände (10kΩ, 220Ω)</span>
+          </div>
+          
+          <div class="source-link">
+            <small>Basiert auf UE Fotometer (LFB-BW)</small>
+          </div>
+        </div>
+
+
+
+       </div>
+    </article>
+
+    <article class="modul-karte" id="modul-2">
+      <div class="karte-banner" style="background-image: url('Media/Images/SolarBanner.png');"></div>
+      
+      <div class="karte-content">
+        <span class="tagline">Erweiterung & Datenerfassung</span>
+        <h3>Modul 2: Die Wetterstation</h3>
+        
+        <a href="https://lehrerfortbildung-bw.de/u_matnatech/nwt/gym/bp2016/fb5/6_ue8/4_wetter/" target="_blank" class="ziel-ue-link">
+          <i class="fa-solid fa-link"></i> Ziel-UE: WetterApp-Test
+        </a>
+ <a href="wetterstation.html" class="start-button">Modul starten 🚀</a>
+        <button class="toggle-trigger" onclick="openModal('modul-2')">
+          <span class="toggle-text">Vorschau & Ablauf</span>
+          
+        </button>
+
+        <div class="karte-details">
           <p>
-            <strong>Regelungstechnik in Aktion.</strong> Dieses Modul fasst alle erworbenen Kompetenzen zusammen: LDR-Logik (Modul 1), Solarzelle (Modul 2) und bewegliches Gehäuse (Modul 3) werden mit einem Servomotor zur aktiven Nachführung kombiniert.
+            Verlassen Sie das Labor. Integrieren Sie Temperatur- und Solarsensoren und lernen Sie, echte Messreihen über Zeiträume aufzunehmen.
           </p>
           <ul>
-            <li><strong>Technik-Schwerpunkt:</strong> Mikrocontroller-Regelung, Servomotor-Ansteuerung.</li>
-            <li><strong>Ziel-UE:</strong> <a href="solarnachfuehrung.html">UE Solarnachführung</a>.</li>
+            <li><i class="fa-solid fa-check"></i> Multi-Sensor-Integration</li>
+            <li><i class="fa-solid fa-check"></i> Datenlogging & Validierung</li>
           </ul>
-          <a href="solarnachfuehrung.html" class="button">Zum Modul 4 starten &rarr;</a>
-        </article>
+         
+        </div>
+      </div>
+    </article>
+
+    <article class="modul-karte" id="modul-3">
+      <div class="karte-banner" style="background-image: url('Media/Images/3DpBanner.png');"></div>
+      
+      <div class="karte-content">
+        <span class="tagline">Konstruktion & 3D-Druck</span>
+        <h3>Modul 3: CAD & Gehäuse</h3>
+        
+        <a href="#" class="ziel-ue-link">
+          <i class="fa-solid fa-graduation-cap"></i> Ziel: 3D-Druck Führerschein
+        </a>
+<a href="cad_gehaeuse.html" class="start-button">Modul starten 🚀</a>
+        <button class="toggle-trigger" onclick="openModal('modul-3')">
+          <span class="toggle-text">Vorschau & Ablauf</span>
+          
+        </button>
+
+        <div class="karte-details">
+          <p>
+            Hardware braucht Schutz. Konstruieren Sie ein Gehäuse für Ihre Sensoren und bereiten Sie bewegliche Teile (Aktorik) vor.
+          </p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> CAD-Grundlagen</li>
+            <li><i class="fa-solid fa-check"></i> Slicing & Druckvorbereitung</li>
+          </ul>
+          
+        </div>
+      </div>
+    </article>
+
+    <article class="modul-karte" id="modul-4">
+      <div class="karte-banner" style="background-image: url('Media/Images/SolarnachBanner.png');"></div>
+      
+      <div class="karte-content">
+        <span class="tagline">Aktorik & Regelungstechnik</span>
+        <h3>Modul 4: Die Solarnachführung</h3>
+        
+        <a href="https://lehrerfortbildung-bw.de/u_matnatech/nwt/gym/bp2016/fb5/7_ue9/6_solar/" target="_blank" class="ziel-ue-link">
+          <i class="fa-solid fa-link"></i> Ziel-UE: Solarnachführung
+        </a>
+<a href="solarnachfuehrung.html" class="start-button">Modul starten 🚀</a>
+        <button class="toggle-trigger" onclick="openModal('modul-4')">
+          <span class="toggle-text">Vorschau & Ablauf</span>
+          
+        </button>
+
+        <div class="karte-details">
+          <p>
+            Die Synthese aller Module. Nutzen Sie Ihre Sensordaten, um einen Servomotor zu steuern und das Panel der Sonne nachzuführen.
+          </p>
+          <ul>
+            <li><i class="fa-solid fa-check"></i> Servomotoren ansteuern</li>
+            <li><i class="fa-solid fa-check"></i> Regelkreis programmieren</li>
+          </ul>
+          
+        </div>
+      </div>
+    </article>
       </div>
     </section>
   </main>
+
+  <!-- Modal for previews -->
+  <div id="preview-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-action="close"></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" aria-label="Schließen" data-action="close">&times;</button>
+      <div class="modal-content"></div>
+    </div>
+  </div>
+
   <footer>
     <div>CC BY Lizenz, Andreas Sexauer, Zentrum für Mediales Lernen am Karlsruher Institut für Technologie (KIT).</div>
     <div><small>Dieses Lernmodul wurde mithilfe von künstlicher Intelligenz (KI) konzipiert und programmiert.</small></div>
@@ -284,5 +576,57 @@
     document.addEventListener('DOMContentLoaded', () => {
       sections.forEach(sec => sec.classList.add('is-visible'));
     });
+
+    // Modal logic - opens a separate overlay so cards don't change size
+    const modal = document.getElementById('preview-modal');
+    const modalContent = modal.querySelector('.modal-content');
+    const closeButtons = modal.querySelectorAll('[data-action="close"]');
+
+    function openModal(id) {
+      const card = document.getElementById(id);
+      if (!card) return;
+      // Support both default and expanded detail blocks
+      const details = card.querySelector('.karte-details, .karte-details-erweitert');
+      if (!details) return;
+
+      // Clone the details content so we don't move nodes from the card
+      modalContent.innerHTML = '';
+      const clone = details.cloneNode(true);
+      // Make sure cloned details are visible inside modal
+      clone.style.display = '';
+      // remove any internal marker classes so modal uses its own styling
+      clone.classList.remove('karte-details', 'karte-details-erweitert');
+      modalContent.appendChild(clone);
+
+      // If there's a .start-button inside, keep it working (links are fine)
+
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      // prevent body scroll while modal open
+      document.body.style.overflow = 'hidden';
+      // focus close button for accessibility
+      const closeBtn = modal.querySelector('.modal-close');
+      if (closeBtn) closeBtn.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      modalContent.innerHTML = '';
+      document.body.style.overflow = '';
+    }
+
+    // Close handlers
+    closeButtons.forEach(btn => btn.addEventListener('click', closeModal));
+    // backdrop click
+    modal.querySelector('.modal-backdrop').addEventListener('click', closeModal);
+    // Esc key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('open')) {
+        closeModal();
+      }
+    });
+
   </script>
 </body>
+</html>
