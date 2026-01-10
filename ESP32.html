@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ESP32: Dein Einstieg in die vernetzte Welt</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- highlight.js (atom-one-dark) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Mathjax -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <!-- p5.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.2/p5.js"></script>
+  <!-- plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+  <!-- highlight.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <style>
+    :root {
+      --kit-primary-color: #4CAF50;
+      --kit-secondary-color: #45a049;
+      --header-height: 80px;
+      --progressbar-height: 8px;
+      --correct-color: #28a745;
+      --incorrect-color: #dc3545;
+      --font-main: 'Roboto', sans-serif;
+      --font-title: 'Roboto', sans-serif;
+      --section-radius: 18px;
+      --section-shadow: 0 8px 32px rgba(44,62,80,0.08);
+      --section-bg: #fff;
+      --section-margin: 36px;
+      --section-padding: 48px 24px;
+      --emoji-opacity: 0.08;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+      background: linear-gradient(180deg, #f7faf9 0%, #e8f5e9 100%);
+      color: #222;
+      min-height: 100vh;
+    }
+
+    .kit-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-height);
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(44,62,80,0.06);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 24px;
+    }
+    .kit-header img {
+      height: 48px;
+      width: 48px;
+      border-radius: 8px;
+      background: #f4f4f4;
+      object-fit: contain;
+    }
+    .kit-header .header-titles {
+      flex: 1;
+      min-width: 0;
+    }
+    .kit-header .header-titles .title {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--kit-primary-color);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .kit-header .header-titles .subtitle {
+      font-size: 1rem;
+      color: #555;
+      font-weight: 400;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .progress-container {
+      position: fixed;
+      top: var(--header-height);
+      left: 0; right: 0;
+      height: var(--progressbar-height);
+      background: #e0e0e0;
+      z-index: 101;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--kit-primary-color);
+      transition: width 0.2s;
+    }
+
+    main {
+      margin-top: calc(var(--header-height) + var(--progressbar-height) + 24px);
+      padding-bottom: 48px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .content-section {
+      background: var(--section-bg);
+      border-radius: var(--section-radius);
+      box-shadow: var(--section-shadow);
+      margin-bottom: var(--section-margin);
+      padding: var(--section-padding);
+      position: relative;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+      will-change: opacity, transform;
+    }
+    .content-section.is-visible { opacity: 1; transform: none; }
+    .section-emoji {
+      position: absolute;
+      right: 24px;
+      bottom: 18px;
+      font-size: 7rem;
+      opacity: var(--emoji-opacity);
+      pointer-events: none;
+      user-select: none;
+    }
+    h1, h2, h3, h4 { font-family: var(--font-title); color: var(--kit-primary-color); margin-top: 0; }
+    h1 { font-size: 2.2rem; }
+    .lead { font-size: 1.05rem; color:#333; margin-top:0; }
+
+    .material-list { list-style: none; padding: 0; margin: 0 0 16px 0; }
+    .material-list li { margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .material-list li i { color: var(--kit-primary-color); font-size: 1.1em; }
+
+    .intro-accordion details {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+      background: #fbfffb;
+    }
+    .intro-accordion summary { list-style: none; font-weight: 600; cursor: pointer; outline: none; padding: 6px 4px; color: var(--kit-primary-color); }
+    .intro-accordion summary::-webkit-details-marker { display: none; }
+    .intro-accordion summary:before { content: "▸"; display: inline-block; margin-right: 8px; transform-origin: 6px 6px; transition: transform 0.18s ease; }
+    .intro-accordion details[open] summary:before { transform: rotate(90deg); }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--kit-primary-color);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(76,175,80,0.12);
+    }
+
+    pre code { display:block; padding:16px; overflow:auto; border-radius:8px; }
+
+    @media (max-width: 700px) { main { padding: 0 4vw; } .content-section { padding: 32px 8px; } .kit-header { padding: 0 8px; } }
+  </style>
+</head>
+<body>
+  <header class="kit-header" role="banner" aria-label="Modultitel und Fortschrittsanzeige">
+    <img src="Media/Images/NWTLOGO.png" alt="NWT Logo" />
+    <div class="header-titles">
+      <div class="title">ESP32 Tutorial</div>
+      <div class="subtitle">Dein Einstieg in die vernetzte Welt</div>
+    </div>
+  </header>
+
+  <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+
+  <main>
+    <section class="content-section" id="intro">
+      <div class="section-emoji">📡</div>
+      <h1>ESP32: Dein Einstieg in die vernetzte Welt.</h1>
+      <p class="lead">In 10 Minuten bereit für das Internet of Things.</p>
+      <p>Der ESP32 ist kein einfacher Mikrocontroller mehr, sondern ein vollwertiges System-on-a-Chip (SoC) mit integrierter Wi‑Fi‑Funktionalität. Ideal für vernetzte Projekte wie unsere Wetterstation.</p>
+    </section>
+
+   <section class="content-section">
+  <h2>1. Schritt 1: Die Hardware-Brücke (Treiber)</h2>
+  <p><strong>Problem:</strong> Damit der PC mit dem ESP32 sprechen kann, braucht er einen „Übersetzer" (USB-to-Serial-Treiber).</p>
+  
+  <ul class="material-list">
+    <li><i class="fa-solid fa-microchip"></i> <strong>Identifikation:</strong>Meistens handelt es sich um <strong>CP2102</strong> oder <strong>CH340</strong>.</li>
+    <li><i class="fa-solid fa-download"></i> <strong>Download:</strong> Hier finden Sie die Treiber: <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank" class="cta-link">Silicon Labs CP210x</a> oder <a href="http://www.wch-ic.com/downloads/CH341SER_EXE.html" target="_blank" class="cta-link">CH340</a>.</li>
+    <li><i class="fa-solid fa-check"></i> <strong>Erfolgskontrolle:</strong>Erscheint ein „COM-Port“ im Gerätemanager?</li>
+  </ul>
+
+  <figure style="margin: 20px 0; border: 1px solid #ddd; padding: 10px; background: #f9f9f9; border-radius: 8px;">
+    <img src="/docs/Media/Images/Comport.png" alt="Screenshot Windows Gerätemanager mit erkanntem COM-Port" style="display: block; margin: 0 auto; max-width: 100%; height: auto; border-radius: 4px; border: 1px solid #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <figcaption style="text-align: center; font-size: 0.9rem; color: #555; margin-top: 10px;">
+      <strong>Was Sie sehen sollten:</strong> Im Windows Gerätemanager unter "Anschlüsse (COM & LPT)" taucht nach der Treiberinstallation Ihr Board als "USB to UART Bridge" mit einer zugewiesenen COM-Nummer auf.
+    </figcaption>
+  </figure>
+
+  <blockquote style="border-left: 4px solid #00876C; padding-left: 15px; font-style: italic; color: #444;">
+    <strong>Didaktik-Tipp:</strong> In der Schule ist dies oft der Moment, in dem USB-Kabel als Fehlerquelle entlarvt werden. Nur "Datenkabel" funktionieren; reine "Ladekabel" zeigen keinen COM-Port an.
+  </blockquote>
+</section>
+
+    <section class="content-section">
+      <h2>2. Schritt 2: Die Arduino IDE vorbereiten</h2>
+      <p><strong>Aktion:</strong> Die „Boardverwalter-URL" hinzufügen.</p>
+      
+      <p><strong>Video-Anleitung:</strong></p>
+      <div style="margin:12px 0; background:#000; padding:8px; border-radius:8px;">
+        <video controls width="100%" preload="metadata">
+          <source src="/docs/Media/videos/ESP32inbetrieb.mp4" type="video/mp4">
+          Ihr Browser unterstützt das Video-Tag nicht. Datei: ESP32inbetrieb.mkv
+        </video>
+       </div>
+      <p><strong>Detail:</strong></p>
+      <ul>
+        <li>Pfad: <em>Datei → Voreinstellungen → Zusätzliche Boardverwalter-URLs</em></li>
+        <li>Diese URL einfügen: <code>https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json</code></li>
+        <li>Installation: Pfad: <em>Werkzeuge → Board → Boardverwalter</em> → Suche nach „ESP32" von Espressif Systems und auf „Installieren" klicken.</li>
+        <li>Board auswählen: <em>Board auswahl menu (Oben Links) →  Suche nach „ESP32" → passendes Board auswählen → ok</em></li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <h2>3. Schritt 3: Das erste Programm (Blink-Test)</h2>
+      <p><strong>Ziel:</strong> Sicherstellen, dass die Kommunikation steht.</p>
+      <p><strong>Hardware-Wissen:</strong> Beim ESP32 ist die interne LED oft an Pin <strong>2</strong> (anders als beim Arduino Uno Pin 13).</p>
+
+     
+      </div>
+
+      <p><strong>Code-Snippet:</strong></p>
+      <pre><code class="language-cpp">// Minimales Blink-Beispiel für ESP32
+const int LED_PIN = 2; // interne LED
+
+void setup() {
+  pinMode(LED_PIN, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(LED_PIN, HIGH);
+  delay(500);
+  digitalWrite(LED_PIN, LOW);
+  delay(500);
+}
+</code></pre>
+      <p>Tip: Beim Upload kann es notwendig sein, kurz die <em>EN/Reset</em>-Taste zu drücken, falls der Upload nicht automatisch startet.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>4. Deep Dive: ESP32 & Wi‑Fi (<code>WiFi.h</code>)</h2>
+      <p><strong>Konzept:</strong> Warum brauchen wir Wi‑Fi für die Wetterstation? Damit Messdaten automatisch an die Cloud oder eine App gesendet und mit Vorhersagen verglichen werden können.</p>
+
+      <p>Basis-Struktur:</p>
+      <pre><code class="language-cpp">#include <WiFi.h>
+
+const char* ssid = "Dein_Netzwerk";
+const char* password = "Dein_Passwort";
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.begin(ssid, password);
+
+  // Warte auf Verbindung
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("Verbunden!");
+}
+</code></pre>
+
+      <h3>Reconnect-Strategie</h3>
+      <p>Wetterstationen stehen oft weit weg vom Router. Wenn die Verbindung abbricht, prüft der <em>loop()</em> regelmäßig:</p>
+      <pre><code class="language-cpp">if (WiFi.status() != WL_CONNECTED) { WiFi.begin(ssid, password); }</code></pre>
+    </section>
+
+    <section class="content-section">
+      <h2>5. Wichtige Unterschiede zum Arduino (Warnhinweise)</h2>
+      <ul class="material-list">
+        <li><i class="fa-solid fa-bolt"></i> Spannung: ESP32 arbeitet mit <strong>3,3V</strong>. 5V an Daten-Pins kann den Chip zerstören.</li>
+        <li><i class="fa-solid fa-plug"></i> Pins: Nicht alle Pins sind gleich (einige sind „Input Only").</li>
+        <li><i class="fa-solid fa-tachometer-alt"></i> Geschwindigkeit: Mit 240 MHz ist er deutlich schneller als ein Arduino Uno.</li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <h2>6. Abschluss & Rücksprung</h2>
+      <p>Checkliste:</p>
+      <ul>
+        <li>Treiber installiert?</li>
+        <li>Board „ESP32 Dev Module“ (oder passendes Modell) ausgewählt?</li>
+        <li>Blink-Test erfolgreich?</li>
+        <li>Wi‑Fi Scan Beispiel ausprobiert?</li>
+      </ul>
+      <p style="margin-top:12px;"><a class="btn-primary" href="wetterstation.html">Bereit! Zurück zu Modul 2: Die Wetterstation</a></p>
+    </section>
+
+  </main>
+
+  <footer style="padding:20px;text-align:center;">
+    <div>CC BY-SA 4.0 – NwT Redaktion</div>
+  </footer>
+
+  <script>
+    // Progressbar
+    const progressBar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = (scrollTop / scrollHeight) * 100 || 0;
+      progressBar.style.width = progress + '%';
+    });
+
+    // Section Reveal
+    const sections = document.querySelectorAll('.content-section');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
+    }, { threshold: 0.15 });
+    sections.forEach(sec => observer.observe(sec));
+
+    // highlight.js init
+    document.addEventListener('DOMContentLoaded', ()=>{ if(window.hljs && typeof hljs.highlightAll==='function') hljs.highlightAll(); });
+  </script>
+</body>
+</html>

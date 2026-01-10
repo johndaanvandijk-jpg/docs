@@ -1,0 +1,127 @@
+Werkzeuge – Bibliotheken und Styles (Basis für Replikation)
+
+Zweck: Auflistung aller externen Bibliotheken, CSS‑Variablen, wichtigen Komponenten‑Styles und Skripte, die in docs/fotometer.html verwendet werden. Mit diesen Informationen lässt sich eine zweite Seite bauen, die optisch und funktional gleich erscheint.
+
+1) Externe Bibliotheken / Assets (CDN & Versionen)
+- Google Fonts: Roboto
+  - Link: https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap
+  - Zweck: Hauptschrift für Fließtext und Titel
+
+- highlight.js (Code-Syntax Highlighting)
+  - CSS (Atom One Dark): https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css
+  - Script: https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js
+  - Zweck: Hervorhebung von Codeblöcken; benötigt hljs.highlightAll() im JS
+
+- Font Awesome (Icons)
+  - CSS: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css
+  - Zweck: Icons für Listen, Buttons und Feedback (z.B. fa-copy, fa-check)
+
+- MathJax (Formeln)
+  - Script: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - Zweck: Darstellung von LaTeX‑Formeln im Inhalt
+
+- p5.js
+  - Script: https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.2/p5.js
+  - Zweck: (eingebunden aber nicht zwingend genutzt) für ggf. interaktive Zeichnungen/Simulationen
+
+- Plotly.js
+  - Script: https://cdn.plot.ly/plotly-2.32.0.min.js
+  - Zweck: Diagramme (eingebunden, im HTML als Abhängigkeit vorhanden)
+
+2) Zentrale CSS-Variablen (aus :root)
+- --kit-primary-color: #4CAF50
+- --kit-secondary-color: #45a049
+- --header-height: 80px
+- --progressbar-height: 8px
+- --correct-color: #28a745
+- --incorrect-color: #dc3545
+- --font-main / --font-title: 'Roboto', sans-serif
+- --section-radius: 18px
+- --section-shadow: 0 8px 32px rgba(44,62,80,0.08)
+- --section-bg: #fff
+- --section-margin: 36px
+- --section-padding: 48px 24px
+- --emoji-opacity: 0.08
+
+Hinweis: Diese Variablen definieren das Farb-, Abstands‑ und Formsystem der Seite; für ein identisches Erscheinungsbild müssen sie übernommen werden.
+
+3) Wichtige Style‑Blöcke und Komponenten (Kurzbeschreibung)
+- Global / Layout
+  - html, body: Hintergrund-Gradient (linear-gradient(180deg, #f7faf9, #e8f5e9)), font-family: var(--font-main), min-height: 100vh
+  - main: zentrierter Content-Container (max-width: 900px) mit margin-top = header + progressbar + 24px
+
+- Header (.kit-header)
+  - Fixed oben, Höhe var(--header-height), weißer Hintergrund, Schatten, Logo-Bild links, Titel/Subtile in der Mitte, optionaler Button (primary color)
+
+- Progressbar (.progress-container, .progress-bar)
+  - Fixiert unter Header, Höhe var(--progressbar-height), .progress-bar Breite per JS animiert, Hintergrund: --kit-primary-color
+
+- Content Section (.content-section)
+  - Weißer Card‑Look mit border-radius var(--section-radius), box-shadow var(--section-shadow), padding var(--section-padding), reveal-animation (opacity/transform) gesteuert per Klasse .is-visible
+  - .section-emoji: großes, leicht transparentes Emoji in Ecke (Dekor)
+
+- Flip-Card (.flip-card, .flip-card-inner, .flip-front, .flip-back)
+  - 3D-Flip mittels transform-style: preserve-3d; .flipped Klasse rotiert .flip-card-inner um 180deg; Vorder‑/Rückseite absolute positioniert; object-fit: contain für Bilder
+
+- Interaktive Simulation Styles (.ldr-simulator-container-adv, .slider-group, .slider-wrapper, .data-display-adv)
+  - Kachel‑Layout mit Box‑Shadows, Slider-Inputs, Anzeigezeilen (.data-row)
+
+- Custom Code Block (.custom-code-block)
+  - Grüne Hervorhebung, gepolsterter Block mit Kopier-Button (position:absolute), monospace Font für Code
+
+- Tooltip (.tooltip .tooltiptext)
+  - versteckte Box, sichtbar beim :hover, Position bottom:110%, Breite 320px, dunkler Hintergrund, Übergänge
+
+- Quiz Styles (.quiz-container, .quiz-option, .feedback-box)
+  - Grid für Optionen, .quiz-option states: :hover, .selected, .correct, .wrong; .feedback-box mit success/error Varianten
+
+- Responsive Regel
+  - @media (max-width:700px): main padding reduziert, content-section padding reduziert, kit-header padding reduziert
+
+4) Wichtige JavaScript‑Module / Funktionen (Reproduktions-Checkliste)
+- Progressbar Handler
+  - window scroll event → berechne progress = scrollTop / scrollHeight → set width style der #progress-bar
+
+- Section Reveal
+  - IntersectionObserver für .content-section → Klasse .is-visible hinzufügen wenn in viewport (threshold 0.15)
+
+- Flip-Card Toggle
+  - Funktion toggleFlip(id): toggle .flipped Klasse, setAttribute aria-pressed; Keyboard‑Support: keydown Listener prüft Enter/Space auf aktivem .flip-card
+
+- LDR Simulation (DOM + Logik)
+  - Elemente: #light-slider-adv, #fixed-resistor-slider, Anzeige: #ldr-res-display, #fixed-res-display, #output-volt-display, #adc-value-display
+  - Konstanten: V_IN = 5.0, ADC_MAX = 1023
+  - updateSimulation(): Berechnung ldr_kOhm (exponentielle Abnahme), vOut = V_IN * (ldr / (r1 + ldr)), adcValue = (vOut/V_IN)*ADC_MAX
+  - Event Listener: input events für beide Slider; initialer Aufruf beim DOMContentLoaded
+
+- Quiz Logik
+  - checkQuiz(scenarioId, value, element): Auswahl bewerten, CSS-Klassen .correct/.wrong setzen, Feedback-Box füllen und anzeigen
+
+- Copy-to-Clipboard für Code-Blöcke
+  - Listener auf .custom-code-block .copy-btn: copy code.innerText via navigator.clipboard.writeText(); Button zeigt kurz "Kopiert!"
+
+- highlight.js Initialisierung
+  - hljs.highlightAll() nach Laden
+
+5) Medien & Projektstruktur (Assets)
+- Verzeichnis: docs/Media/Images/
+  - Wichtige Bilder: NWTLOGO.png, Fotometer.png, Schaltplan1.png, Schaltplan2.png, Spannungsteiler.png, LDR*.jpeg, Serial0/50/100.png, Konz0/50/100.jpg
+- Hinweise: Verwende alt‑Attribute, setze onerror Fallback für kritische Illustrationen
+
+6) Reihenfolge beim Reproduzieren einer zweiten Seite
+- 1) Kopf: Einbinden Google Fonts + highlight.js CSS + FontAwesome CSS
+- 2) Basis-CSS (variablen) und zentrale Komponenten‑Styles
+- 3) Body‑HTML-Struktur: header, progress-container, main mit content sections (intro, grundlagen, aufbau, messwerterfassung, etc.)
+- 4) Dritt‑Bibliotheken (MathJax, p5.js, Plotly, highlight.js script, Font Awesome) möglichst am Ende oder asynchron einbinden wenn nötig
+- 5) Eigene Skripte: DOMContentLoaded Handler, IntersectionObserver, Progressbar, Flip-Card, Simulation, Quiz, Copy-to-Clipboard, hljs.highlightAll()
+- 6) Medien (Images) in docs/Media/Images/ ablegen
+
+7) Quick‑Checklist für Entwickler
+- [ ] Fonts & externe CSS laden (Reihenfolge beachten)
+- [ ] :root Variablen übernehmen
+- [ ] Hauptkomponenten‑Styles (Header, Sections, Cards, Flip, Code-Block, Tooltip, Quiz) übernehmen
+- [ ] Skripte in der richtigen Reihenfolge implementieren (DOMContentLoaded → Inits)
+- [ ] Assets platzieren und Pfade prüfen
+- [ ] Accessibility: ARIA-Labels, tabindex, keyboard support
+
+Ende – Werkzeuge.txt

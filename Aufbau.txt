@@ -1,0 +1,121 @@
+Aufbau (Konzept) – Basierend auf docs/fotometer.html
+
+Hinweis: Dies ist eine Struktur-Auflistung (Blöcke) ohne inhaltliche Ausformulierung. Jeder Block beschreibt, welche Elemente und welche Art von Inhalten später eingefügt werden sollen.
+
+- Header (fixed)
+  - Zweck: Modultitel, Subtitle, Logo, schnelle Aktion(en)
+  - Enthält: Logo-Bild, Titelzeile, Untertitel, optionaler CTA-Button
+  - Hinweise: Fixed-Position, responsive Verhalten, ARIA-Rollen
+
+- Fortschrittsanzeige (Progress Bar)
+  - Zweck: Visuelle Rückmeldung über Scroll-/Lernfortschritt
+  - Enthält: sichtbare Leiste mit animierbarer Breite, JS-Update-Logik
+  - Hinweise: Verknüpfung mit Scroll-Event, Z-Index über Content
+
+- Hauptbereich (main) — Container für Sektionen
+  - Zweck: Seiteninhalt; mehrere in sich abgeschlossene Content-Section-Blöcke
+  - Enthält: alle folgenden Sektionen als eigenständige Content-Section
+
+- Sektion: Einführung (intro)
+  - Zweck: Modulname, Kurzbeschreibung, Autor, Lizenz, Einstiegstext
+  - Enthält: Titel (H1), kurze Lead-Beschreibung, Autor- & Lizenzangabe
+  - Unterblock: Intro-Akkordeon
+    - Vorbereitung & Werkzeuge: Linkliste, Installationshinweise
+    - Benötigte Materialien: Liste mit Icons (Bauteile, Tools)
+  - Hinweise: Platz für Quicklinks / Einstiegsvideos
+
+- Sektion: 1. Technische Grundlagen (grundlagen)
+  - Zweck: Theorie zum LDR und dem Messprinzip
+  - Unterblöcke:
+    - 1.1 Funktionsprinzip LDR
+      - Text-Erklärung des Bauteils, invertierter Zusammenhang Licht↔Widerstand
+      - Bild(er) / Foto des LDR, einfache Grafik (SVG) zur Veranschaulichung
+    - 1.2 Der Spannungsteiler
+      - Konzept-Erklärung, Formel-Box (Tooltip mit Herleitung)
+      - Visual: Schaltplan/Fotografie als Flip-Card (Foto ↔ Schematisch)
+    - 1.3 Simulation
+      - Interaktive Komponente: Slider für Lichtintensität und Festwiderstand
+      - Anzeige-Felder: berechneter LDR-Widerstand, V_out, ADC-Wert
+      - Hinweise: JS-Logik für Berechnungen, Initialisierung, Event-Handler
+  - Hinweise: Accessibility (Beschriftungen), responsive Layout
+
+- Visual/Interaktive Komponente: Flip-Card (Fotografie ↔ Schaltplan)
+  - Zweck: Bild vs. schematische Darstellung umschaltbar
+  - Enthält: zwei Seiten (front/back), CSS 3D-Flip, JS-Toggle, Keyboard-Support
+  - Hinweise: Fallback-Bilder für onerror, ARIA-Pressed, tabindex
+
+- Interaktive Simulation (LDR-Simulator-Adv)
+  - Zweck: Nutzerexperiment zum Verständnis von R1-Effekt und Messbereich
+  - Enthält: Slider-Gruppen (Licht, R1), Live-Daten-Box (R_LDR, Vout, ADC), Beschreibungen
+  - Hinweise: Simulationsgleichungen, Konstanten (V_IN, ADC_MAX), Update-Funktion
+
+- Quizblock: Widerstands-Optimierer (quiz-r1)
+  - Zweck: Kurze Wissensüberprüfung / Anwendung des Lerninhalts
+  - Enthält: Einleitung, mehrere Szenarien (z. B. dunkel/hell), Auswahloptionen als Kacheln
+  - Interaktion: Click-Handler zur Bewertung, visuelles Feedback (correct/wrong), Feedback-Box mit Erklärung
+  - Hinweise: Bewertungen, Animation/Style-Klassen, ARIA-Lösungen
+
+- Sektion: 2. Der Messaufbau (aufbau)
+  - Zweck: Physikalische Anordnung des Fotometers beschreiben
+  - Enthält: erklärender Text, Flip-Card Foto ↔ Schaltplan des Fotometers, Figur-Untertitel
+  - Parameter: empfohlene Widerstandswerte, Hinweise zur Bestückung
+  - Unterblock: Test Arduino Code
+    - Zweck: Minimaler Sketch zum Einschalten der LED & seriellen Ausgabe
+    - Enthält: Code-Block mit Kopier-Button, kurze Testanleitung (Upload, Serieller Monitor)
+  - Unterblock: Optimierungsansätze
+    - Liste von Störfaktoren (Fremdlicht, Geometrie, Lichtbündelung, Wellenlänge) und mögliche Gegenmaßnahmen
+
+- Sektion: 3. Messwerterfassung & Kalibrierung (messwerterfassung)
+  - Zweck: Vom Rohwert zur physikalisch interpretierbaren Größe (z. B. % Konzentration)
+  - Unterblöcke:
+    - 3.1 Problem: Der "dumme" Rohwert
+      - Beschreibung: warum 0–1023 allein nicht genügt
+    - 3.2 Die 2-Punkt-Kalibrierung
+      - Schritt-für-Schritt-Anleitung: Referenzmessung Hell / Dunkel, Notation der Werte
+      - Visual: schematische Darstellung der Kalibrierpunkte
+    - 3.3 Zwei Wege der Auswertung
+      - Weg A (Excel): Datenerfassung, Kalibrierkurve, manuelle Auswertung
+      - Weg B (Map / Arduino): automatische Umrechnung on-device
+      - Vergleich: Vor-/Nachteile, didaktische Ziele
+    - 3.4 Umsetzung von Weg B
+      - Code-Block: Beispiel mit map() und constrain(), Serial-Ausgabe
+  - Unterblock: Beispielmessungen
+    - Galerie: Fotos der Proben + zugehörige Serieller-Monitor-Screenshots
+
+- Zusätzliche UI-Elemente & Hilfsblöcke
+  - Custom Code Blocks
+    - Zweck: Zeigen von Code mit Kopier-Button
+    - Enthält: pre/code, copy-to-clipboard JS, visuelles Feedback (kopiert)
+  - Tooltips & Erklärungskästen
+    - Zweck: zusätzliche Kontext- oder Herleitungsinfos ohne Seite zu überfrachten
+    - Enthält: kurze Herleitungen, MathJax-Formeln, kleine Überschriften
+  - Figuren / Captions
+    - Zweck: kontextualisierte Bildunterschriften
+
+- Footer
+  - Zweck: Credits, Lizenzhinweise, Metainformation
+  - Enthält: Lizenztext, Urheber, Hinweis auf KI-Unterstützung
+
+- Scripts & Funktionen (architecture notes)
+  - Progressbar-Handler (scroll -> width)
+  - IntersectionObserver für Reveal-Animationen der Sektionen
+  - Flip-Card toggle-Funktion (inkl. Keyboard-Support)
+  - Quiz-Handling (Auswahl, Bewertung, Feedback)
+  - Simulation-Update-Funktion (Slider event listeners, Berechnungen)
+  - Copy-to-Clipboard für Code-Blöcke
+  - Third-party libs: MathJax, p5.js, Plotly, highlight.js (Liste, Zweck)
+
+- Styles & Design Tokens
+  - Zweck: zentrales Styling (Farben, Abstände, Radius)
+  - Enthält: CSS-Variablen, responsive rules, Komponentenspezifische Styles
+
+- Assets & Medien
+  - Zweck: Übersicht der benötigten Medien
+  - Enthält: Bilder (Fotos, Schaltpläne), SVGs, Beispiel-Serial-Screenshots
+  - Hinweise: alternative Texte, onerror-Fallbacks, Bildgrößen
+
+- Hinweise für Redakteure / Autoren
+  - Zweck: wie Inhalte später befüllt werden sollen
+  - Enthält: Empfehlungen zu Ton, Umfang (z. B. kurze Erklärtexte vs. ausführliche Herleitungen), Stellen für Aufgaben/Arbeitsblätter
+
+Ende der Strukturliste.

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Die Wetterstation – Ein Lernmodul zur Sensorintegration und Messdatenerfassung</title>
+  <title>Wetterapp-Test 2.0 – Einstieg in das Internet of Things</title>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <!-- highlight.js (atom-one-dark) -->
@@ -18,8 +18,8 @@
   <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
   <!-- highlight.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
   <style>
-    /* Styles übernommen aus fotometer.html */
     :root {
       --kit-primary-color: #4CAF50;
       --kit-secondary-color: #45a049;
@@ -36,6 +36,7 @@
       --section-padding: 48px 24px;
       --emoji-opacity: 0.08;
     }
+
     html, body {
       margin: 0;
       padding: 0;
@@ -44,6 +45,7 @@
       color: #222;
       min-height: 100vh;
     }
+
     .kit-header {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -85,6 +87,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .progress-container {
       position: fixed;
       top: var(--header-height);
@@ -99,6 +102,7 @@
       background: var(--kit-primary-color);
       transition: width 0.2s;
     }
+
     main {
       margin-top: calc(var(--header-height) + var(--progressbar-height) + 24px);
       padding-bottom: 48px;
@@ -106,6 +110,7 @@
       margin-left: auto;
       margin-right: auto;
     }
+
     .content-section {
       background: var(--section-bg);
       border-radius: var(--section-radius);
@@ -118,10 +123,7 @@
       transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
       will-change: opacity, transform;
     }
-    .content-section.is-visible {
-      opacity: 1;
-      transform: none;
-    }
+    .content-section.is-visible { opacity: 1; transform: none; }
     .section-emoji {
       position: absolute;
       right: 24px;
@@ -131,220 +133,196 @@
       pointer-events: none;
       user-select: none;
     }
-    h1, h2, h3, h4 {
-      font-family: var(--font-title);
-      color: var(--kit-primary-color);
-      margin-top: 0;
-    }
+    h1, h2, h3, h4 { font-family: var(--font-title); color: var(--kit-primary-color); margin-top: 0; }
     h1 { font-size: 2.2rem; }
-    h2 { font-size: 1.5rem; }
-    h3 { font-size: 1.2rem; }
-    .material-list {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 16px 0;
+    .lead { font-size: 1.05rem; color:#333; margin-top:0; }
+
+    .material-list { list-style: none; padding: 0; margin: 0 0 16px 0; }
+    .material-list li { margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .material-list li i { color: var(--kit-primary-color); font-size: 1.1em; }
+
+    /* Small styles for details accordion (copied from fotometer) */
+    .intro-accordion details {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+      background: #fbfffb;
     }
-    .material-list li {
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .material-list li i {
-      color: var(--kit-primary-color);
-      font-size: 1.1em;
-    }
-    /* Responsive */
-    @media (max-width: 700px) {
-      main { padding: 0 4vw; }
-      .content-section { padding: 32px 8px; }
-      .kit-header { padding: 0 8px; }
-    }
+    .intro-accordion summary { list-style: none; font-weight: 600; cursor: pointer; outline: none; padding: 6px 4px; color: var(--kit-primary-color); }
+    .intro-accordion summary::-webkit-details-marker { display: none; }
+    .intro-accordion summary:before { content: "▸"; display: inline-block; margin-right: 8px; transform-origin: 6px 6px; transition: transform 0.18s ease; }
+    .intro-accordion details[open] summary:before { transform: rotate(90deg); }
+
+    @media (max-width: 700px) { main { padding: 0 4vw; } .content-section { padding: 32px 8px; } .kit-header { padding: 0 8px; } }
+
+    /* Flip card for BME280 (keine externen Klassen, Stil ähnlich zu bestehenden Sektionen) */
+    .flip-card { background: transparent; width: 220px; height: 140px; perspective: 1000px; margin: 12px 0; }
+    .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; box-shadow: 0 6px 18px rgba(44,62,80,0.08); border-radius: 12px; }
+    .flip-card:hover .flip-card-inner, .flip-card:focus-within .flip-card-inner { transform: rotateY(180deg); }
+    .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 12px; display:flex; align-items:center; justify-content:center; padding:12px; background:#fbfffb; }
+    .flip-card-front img { max-width:100%; max-height:100%; border-radius:8px; }
+    .flip-card-back { transform: rotateY(180deg); font-size:0.95rem; color:#333; }
+
+    /* Plotly container */
+    #solar-plot { width:100%; height:320px; }
+
+    /* Simple diagram placeholder for ESP32 pinout */
+    .pinout-placeholder { background:linear-gradient(180deg,#fff,#f6f6f6); border:1px dashed #e0e0e0; padding:14px; border-radius:12px; color:#333; text-align:center; font-size:0.95rem; }
+
+    @media (max-width:700px) { .flip-card{ width:100%; height:auto; } }
   </style>
 </head>
 <body>
   <header class="kit-header" role="banner" aria-label="Modultitel und Fortschrittsanzeige">
     <img src="Media/Images/NWTLOGO.png" alt="NWT Logo" />
     <div class="header-titles">
-      <div class="title">Die Wetterstation</div>
-      <div class="subtitle">Ein Lernmodul zur Sensorintegration und Messdatenerfassung</div>
+      <div class="title">Wetterapp-Test 2.0</div>
+      <div class="subtitle">Einstieg in das Internet of Things</div>
     </div>
   </header>
+
   <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+
   <main>
-    <!-- Einführung -->
     <section class="content-section" id="intro">
-      <div class="section-emoji">🌦️</div>
-      <h1>Die Wetterstation</h1>
-      <p class="lead">Ein Lernmodul zur Sensorintegration und Messdatenerfassung</p>
+      <div class="section-emoji">🌤️</div>
+      <h1>Wetterapp-Test 2.0</h1>
+      <p class="lead">Leitfrage: Wie zuverlässig ist eine Wettervorhersage? Dieses Modul begleitet Sie vom Aufbau einer einfachen vernetzten Wetterstation bis zur Auswertung und zum Vergleich eigener Messdaten mit Vorhersage‑Apps.</p>
       <p><strong>Autor:</strong> John van Dijk</p>
       <p><strong>Lizenzhinweis:</strong> CC BY-SA 4.0</p>
-      <p>
-        Dieses Modul baut auf den Kalibrierkenntnissen aus Modul 1 auf und erweitert die Sensorik um Temperatur- und Solarsensoren. Ziel ist die systematische Erfassung von Messreihen und deren Vergleich mit realen Wetterdaten. Die technische Befähigung steht im Vordergrund: Lehrkräfte lernen, wie man verschiedene Sensoren am Microcontroller betreibt und die Daten sinnvoll auswertet.
-      </p>
-      <div class="quiz-block" style="background:#e8f5e9;">
-        <i class="fa-solid fa-circle-info"></i>
-        Dieses Modul richtet sich an Fortgeschrittene, die bereits mit LDR und Spannungsteiler vertraut sind.
+
+      <p>In diesem Lernmodul lernen Schülerinnen und Schüler, eine kleine IoT‑Wetterstation mit ESP32 und BME280 aufzubauen, Messdaten per WLAN in die Cloud zu senden und die Daten wissenschaftlich auszuwerten. Ziel ist es, die Güte von Vorhersagen kritisch zu hinterfragen und eigene Messreihen zu produzieren.</p>
+
+      <div class="intro-accordion">
+        <details open>
+          <summary>Vorbereitung & Werkzeuge</summary>
+          <ul class="material-list">
+        <li>
+          <a href="ESP32.html" style="color: blue; text-decoration: underline; font-weight: bold;">
+           <i class="fa-solid fa-microchip"></i> Zum zentralen ESP32-Setup & WiFi-Tutorial
+          </a>
+          <ul style="margin-top: 0.5rem; font-size: 0.95rem; color: #555;">
+            <li><i class="fa-solid fa-check-circle"></i> Installation des Boardverwalters (Arduino IDE)</li>
+            <li><i class="fa-solid fa-check-circle"></i> WiFi.h Grundlagen & Verbindungs-Strategien</li>
+            <li><i class="fa-solid fa-check-circle"></i> Weiterführende Code-Beispiele und Ressourcen</li>
+          </ul>
+        </li>
+        </details>
+
+        <details>
+          <summary>Benötigte Materialien</summary>
+          <ul class="material-list">
+            <li><i class="fa-solid fa-microchip"></i> ESP32 NodeMCU (oder kompatibles ESP32-Board)</li>
+            <li><i class="fa-solid fa-square-rss"></i> BME280 Umweltsensor (Temperatur, Luftfeuchte, Luftdruck)</li>
+            <li><i class="fa-solid fa-solar-panel"></i> Kleines Solarmodul</li>
+            <li><i class="fa-solid fa-cable-minijack"></i> Jumperkabel, Steckbrett oder Lötzubehör</li>
+          </ul>
+        </details>
+
+       
       </div>
-      <h2>Vorbereitung & Werkzeuge</h2>
-      <ul class="material-list">
-        <li><i class="fa-solid fa-download"></i> Arduino IDE installieren: <a href="https://www.arduino.cc/en/software" target="_blank" rel="noopener">arduino.cc/en/software</a></li>
-        <li><i class="fa-solid fa-download"></i> CH340-Treiber (falls benötigt): <a href="https://sparks.gogo.co.nz/ch340.html" target="_blank" rel="noopener">sparks.gogo.co.nz/ch340.html</a></li>
-        <li><i class="fa-solid fa-bread-slice"></i> Breadboard verstehen: <a href="https://learn.sparkfun.com/tutorials/how-to-use-a-breadboard/all" target="_blank" rel="noopener">SparkFun Breadboard Guide</a></li>
-      </ul>
-      <h3 style="margin-top:28px; margin-bottom:10px;">Benötigte Materialien</h3>
-      <ul class="material-list">
-        <li><i class="fa-solid fa-microchip"></i> Arduino Microcontroller (Uno / Nano etc.)</li>
-        <li><i class="fa-solid fa-bread-slice"></i> Breadboard</li>
-        <li><i class="fa-solid fa-grip-lines"></i> Jumper Kabel</li>
-        <li><i class="fa-solid fa-temperature-high"></i> Temperatursensor (z.B. TMP36, DS18B20)</li>
-        <li><i class="fa-solid fa-solar-panel"></i> Kleine Solarzelle</li>
-        <li><i class="fa-solid fa-ruler-horizontal"></i> Widerstände</li>
-        <li><i class="fa-solid fa-memory"></i> SD-Kartenmodul oder PC für Datenlogging</li>
-      </ul>
+
+      
     </section>
-    <!-- 1. Technische Grundlagen: Sensoren am Microcontroller -->
+
     <section class="content-section" id="grundlagen">
-      <div class="section-emoji">🌡️</div>
-      <h2>1. Technische Grundlagen: Sensoren am Microcontroller</h2>
-      <h3>1.1. Temperatursensor</h3>
-      <p>
-        Ein Temperatursensor wie der TMP36 oder DS18B20 misst die Umgebungstemperatur und liefert einen analogen oder digitalen Wert an den Mikrocontroller. Die Auswertung erfolgt über <code>analogRead()</code> oder spezielle Bibliotheken.
-      </p>
-      <h3>1.2. Solarzelle als Sensor</h3>
-      <p>
-        Eine kleine Solarzelle kann als Helligkeitssensor dienen. Sie erzeugt eine Spannung, die proportional zur Lichtintensität ist. Die Messung erfolgt ebenfalls über einen analogen Eingang des Mikrocontrollers.
-      </p>
-      <h3>1.3. Datenlogging</h3>
-      <p>
-        Die erfassten Messwerte (Temperatur, Licht) werden systematisch aufgezeichnet. Dies kann entweder direkt auf eine SD-Karte oder über die serielle Schnittstelle am PC erfolgen. Ziel ist die Erstellung von Messreihen für den Vergleich mit echten Wetterdaten.
-      </p>
-    </section>
-    <!-- 2. Der Messaufbau -->
-    <section class="content-section" id="aufbau">
-      <div class="section-emoji">🧰</div>
-      <h2>2. Der Messaufbau</h2>
-      <p>
-        Der Aufbau der Wetterstation umfasst die Integration von mindestens zwei Sensoren (Temperatur und Solarzelle) auf dem Breadboard. Die Sensoren werden mit dem Arduino verbunden und die Messwerte regelmäßig erfasst.
-      </p>
-      <figure style="border: 1px solid #ccc; padding: 10px; text-align: center; background: #f9f9f9;">
-        <figcaption>
-          <em>Modellhafter Aufbau: Arduino mit Temperatursensor und Solarzelle auf Breadboard</em>
-        </figcaption>
-      </figure>
-      <h4>Test Arduino Code (Platzhalter)</h4>
-      <p>
-        Beispielcode zur Erfassung von Temperatur und Lichtstärke. Die Messwerte werden im Seriellen Monitor ausgegeben.
-      </p>
-      <div class="custom-code-block">
-        <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
-        <pre><code class="language-cpp">
-/*
-  Wetterstation-Test
-  Zweck: Temperatur und Lichtstärke messen und ausgeben.
-*/
+      <div class="section-emoji">🛠️</div>
+      <h2>1. Technische Grundlagen</h2>
+      <p class="lead">In diesem Abschnitt erläutern wir die wichtigsten technischen Komponenten und die Gründe für das Upgrade vom Arduino zum ESP32.</p>
 
-// Pins definieren
-const int tempPin = A0; // Temperatursensor an A0
-const int solarPin = A1; // Solarzelle an A1
-
-void setup() {
-  Serial.begin(9600);
-}
-
-void loop() {
-  int tempRaw = analogRead(tempPin);
-  int solarRaw = analogRead(solarPin);
-
-  // Temperatur berechnen (TMP36 Beispiel)
-  float voltage = tempRaw * (5.0 / 1023.0);
-  float temperatureC = (voltage - 0.5) * 100.0;
-
-  Serial.print("Temperatur: ");
-  Serial.print(temperatureC);
-  Serial.print(" °C | Licht: ");
-  Serial.println(solarRaw);
-
-  delay(1000);
-}
-        </code></pre>
+      <h3>Das Upgrade: Der ESP32</h3>
+      <p>Im ersten Modul wurde ein Arduino verwendet. Für die erweiterte Wetterstation wechseln wir zum ESP32. Gründe: Integriertes Wi‑Fi für IoT‑Anwendungen, echte Dual‑Core Leistung für gleichzeitige Mess‑ und Netzwerkaufgaben sowie eine native Logikspannung von 3,3 V, die gut mit Sensoren wie dem BME280 zusammenarbeitet.</p>
+      <div class="pinout-placeholder" role="img" aria-label="ESP32 Pinout">
+        [Bild: ESP32 Pinout mit Markierung von SDA (GPIO 21) und SCL (GPIO 22)]
       </div>
-      <p style="margin-top:15px;">
-        <strong>Test-Anleitung:</strong> Kopieren Sie den Code in die Arduino IDE, passen Sie die Pin-Belegung ggf. an und laden Sie ihn auf den Arduino. Öffnen Sie den Seriellen Monitor, um die Messwerte zu sehen.
-      </p>
+
+      <h3>Der BME280 Umweltsensor</h3>
+      <p>Der BME280 ist ein 3‑in‑1 Wunder: Temperatur, Luftfeuchtigkeit und Luftdruck in einem kompakten Modul.</p>
+      <p>Didaktisch wichtig: Wir nutzen den Sensor über I²C (digital). Die Module liefern ab Werk kalibrierte Messwerte, sodass systematische Messfehler – die bei analogen Messungen und manueller Kalibrierung auftreten können – deutlich reduziert werden. Für Schülerinnen und Schüler bedeutet das: schnelleres Experimentieren, robustere Daten und klarere Diskussionen über Messunsicherheit.</p>
+
+      <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;margin-top:12px;">
+        <div>
+          <div class="flip-card" tabindex="0" aria-label="BME280 Flipcard">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <!-- Foto placeholder -->
+                <img src="Media/Images/BME280.png" alt="Foto des BME280" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style="padding:12px;color:#666;">Foto des BME280 (Platzhalter)</div>';">
+              </div>
+              <div class="flip-card-back">
+                <div>
+                  <strong>I²C Bus (vereinfacht)</strong>
+                  <div style="margin-top:8px;font-size:0.95rem;color:#555;">Master (ESP32) ⇄ SDA (GPIO21) / SCL (GPIO22) ⇄ Slave (BME280)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="flex:1;min-width:220px;">
+          <h3>Die Solarzelle als Lichtsensor</h3>
+          <p>Die kleine Solarzelle wird nicht nur als Energiequelle eingesetzt, sondern wir messen die Leerlaufspannung, um die Sonnenscheindauer quantitativ zu erfassen. Dieses Prinzip ist einfach und anschaulich: höhere Leerlaufspannung ≈ mehr eingehende Sonnenstrahlung.</p>
+        </div>
+      </div>
+
+      <h3>Simulation & Auswertung</h3>
+      <p>Zur Demonstration wissenschaftlicher Auswertung binden wir ein interaktives Chart ein, das eine ideale Sinuskurve (theoretischer Sonnenlauf) mit fiktiven, unregelmäßigen Messpunkten vergleicht. Lehrkräfte können so zeigen, wie Messdaten visualisiert und interpretiert werden.</p>
+
+      <div id="solar-plot" aria-label="Plot: Ideale Sinuskurve vs. Fiktive Daten"></div>
     </section>
-    <!-- 3. Messwerterfassung & Auswertung -->
-    <section class="content-section" id="messwerterfassung">
-      <div class="section-emoji">📈</div>
-      <h2>3. Messwerterfassung & Auswertung</h2>
-      <p class="lead">
-        Die Wetterstation zeichnet fortlaufend Messwerte auf. Ziel ist die Erstellung von Messreihen, die mit echten Wetterdaten verglichen werden können.
-      </p>
-      <article>
-        <h3>3.1. Messreihen erstellen</h3>
-        <p>
-          Die Messwerte werden über einen längeren Zeitraum aufgezeichnet. Dies kann automatisiert (SD-Karte) oder manuell (Serieller Monitor, Excel) erfolgen.
-        </p>
-      </article>
-      <article>
-        <h3>3.2. Vergleich mit echten Wetterdaten</h3>
-        <p>
-          Die eigenen Messreihen können mit öffentlich verfügbaren Wetterdaten (z.B. von <a href="https://www.wetter.com/" target="_blank">wetter.com</a>) verglichen werden. Ziel ist die Bewertung der Genauigkeit und die Diskussion möglicher Fehlerquellen.
-        </p>
-      </article>
-      <article>
-        <h3>3.3. Ansätze zur Optimierung</h3>
-        <ul>
-          <li><strong>Sensorplatzierung:</strong> Die Position der Sensoren beeinflusst die Messgenauigkeit. <em>Optimierung:</em> Feste Montage und Schutz vor direkter Sonneneinstrahlung.</li>
-          <li><strong>Datenlogging:</strong> Automatisierte Speicherung der Messwerte erhöht die Auswertbarkeit. <em>Optimierung:</em> Einsatz eines SD-Kartenmoduls oder Anbindung an einen PC.</li>
-          <li><strong>Vergleichsdaten:</strong> Nutzung von Online-Wetterdaten zur Validierung der eigenen Messungen.</li>
-        </ul>
-      </article>
-    </section>
-    <!-- ... weitere Sektionen wie Quiz, Troubleshooting, Ausblick ... -->
+
   </main>
-  <footer>
-    <div>CC BY Lizenz, Andreas Sexauer, Zentrum für Mediales Lernen am Karlsruher Institut für Technologie (KIT).</div>
-    <div><small>Dieses Lernmodul wurde mithilfe von künstlicher Intelligenz (KI) konzipiert und programmiert.</small></div>
+
+  <footer style="padding:20px;text-align:center;">
+    <div>CC BY-SA 4.0 – NwT Redaktion</div>
+    <div><small>Dieses Modul wurde mithilfe von künstlicher Intelligenz (KI) konzipiert und programmiert..</small></div>
   </footer>
+
   <script>
     // Progressbar
     const progressBar = document.getElementById('progress-bar');
     window.addEventListener('scroll', () => {
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
       const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const progress = (scrollTop / scrollHeight) * 100;
+      const progress = (scrollTop / scrollHeight) * 100 || 0;
       progressBar.style.width = progress + '%';
     });
-    // Section Observer
+
+    // Section Reveal
     const sections = document.querySelectorAll('.content-section');
     const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('is-visible');
-      });
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
     }, { threshold: 0.15 });
     sections.forEach(sec => observer.observe(sec));
-    // highlight.js
-    hljs.highlightAll();
+
+    // highlight.js init
+    document.addEventListener('DOMContentLoaded', ()=>{ if(window.hljs && typeof hljs.highlightAll==='function') hljs.highlightAll(); });
   </script>
+
   <script>
-    // Copy-to-Clipboard for custom code blocks
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.custom-code-block .copy-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          const code = btn.parentElement.querySelector('pre code');
-          if (!code) return;
-          let text = code.innerText.replace(/^\s*\n/, '').replace(/\s*$/, '');
-          navigator.clipboard.writeText(text).then(function() {
-            btn.classList.add('copied');
-            btn.innerHTML = '<i class="fa fa-check"></i> Kopiert!';
-            setTimeout(function() {
-              btn.classList.remove('copied');
-              btn.innerHTML = '<i class="fa fa-copy"></i>';
-            }, 1200);
-          });
-        });
-      });
-    });
+    // Plotly: Ideale Sinuskurve vs. fiktive Messdaten (Demo)
+    (function(){
+      // ideale Kurve (fein aufgelöst)
+      const x = Array.from({length:100}, (_,i)=> i*(24/99));
+      const ideal = x.map(t=> Math.max(0, Math.sin(Math.PI*(t-6)/12)));
+
+      const traceIdeal = { x: x, y: ideal, mode: 'lines', name: 'Ideale Sinuskurve', line: { color: '#ff8c00' } };
+
+      // fiktive, unregelmäßige Messpunkte
+      const pts = 18;
+      const xp = []; const yp = [];
+      for(let i=0;i<pts;i++){
+        const t = Math.random()*24;
+        const v = Math.max(0, Math.sin(Math.PI*(t-6)/12) + (Math.random()-0.5)*0.4);
+        xp.push(Number(t.toFixed(2)));
+        yp.push(Number(v.toFixed(3)));
+      }
+      const traceFiktiv = { x: xp, y: yp, mode: 'markers', name: 'Fiktive Messdaten', marker: { color: '#1f77b4', size: 8 } };
+
+      const layout = { title: 'Sonnenverlauf: Ideal vs. Fiktive Daten', xaxis: { title: 'Stunde', range:[0,24] }, yaxis: { title: 'Relative Sonnenintensität', range:[0,1.2] }, legend:{orientation:'h'} };
+
+      Plotly.newPlot('solar-plot', [traceIdeal, traceFiktiv], layout, {responsive:true});
+    })();
   </script>
 </body>
+</html>

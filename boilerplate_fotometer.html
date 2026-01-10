@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Boilerplate – Vom LDR zum Fotometer (Template)</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- highlight.js (atom-one-dark) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Third-party scripts (deferred/async where appropriate) -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.2/p5.js" defer></script>
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+
+  <style>
+    :root{
+      --kit-primary-color: #4CAF50;
+      --kit-secondary-color: #45a049;
+      --header-height: 80px;
+      --progressbar-height: 8px;
+      --font-main: 'Roboto', sans-serif;
+      --font-title: 'Roboto', sans-serif;
+      --section-radius: 18px;
+      --section-shadow: 0 8px 32px rgba(44,62,80,0.08);
+      --section-bg: #fff;
+      --section-margin: 36px;
+      --section-padding: 48px 24px;
+      --emoji-opacity: 0.08;
+    }
+    html,body{margin:0;padding:0;font-family:var(--font-main);background:linear-gradient(180deg,#f7faf9 0%,#e8f5e9 100%);color:#222;min-height:100vh}
+    .kit-header{position:fixed;top:0;left:0;right:0;height:var(--header-height);background:#fff;box-shadow:0 2px 8px rgba(44,62,80,0.06);z-index:100;display:flex;align-items:center;padding:0 32px;gap:24px}
+    .kit-header img{height:48px;width:48px;border-radius:8px;object-fit:contain}
+    .kit-header .title{font-family:var(--font-title);font-size:1.5rem;font-weight:700;color:var(--kit-primary-color);margin-bottom:2px}
+    .progress-container{position:fixed;top:var(--header-height);left:0;right:0;height:var(--progressbar-height);background:#e0e0e0;z-index:101}
+    .progress-bar{height:100%;width:0;background:var(--kit-primary-color);transition:width .2s}
+    main{margin-top:calc(var(--header-height)+var(--progressbar-height)+24px);padding-bottom:48px;max-width:900px;margin-left:auto;margin-right:auto}
+    .content-section{background:var(--section-bg);border-radius:var(--section-radius);box-shadow:var(--section-shadow);margin-bottom:var(--section-margin);padding:var(--section-padding);position:relative}
+    /* Minimal placeholders for components referenced in Werkzeuge.txt */
+    .flip-card{width:650px;max-width:100%;height:450px;perspective:1000px;margin:0 auto;cursor:pointer}
+    .custom-code-block{background:#e8f5e9;border:1.5px solid var(--kit-primary-color);border-radius:8px;padding:18px;position:relative;overflow:auto}
+    .ldr-simulator-container-adv{max-width:500px;margin:20px auto;padding:20px;background:#f7f9fc;border-radius:8px}
+    @media (max-width:700px){main{padding:0 4vw}.content-section{padding:32px 8px}.kit-header{padding:0 8px}}
+  </style>
+</head>
+<body>
+  <header class="kit-header" role="banner" aria-label="Modultitel und Fortschrittsanzeige">
+    <img src="Media/Images/NWTLOGO.png" alt="NWT Logo" />
+    <div class="header-titles">
+      <div class="title">Vom LDR zum Fotometer (Template)</div>
+      <div class="subtitle">Template – Bibliotheken & Styles eingebunden</div>
+    </div>
+  </header>
+
+  <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+
+  <main>
+    <section class="content-section" id="intro">
+      <h1>Intro (Platzhalter)</h1>
+      <p>Kurz: kopiere die Sektionen aus dem Original und fülle sie hier wieder ein.</p>
+    </section>
+
+    <section class="content-section" id="grundlagen">
+      <h2>Technische Grundlagen (Platzhalter)</h2>
+      <div class="flip-card" id="flip-placeholder" role="button" tabindex="0">Bild/Schaltplan Platzhalter</div>
+    </section>
+
+    <section class="content-section" id="simulation">
+      <h2>Simulation (Platzhalter)</h2>
+      <div class="ldr-simulator-container-adv">
+        <p>Slider & Werte: implementiere JavaScript wie in Werkzeuge.txt beschrieben.</p>
+      </div>
+    </section>
+
+    <section class="content-section" id="aufbau">
+      <h2>Messaufbau (Platzhalter)</h2>
+      <div class="custom-code-block"><pre><code>// Arduino-Testcode hier einfügen (Kopier-Button optional)</code></pre></div>
+    </section>
+
+  </main>
+
+  <footer style="padding:20px;text-align:center;">Template Footer – Lizenz & Credits hier eintragen</footer>
+
+  <script>
+    // Progressbar
+    const progressBar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', ()=>{
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = (scrollTop / scrollHeight) * 100 || 0;
+      progressBar.style.width = progress + '%';
+    });
+
+    // Section Reveal (minimal)
+    const sections = document.querySelectorAll('.content-section');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.15 });
+    sections.forEach(s => observer.observe(s));
+
+    // Flip-card toggle (placeholder)
+    function toggleFlip(id){const el=document.getElementById(id);if(!el)return;el.classList.toggle('flipped');const pressed=el.classList.contains('flipped');el.setAttribute('aria-pressed', pressed ? 'true':'false');}
+    document.addEventListener('keydown', function(e){const active=document.activeElement; if(!active) return; if(active.classList && active.classList.contains('flip-card')){ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggleFlip(active.id); } } });
+
+    // highlight.js init (deferred script included)
+    document.addEventListener('DOMContentLoaded', ()=>{ if(window.hljs && typeof hljs.highlightAll==='function') hljs.highlightAll(); });
+
+    // Copy-to-clipboard and simulation/quiz JS are intentionally left as placeholders.
+  </script>
+</body>
+</html>

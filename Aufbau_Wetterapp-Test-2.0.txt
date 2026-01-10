@@ -1,0 +1,105 @@
+Aufbau (Konzept) – Lernmodul: Wetterapp-Test 2.0
+
+Hinweis: Dies ist eine Struktur-Auflistung (Blöcke) mit konkreten Inhalten für das Modul „Wetterapp-Test 2.0“. Jeder Block beschreibt, welche Elemente und welche Art von Inhalten später in die Web-Seite/des Lernmoduls eingefügt werden sollen.
+
+- Header (fixed)
+  - Zweck: Modultitel, Subtitle, Logo, schnelle Aktion(en)
+  - Enthält:
+    - Modultitel: „Wetterapp-Test 2.0"
+    - Subtitle: „Einstieg in das Internet of Things"
+    - Logo: Logo der NwT-Reihe (Platzhalter / img src)
+    - Hinweise: Fixed-Position, responsive Verhalten, ARIA-Rollen
+
+- Fortschrittsanzeige (Progress Bar)
+  - Zweck: Visuelle Rückmeldung über den Lernweg (von der Sensorik zur wissenschaftlichen Konferenz)
+  - Enthält: sichtbare Leiste mit animierbarer Breite, JS-Update-Logik
+  - Hinweise: Verknüpfung mit Scroll-Event oder Abschnitts-Navigation, Z-Index über Content
+
+- Hauptbereich (main) — Container für Sektionen
+  - Zweck: Seiteninhalt; mehrere in sich abgeschlossene Content-Section-Blöcke
+  - Enthält: alle folgenden Sektionen als eigenständige Content-Section
+
+- Sektion: Einführung (intro)
+  - Zweck: Kontextualisierung der Leitfrage: „Wie zuverlässig ist eine Wettervorhersage?"
+  - Enthält:
+    - Titel (H1): Wetterapp-Test 2.0
+    - Kurze Lead-Beschreibung: Einstiegstext zur Unterrichtseinheit (UE)
+    - Autor: Angabe des Autors / Redaktion
+    - Lizenz: CC BY-SA 4.0
+  - Unterblock: Intro-Akkordeon
+    - Vorbereitung & Werkzeuge:
+      - Installationshinweis: ESP32-Boardverwalter-URLs in der Arduino IDE hinzufügen
+      - Einführung: kurze Hinweise zur Wi-Fi-Library (ESP32 WiFi.h)
+      - Links: weiterführende Ressourcen / Tutorials
+    - Benötigte Materialien:
+      - Liste mit Icons und Bezeichnungen: ESP32 NodeMCU, BME280 Sensor, kleines Solarmodul, Jumperkabel, Sperrholz für das Gehäuse
+    - Didaktischer Brückenschlag:
+      - Kurzer Rückblick auf Modul 1 („Vom LDR zum smarten Sensor"): Motivation und Verbindung zu diesem Modul
+  - Hinweise: Platz für Quicklinks / Einstiegsvideos
+
+- Sektion: 1. Technische Grundlagen (grundlagen)
+  - Zweck: Einführung in den ESP32 und das I2C-Protokoll vs. Analogmessung
+  - Unterblöcke:
+    - 1.1 Das Upgrade: Der ESP32
+      - Inhalt: Erklärung der Vorteile (Wi‑Fi, Dual‑Core, 3.3V Logik) gegenüber dem Arduino aus Modul 1
+      - Visual: Pinout‑Diagramm des ESP32 mit Fokus auf I2C‑Pins (SDA/SCL)
+    - 1.2 Der BME280 Umweltsensor
+      - Inhalt: Funktionsweise der kombinierten Messung von Temperatur, Luftfeuchtigkeit und Luftdruck
+      - Vergleich: Warum digitale Sensoren (I2C) die Kalibrierung vereinfachen (Werkseinstellung)
+    - 1.3 Die Solarzelle als Lichtsensor
+      - Inhalt: Messprinzip der Leerlaufspannung als Maß für die Sonnenscheinintensität
+    - 1.4 Simulation
+      - Inhalt: Interaktives Plotly‑Chart: Vergleich von fiktiven Vorhersagedaten mit einer „idealen" Sinuskurve des Tagesverlaufs
+      - Visual/Interaktive Komponente: Flip‑Card (Foto BME280 ↔ I2C Bus‑Schema)
+
+- Quizblock: Sensor‑Platzierung (quiz-placement)
+  - Zweck: Verständnis von Messfehlern durch äußere Einflüsse
+  - Inhalt:
+    - Szenarien: Wo platziere ich die Wetterstation? Beispiele: pralle Sonne vs. Schatten, Höhe über dem Boden, Nähe zu Hauswänden
+    - Interaktion: Auswahlmöglichkeiten / Kacheln zur Positionierung, Bewertung mit Feedback
+  - Feedback: Erklärung zum „Strahlungsfehler" und warum ein weißer Anstrich der Station essentiell ist
+
+- Sektion: 2. Der Messaufbau & IoT‑Check (aufbau)
+  - Zweck: Verkabelung und erster Funktionstest der vernetzten Station
+  - Inhalt: Schritt‑für‑Schritt‑Verkabelungsanleitung (BME280 an ESP32)
+  - Unterblock: Wi‑Fi Hello World
+    - Zweck: Minimaler Sketch zur Verbindung mit dem lokalen WLAN
+    - Inhalt: Code‑Block mit Platzhaltern für SSID/Passwort und Erfolgskontrolle im Seriellen Monitor
+  s
+- Sektion: 3. Messwerterfassung & Datenlogging (messwerterfassung)
+  - Zweck: Von der Einzelmessung zur automatisierten Cloud‑Tabelle
+  - Unterblöcke:
+    - 3.1 Problem: Die Langzeitbeobachtung
+      - Beschreibung: Warum händisches Ablesen (wie in Modul 1) für 14‑Tage‑Messreihen unpraktisch ist
+    - 3.2 Das IoT‑Prinzip
+      - Erklärung: Wie der ESP32 Daten per HTTP‑Request an ein Online‑Formular (z. B. Google Forms/Sheets) sendet
+    - 3.3 Code‑Block: Der Daten‑Logger
+      - Inhalt: Sketch, der in festen Intervallen Temperatur und Helligkeit an eine URL sendet (inkl. Platzhalter für URL)
+    - 3.4 Auswertung in der Cloud
+      - Anleitung: Erstellung von Live‑Graphen in der Tabellenkalkulation
+      - Visual: Schematische Darstellung des Datenflusses (Sensor → ESP32 → WLAN → Cloud‑Tabelle)
+
+- Sektion: 4. Wissenschaftliche Auswertung (analyse)
+  - Zweck: Vergleich der eigenen Daten mit Vorhersage‑Apps
+  - Inhalt:
+    - Leitfaden zur Bestimmung der Vorhersagegüte (Differenzbildung)
+    - Definition von Vertrauensintervallen für die Temperaturmessung
+    - Vorbereitung auf die „Wissenschaftliche Konferenz": Hinweise, wie Abweichungen präsentiert werden (Plots, Fehlerangaben, Diskussionsfragen)
+
+- Footer & Metadaten
+  - Credits: Verweis auf die NwT‑Didaktik und die UE „Wetterapp‑Test"
+  - Lizenz: CC BY‑SA 4.0
+  - Ausblick: Teaser auf Modul 3 (CAD‑Gehäusebau) und Modul 4 (Aktive Solarnachführung)
+
+- Scripts & Funktionen (Technik‑Stack)
+  - Wi‑Fi Manager: JS‑Simulation zur Eingabe von Zugangsdaten
+  - Live‑Chart‑Updater: Simulation von eintreffenden IoT‑Datenpaketen
+  - MathJax: Formeln zur Berechnung von Messabweichungen (z. B. Mittlerer absoluter Fehler)
+
+- Zusätzliche UI‑Elemente & Hinweise für Entwickler
+  - Custom Code Blocks: Code‑Blöcke mit Kopier‑Button für Sketches (Wi‑Fi Hello World, Daten‑Logger)
+  - Flip‑Card: Foto BME280 ↔ I2C‑Bus‑Schema (CSS/JS mit Keyboard‑Support)
+  - Plotly‑Chart: Interaktive Visualisierung für Simulation und Vergleich
+  - Accessibility: ARIA‑Attribute, alternativer Text für Bilder
+
+Ende der Modulstruktur.
