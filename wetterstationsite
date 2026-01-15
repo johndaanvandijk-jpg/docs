@@ -1,0 +1,106 @@
+const char index_html[] PROGMEM = R"rawliteral(
+<!DOCTYPE HTML><html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>NWT Wetterstation</title>
+  <script src="/chart.js"></script>
+  <style>
+    body { font-family: Arial; text-align: center; margin: 0px; background-color: #f4f4f4; }
+    h2 { color: #333; }
+    .card { background: white; max-width: 600px; margin: 20px auto; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .value { font-size: 2rem; font-weight: bold; color: #0275d8; }
+    .sensor-block { display: flex; justify-content: space-around; margin-bottom: 20px; }
+    canvas { max-width: 100%; }
+    button { cursor: pointer; border: none; border-radius: 5px; font-size: 1rem; margin: 5px; }
+  </style>
+</head>
+<body>
+  <h2>NWT Wetterstation Dashboard</h2>
+  
+  <div class="card">
+    <div class="sensor-block">
+      <div>Temp<br><span id="temp" class="value">--</span> &deg;C</div>
+      <div>Feuchte<br><span id="hum" class="value">--</span> %</div>
+      <div>Solar<br><span id="volt" class="value">--</span> V</div>
+    </div>
+    <canvas id="weatherChart"></canvas>
+  </div>
+  <div class="card">
+    <button onclick="window.location.href='/download'" style="background: green; color: white; padding: 10px;">💾 Daten als CSV speichern</button>
+    <button onclick="clearData()" style="background: red; color: white; padding: 10px;">🗑️ Messung neu starten</button>
+</div>
+
+<script>
+var ctx = document.getElementById('weatherChart').getContext('2d');
+var chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Temperatur (°C)',
+            borderColor: 'rgb(255, 99, 132)', // ROT
+            tension: 0.1,
+            data: []
+        }, {
+            label: 'Solar (V)',
+            borderColor: 'rgb(255, 205, 86)', // GELB
+            tension: 0.1,
+            data: []
+        }, {
+            label: 'Luftfeuchtigkeit (%)',
+            borderColor: 'rgb(75, 192, 192)', // TÜRKIS/GRÜN
+            tension: 0.1,
+            data: []
+        }]
+    },
+    options: { 
+        scales: { 
+            x: { title: { display: true, text: 'Zeit' } },
+            y: { beginAtZero: true } 
+        },
+        animation: { duration: 0 } // Performance-Optimierung
+    }
+});
+
+function updateData() {
+  fetch('/data').then(response => response.json()).then(json => {
+    // 1. Textwerte in HTML aktualisieren
+    document.getElementById('temp').innerHTML = json.temperature.toFixed(1);
+    document.getElementById('hum').innerHTML = json.humidity.toFixed(0);
+    document.getElementById('volt').innerHTML = json.solar.toFixed(2);
+
+    // 2. Zeitstempel generieren
+    var now = new Date();
+    var timeString = now.getHours() + ":" + ((now.getMinutes()<10?'0':'') + now.getMinutes()) + ":" + ((now.getSeconds()<10?'0':'') + now.getSeconds());
+    
+    // 3. Ringpuffer (Rolling Window) Logik
+    if(chart.data.labels.length > 50) {
+        chart.data.labels.shift();           // Zeit entfernen
+        chart.data.datasets[0].data.shift(); // Temp entfernen
+        chart.data.datasets[1].data.shift(); // Solar entfernen
+        chart.data.datasets[2].data.shift(); // <--- HIER WAR DER FEHLER (Feuchte entfernen)
+    }
+
+    // 4. Neue Werte hinzufügen
+    chart.data.labels.push(timeString);
+    chart.data.datasets[0].data.push(json.temperature);
+    chart.data.datasets[1].data.push(json.solar);
+    chart.data.datasets[2].data.push(json.humidity);
+    
+    chart.update();
+  });
+}
+
+// Alle 2 Sekunden abrufen
+setInterval(updateData, 2000);
+
+function clearData() {
+    if(confirm("Alle gespeicherten Daten löschen?")) {
+        fetch('/clear').then(() => location.reload());
+    }
+}
+</script>
+</body>
+</html>
+)rawliteral";

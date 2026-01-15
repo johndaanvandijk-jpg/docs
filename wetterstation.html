@@ -171,6 +171,35 @@
     .pinout-placeholder { background:linear-gradient(180deg,#fff,#f6f6f6); border:1px dashed #e0e0e0; padding:14px; border-radius:12px; color:#333; text-align:center; font-size:0.95rem; }
 
     @media (max-width:700px) { .flip-card{ width:100%; height:auto; } }
+
+    /* Zusatz-Styles für diese Seite (angepasst an fotometer.html) */
+    .custom-code-block { background:#e8f5e9; color:#222; border:1.5px solid var(--kit-primary-color); border-radius:8px; padding:18px 18px 12px 18px; margin:18px 0; position:relative; font-family:'Fira Mono','Consolas','Menlo','Monaco',monospace; overflow-x:auto; }
+    .custom-code-block pre { margin:0; background:transparent; color:inherit; font-size:1em; overflow-x:auto; }
+    .custom-code-block .copy-btn { position:absolute; top:10px; right:12px; background:var(--kit-primary-color); color:#fff; border:none; border-radius:4px; padding:5px 10px; font-size:1em; cursor:pointer; transition:background .2s; z-index:2; display:flex; align-items:center; gap:4px; }
+    .custom-code-block .copy-btn:hover,.custom-code-block .copy-btn:focus{ background:var(--kit-secondary-color); color:#fff; }
+    .custom-code-block .copy-btn.copied{ background:#388e3c; color:#fff; }
+
+    .warn-box { background:#fff8e1; border-left:5px solid #ff9800; padding:14px 16px; border-radius:8px; margin:16px 0; color:#4a3b00; }
+
+    .media-placeholder { border:1.5px dashed #cfcfcf; background:#f6f6f6; color:#666; display:flex; align-items:center; justify-content:center; min-height:140px; border-radius:12px; font-size:0.95rem; padding:12px; text-align:center; }
+
+    .card-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
+    .mini-card { border:1px solid #e0e0e0; border-radius:12px; padding:14px; background:#fbfffb; display:flex; flex-direction:column; gap:10px; }
+    .mini-card h4 { margin:0; color:#2c3e50; font-size:1.05rem; display:flex; align-items:center; gap:8px; }
+    .mini-card p { margin:0; color:#444; font-size:0.95rem; }
+
+    /* Flip-Unterstützung per Klick (zusätzlich zu :hover) */
+    .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+    /* IP-Hinweisbox */
+    .ip-box { background:#e3f2fd; border-left:5px solid #2196f3; padding:14px 16px; border-radius:8px; margin:16px 0; color:#0d47a1; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-weight:600; }
+
+    /* Prozess-Schritte (3-Schritt-Logik) */
+    .process-steps { display:flex; gap:14px; flex-wrap:wrap; margin:10px 0 16px; }
+    .process-step { flex:1; min-width:220px; border:1px solid #e0e0e0; border-radius:12px; padding:14px; background:#fbfffb; text-align:center; }
+    .process-step i { color: var(--kit-primary-color); font-size:1.4rem; margin-bottom:8px; }
+    .process-step h4 { margin:6px 0 4px; font-size:1.05rem; color:#2c3e50; }
+    .process-step p { margin:0; color:#444; font-size:0.95rem; }
   </style>
 </head>
 <body>
@@ -200,12 +229,12 @@
           <ul class="material-list">
         <li>
           <a href="ESP32.html" style="color: blue; text-decoration: underline; font-weight: bold;">
-           <i class="fa-solid fa-microchip"></i> Zum zentralen ESP32-Setup & WiFi-Tutorial
+           <i class="fa-solid fa-microchip"></i> Zum zentralen ESP32-Setup
           </a>
           <ul style="margin-top: 0.5rem; font-size: 0.95rem; color: #555;">
-            <li><i class="fa-solid fa-check-circle"></i> Installation des Boardverwalters (Arduino IDE)</li>
-            <li><i class="fa-solid fa-check-circle"></i> WiFi.h Grundlagen & Verbindungs-Strategien</li>
-            <li><i class="fa-solid fa-check-circle"></i> Weiterführende Code-Beispiele und Ressourcen</li>
+            <li><i class="fa-solid fa-check-circle"></i> Vorbereitung der Programmierumgebung (Arduino IDE)</li>
+            <li><i class="fa-solid fa-check-circle"></i> Verbindungs-Strategien</li>
+            <li><i class="fa-solid fa-check-circle"></i> Erster Test-Code</li>
           </ul>
         </li>
         </details>
@@ -226,49 +255,110 @@
       
     </section>
 
-    <section class="content-section" id="grundlagen">
-      <div class="section-emoji">🛠️</div>
-      <h2>1. Technische Grundlagen</h2>
-      <p class="lead">In diesem Abschnitt erläutern wir die wichtigsten technischen Komponenten und die Gründe für das Upgrade vom Arduino zum ESP32.</p>
+    <section class="content-section" id="phase-2-1">
+      <div class="section-emoji">🧭</div>
+      <h2>Hardware-Basis (ESP32 & Sensoren)</h2>
 
-      <h3>Das Upgrade: Der ESP32</h3>
-      <p>Im ersten Modul wurde ein Arduino verwendet. Für die erweiterte Wetterstation wechseln wir zum ESP32. Gründe: Integriertes Wi‑Fi für IoT‑Anwendungen, echte Dual‑Core Leistung für gleichzeitige Mess‑ und Netzwerkaufgaben sowie eine native Logikspannung von 3,3 V, die gut mit Sensoren wie dem BME280 zusammenarbeitet.</p>
-      <div class="pinout-placeholder" role="img" aria-label="ESP32 Pinout">
-        [Bild: ESP32 Pinout mit Markierung von SDA (GPIO 21) und SCL (GPIO 22)]
+      <h3>Der Umstieg auf den ESP32</h3>
+      <p class="lead">Mehr Leistung und integriertes WLAN schaffen Reserven für spätere Cloud‑Anbindung. Der ESP32 lässt sich gleich programmieren wie einen Arduino und nach der Vorbereitung, auch im gleichem Programm !</p>
+
+     <div style="display:flex; justify-content:center; margin:10px 0 22px;">
+  <div style="flex:1; max-width:100%; text-align:center;">
+    <img src="/docs/Media/Images/Vergleich.png" 
+         alt="Vergleich: Arduino vs. ESP32" 
+         style="width:100%; height:auto; border-radius:8px; border:1px solid #ddd;">
+  </div>
+</div>
+
+      <h3>Die neuen Sinnesorgane</h3>
+      <div class="card-grid" role="list" aria-label="Hardware‑Checkliste">
+        <div class="mini-card" role="listitem">
+          <h4><i class="fa-solid fa-square-rss" style="color: var(--kit-primary-color);"></i> BME280</h4>
+          <p>Der digitale Alleskönner: Temperatur, Luftdruck, Feuchtigkeit – präzise über I2C.</p>
+          <div class="media-placeholder" aria-label="Platzhalter: BME280 Produktbild" title="Media/Images/BME280_Schaltung.png">
+            Platzhalter – BME280 (Media/Images/BME280_Schaltung.png)
+          </div>
+        </div>
+        <div class="mini-card" role="listitem">
+          <h4><i class="fa-solid fa-solar-panel" style="color: var(--kit-primary-color);"></i> Solarzelle</h4>
+          <p>Unser analoger Helligkeitssensor </p>
+          <div class="media-placeholder" aria-label="Platzhalter: Solarzelle Produktfoto">
+            Platzhalter – Solarzelle (Foto folgt)
+          </div>
+        </div>
       </div>
 
-      <h3>Der BME280 Umweltsensor</h3>
-      <p>Der BME280 ist ein 3‑in‑1 Wunder: Temperatur, Luftfeuchtigkeit und Luftdruck in einem kompakten Modul.</p>
-      <p>Didaktisch wichtig: Wir nutzen den Sensor über I²C (digital). Die Module liefern ab Werk kalibrierte Messwerte, sodass systematische Messfehler – die bei analogen Messungen und manueller Kalibrierung auftreten können – deutlich reduziert werden. Für Schülerinnen und Schüler bedeutet das: schnelleres Experimentieren, robustere Daten und klarere Diskussionen über Messunsicherheit.</p>
+      <h3>Achtung: Die 3,3V Welt</h3>
+      <div class="warn-box" role="note" aria-label="Wichtiger Sicherheitshinweis">
+        Der ESP32 arbeitet mit 3,3 V Logik. 5‑V‑Signale (Arduino‑Niveau) können ihn zerstören – Pegel und Spannungsteiler prüfen!
+        <br><em>Lerneffekt:</em> Logikspannungen vergleichen und Grenzen kennen.
+      </div>
 
-      <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;margin-top:12px;">
-        <div>
-          <div class="flip-card" tabindex="0" aria-label="BME280 Flipcard">
-            <div class="flip-card-inner">
-              <div class="flip-card-front">
-                <!-- Foto placeholder -->
-                <img src="Media/Images/BME280.png" alt="Foto des BME280" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style="padding:12px;color:#666;">Foto des BME280 (Platzhalter)</div>';">
-              </div>
-              <div class="flip-card-back">
-                <div>
-                  <strong>I²C Bus (vereinfacht)</strong>
-                  <div style="margin-top:8px;font-size:0.95rem;color:#555;">Master (ESP32) ⇄ SDA (GPIO21) / SCL (GPIO22) ⇄ Slave (BME280)</div>
-                </div>
-              </div>
+      <h3>Verdrahtung ohne Kabelsalat</h3>
+      <p style="margin-top:-6px; color:#444;">I2C: BME280 an SDA/SCL (i. d. R. 21/22). Analog‑In: Solarzelle an GPIO34.</p>
+      <div style="display:flex; justify-content:center; margin:12px 0 8px;">
+        <div class="flip-card" id="flip-verdrahtung" role="button" tabindex="0" aria-pressed="false" onclick="toggleFlip('flip-verdrahtung')" style="width:650px; max-width:100%; height:360px;">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img src="Media/Images/BME280_Schaltung.png" alt="Fritzing‑Schaltplan BME280 + Solarzelle" onerror="this.src='https://placehold.co/650x360?text=Schaltplan'">
+            </div>
+            <div class="flip-card-back">
+              <img src="#" alt="Reales Foto des Breadboards" onerror="this.src='https://placehold.co/650x360?text=Aufbaufoto'">
             </div>
           </div>
         </div>
+      </div>
+      <p style="text-align:center; color:#666; font-size:0.95rem;">Klicken/Tippen: Foto ↔ Schaltplan</p>
 
-        <div style="flex:1;min-width:220px;">
-          <h3>Die Solarzelle als Lichtsensor</h3>
-          <p>Die kleine Solarzelle wird nicht nur als Energiequelle eingesetzt, sondern wir messen die Leerlaufspannung, um die Sonnenscheindauer quantitativ zu erfassen. Dieses Prinzip ist einfach und anschaulich: höhere Leerlaufspannung ≈ mehr eingehende Sonnenstrahlung.</p>
-        </div>
+      <h3>Die Sprache der Sensoren</h3>
+      <p style="margin-top:-6px; color:#444;">Minimal‑Sketch: Liest BME280 und Solarzelle aus und gibt Daten via Serial aus.</p>
+      <div class="custom-code-block">
+        <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
+        <pre><code class="language-cpp">// ESP32 + BME280 + Solarzelle (Minimaltest)
+// Verkabelung: BME280 an 3V3, GND, SDA(21), SCL(22); Solar an GPIO34 (max. 3,3 V sicherstellen)
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>
+
+Adafruit_BME280 bme;            // I2C
+const int SOLAR_PIN = 34;       // ADC1_CH6 (nur Eingang)
+
+void setup() {
+  Serial.begin(115200);
+  while(!Serial) { delay(10); }
+  Wire.begin();                 // ESP32 Default: SDA=21, SCL=22
+
+  if(!bme.begin(0x76)) {        // Alternative Adresse: 0x77
+    Serial.println("BME280 nicht gefunden! Adresse prüfen (0x76/0x77) und Verdrahtung kontrollieren.");
+    while(1) delay(10);
+  }
+  analogReadResolution(12);     // 0..4095
+  Serial.println("Start: ESP32 + BME280 + Solarzelle");
+}
+
+void loop() {
+  float t = bme.readTemperature();      // &deg;C
+  float p = bme.readPressure() / 100.0; // hPa
+  float h = bme.readHumidity();         // % rF
+
+  int raw = analogRead(SOLAR_PIN);      // 0..4095
+  float v  = raw * (3.3 / 4095.0);      // Volt (Referenz 3,3 V)
+
+  Serial.print("T[°C]: "); Serial.print(t, 1);
+  Serial.print("  p[hPa]: "); Serial.print(p, 1);
+  Serial.print("  rH[%]: "); Serial.print(h, 1);
+  Serial.print("  Solar[V]: "); Serial.println(v, 2);
+
+  delay(1000);
+}
+</code></pre>
       </div>
 
-      <h3>Simulation & Auswertung</h3>
-      <p>Zur Demonstration wissenschaftlicher Auswertung binden wir ein interaktives Chart ein, das eine ideale Sinuskurve (theoretischer Sonnenlauf) mit fiktiven, unregelmäßigen Messpunkten vergleicht. Lehrkräfte können so zeigen, wie Messdaten visualisiert und interpretiert werden.</p>
-
-      <div id="solar-plot" aria-label="Plot: Ideale Sinuskurve vs. Fiktive Daten"></div>
+      <h3>Der Check im Seriellen Monitor</h3>
+      <p style="margin-top:-6px; color:#444;">Erwartet: Spalten mit T, p, rH und Solar‑Spannung. Werte ändern sich bei Handwärme, Druck auf den Sensor oder Lichtwechsel.</p>
+      <div class="media-placeholder" aria-label="Platzhalter: Screenshot Serieller Monitor">
+        Platzhalter – Screenshot Serieller Monitor
+      </div>
     </section>
 
   </main>
@@ -297,32 +387,45 @@
 
     // highlight.js init
     document.addEventListener('DOMContentLoaded', ()=>{ if(window.hljs && typeof hljs.highlightAll==='function') hljs.highlightAll(); });
-  </script>
 
-  <script>
-    // Plotly: Ideale Sinuskurve vs. fiktive Messdaten (Demo)
-    (function(){
-      // ideale Kurve (fein aufgelöst)
-      const x = Array.from({length:100}, (_,i)=> i*(24/99));
-      const ideal = x.map(t=> Math.max(0, Math.sin(Math.PI*(t-6)/12)));
+    // Copy-to-Clipboard für custom code blocks
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.custom-code-block .copy-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const code = btn.parentElement.querySelector('pre code');
+          if (!code) return;
+          let text = code.innerText.replace(/^\s*\n/, '').replace(/\s*$/, '');
+          navigator.clipboard.writeText(text).then(function() {
+            btn.classList.add('copied');
+            btn.innerHTML = '<i class="fa fa-check"></i> Kopiert!';
+            setTimeout(function() {
+              btn.classList.remove('copied');
+              btn.innerHTML = '<i class="fa fa-copy"></i>';
+            }, 1200);
+          });
+        });
+      });
+    });
 
-      const traceIdeal = { x: x, y: ideal, mode: 'lines', name: 'Ideale Sinuskurve', line: { color: '#ff8c00' } };
-
-      // fiktive, unregelmäßige Messpunkte
-      const pts = 18;
-      const xp = []; const yp = [];
-      for(let i=0;i<pts;i++){
-        const t = Math.random()*24;
-        const v = Math.max(0, Math.sin(Math.PI*(t-6)/12) + (Math.random()-0.5)*0.4);
-        xp.push(Number(t.toFixed(2)));
-        yp.push(Number(v.toFixed(3)));
+    // Flip-Logik per Klick/Tastatur (Foto ↔ Schaltplan)
+    function toggleFlip(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.classList.toggle('flipped');
+      const pressed = el.classList.contains('flipped');
+      el.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+    }
+    document.addEventListener('keydown', function(e){
+      const active = document.activeElement;
+      if(!active) return;
+      if(active.classList && active.classList.contains('flip-card')){
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          toggleFlip(active.id);
+        }
       }
-      const traceFiktiv = { x: xp, y: yp, mode: 'markers', name: 'Fiktive Messdaten', marker: { color: '#1f77b4', size: 8 } };
-
-      const layout = { title: 'Sonnenverlauf: Ideal vs. Fiktive Daten', xaxis: { title: 'Stunde', range:[0,24] }, yaxis: { title: 'Relative Sonnenintensität', range:[0,1.2] }, legend:{orientation:'h'} };
-
-      Plotly.newPlot('solar-plot', [traceIdeal, traceFiktiv], layout, {responsive:true});
-    })();
+    });
   </script>
+
 </body>
 </html>

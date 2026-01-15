@@ -185,8 +185,23 @@
       <div class="section-emoji">📡</div>
       <h1>ESP32: Dein Einstieg in die vernetzte Welt.</h1>
       <p class="lead">In 10 Minuten bereit für das Internet of Things.</p>
-      <p>Der ESP32 ist kein einfacher Mikrocontroller mehr, sondern ein vollwertiges System-on-a-Chip (SoC) mit integrierter Wi‑Fi‑Funktionalität. Ideal für vernetzte Projekte wie unsere Wetterstation.</p>
+      
+    
+    
+      <figure style="margin: 20px 0; border: 1px solid #ddd; padding: 10px; background: #f9f9f9; border-radius: 8px;">
+    <img src="/docs/Media/Images/ESP32.png" alt="Screenshot Windows Gerätemanager mit erkanntem COM-Port" style="display: block; margin: 0 auto; max-width: 50%; height: auto; border-radius: 4px; border: 1px solid #ccc; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <figcaption style="text-align: center; font-size: 0.9rem; color: #555; margin-top: 10px;">
+      Der <strong>ESP32</strong>  ist kein einfacher Mikrocontroller mehr, sondern ein vollwertiges System-on-a-Chip (SoC) mit integrierter Wi‑Fi‑Funktionalität. Ideal für vernetzte Projekte wie unsere Wetterstation.
+    </figcaption>
+  </figure>
+   
+   
+   
+   
+   
     </section>
+
+
 
    <section class="content-section">
   <h2>1. Schritt 1: Die Hardware-Brücke (Treiber)</h2>
@@ -212,8 +227,14 @@
 
     <section class="content-section">
       <h2>2. Schritt 2: Die Arduino IDE vorbereiten</h2>
-      <p><strong>Aktion:</strong> Die „Boardverwalter-URL" hinzufügen.</p>
       
+      <p><strong>Ablauf:</strong></p>
+      <ul>
+        <li><em>Datei → Voreinstellungen → Zusätzliche Boardverwalter-URLs</em></li>
+        <li>Diese URL einfügen: <code>https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json</code> → OK </li>
+        <li>Installation:<em>Werkzeuge → Board → Boardverwalter</em> → Suche nach „ESP32" von Espressif Systems und auf „Installieren" klicken.</li>
+        <li>Board auswählen: <em>Board auswahl menu (Oben Links) →  Suche nach „ESP32" → passendes Board auswählen → ok</em></li>
+      </ul>
       <p><strong>Video-Anleitung:</strong></p>
       <div style="margin:12px 0; background:#000; padding:8px; border-radius:8px;">
         <video controls width="100%" preload="metadata">
@@ -221,13 +242,7 @@
           Ihr Browser unterstützt das Video-Tag nicht. Datei: ESP32inbetrieb.mkv
         </video>
        </div>
-      <p><strong>Detail:</strong></p>
-      <ul>
-        <li>Pfad: <em>Datei → Voreinstellungen → Zusätzliche Boardverwalter-URLs</em></li>
-        <li>Diese URL einfügen: <code>https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json</code></li>
-        <li>Installation: Pfad: <em>Werkzeuge → Board → Boardverwalter</em> → Suche nach „ESP32" von Espressif Systems und auf „Installieren" klicken.</li>
-        <li>Board auswählen: <em>Board auswahl menu (Oben Links) →  Suche nach „ESP32" → passendes Board auswählen → ok</em></li>
-      </ul>
+      
     </section>
 
     <section class="content-section">
@@ -256,33 +271,7 @@ void loop() {
       <p>Tip: Beim Upload kann es notwendig sein, kurz die <em>EN/Reset</em>-Taste zu drücken, falls der Upload nicht automatisch startet.</p>
     </section>
 
-    <section class="content-section">
-      <h2>4. Deep Dive: ESP32 & Wi‑Fi (<code>WiFi.h</code>)</h2>
-      <p><strong>Konzept:</strong> Warum brauchen wir Wi‑Fi für die Wetterstation? Damit Messdaten automatisch an die Cloud oder eine App gesendet und mit Vorhersagen verglichen werden können.</p>
-
-      <p>Basis-Struktur:</p>
-      <pre><code class="language-cpp">#include <WiFi.h>
-
-const char* ssid = "Dein_Netzwerk";
-const char* password = "Dein_Passwort";
-
-void setup() {
-  Serial.begin(115200);
-  WiFi.begin(ssid, password);
-
-  // Warte auf Verbindung
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("Verbunden!");
-}
-</code></pre>
-
-      <h3>Reconnect-Strategie</h3>
-      <p>Wetterstationen stehen oft weit weg vom Router. Wenn die Verbindung abbricht, prüft der <em>loop()</em> regelmäßig:</p>
-      <pre><code class="language-cpp">if (WiFi.status() != WL_CONNECTED) { WiFi.begin(ssid, password); }</code></pre>
-    </section>
+   
 
     <section class="content-section">
       <h2>5. Wichtige Unterschiede zum Arduino (Warnhinweise)</h2>
@@ -300,7 +289,7 @@ void setup() {
         <li>Treiber installiert?</li>
         <li>Board „ESP32 Dev Module“ (oder passendes Modell) ausgewählt?</li>
         <li>Blink-Test erfolgreich?</li>
-        <li>Wi‑Fi Scan Beispiel ausprobiert?</li>
+        
       </ul>
       <p style="margin-top:12px;"><a class="btn-primary" href="wetterstation.html">Bereit! Zurück zu Modul 2: Die Wetterstation</a></p>
     </section>
@@ -308,7 +297,7 @@ void setup() {
   </main>
 
   <footer style="padding:20px;text-align:center;">
-    <div>CC BY-SA 4.0 – NwT Redaktion</div>
+    <div>CC BY-SA 4.0 – Arduino ist eine eingetragene Marke der Arduino SA. Dieses Projekt steht in keiner direkten Verbindung zur Arduino SA. Die Screencasts dienen ausschließlich pädagogischen Zwecken im Rahmen der NwT-Lehrkräftebildung. - NwT Redaktion</div>
   </footer>
 
   <script>
