@@ -1,0 +1,188 @@
+<!-- ============================================
+     BAUSTEIN: Wissensabfrage (Quiz)
+     ============================================
+     
+     BESCHREIBUNG:
+     Ein Quiz-Baustein mit Multiple-Choice-Szenarien und Feedback.
+     Unterstützt mehrere Szenarien pro Quiz-Container.
+     
+     PLATZHALTER:
+     - {{SECTION_ID}}        : Eindeutige ID für die Sektion (z.B. "quiz-ldr")
+     - {{SECTION_EMOJI}}     : Emoji für die Sektion (z.B. "🧠")
+     - {{QUIZ_TITLE}}        : Titel des Quiz (z.B. "Teste dein Wissen")
+     - {{QUIZ_INTRO}}        : Einleitungstext für das Quiz
+     
+     PRO SZENARIO:
+     - {{SCENARIO_ID}}       : Eindeutige ID für das Szenario (z.B. "1", "2")
+     - {{SCENARIO_ICON}}     : FontAwesome Icon-Klasse (z.B. "fa-solid fa-moon")
+     - {{SCENARIO_ICON_COLOR}}: Farbe für das Icon (z.B. "#6c757d")
+     - {{SCENARIO_TITLE}}    : Titel des Szenarios (z.B. "Szenario A: Dunkle Umgebung")
+     - {{SCENARIO_DESC}}     : Beschreibung des Szenarios
+     - {{SCENARIO_QUESTION}} : Die eigentliche Frage
+     
+     PRO OPTION:
+     - {{OPTION_VALUE}}      : Wert der Option für die Logik
+     - {{OPTION_TEXT}}       : Anzeigetext der Option
+     
+     IN DER JAVASCRIPT-LOGIK:
+     - {{CORRECT_VALUE}}     : Der korrekte Wert für dieses Szenario
+     - {{CORRECT_MESSAGE}}   : Feedback bei richtiger Antwort
+     - {{WRONG_MESSAGE}}     : Feedback bei falscher Antwort
+============================================ -->
+
+<section class="content-section" id="{{SECTION_ID}}">
+    <div class="section-emoji">{{SECTION_EMOJI}}</div>
+    <h2>{{QUIZ_TITLE}}</h2>
+    <p>{{QUIZ_INTRO}}</p>
+
+    <style>
+        /* Quiz Container Styles */
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            margin-top: 24px;
+        }
+
+        .quiz-scenario {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-scenario h4 {
+            margin-top: 0;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .quiz-option {
+            background: #f9f9f9;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--kit-primary-color);
+            background: #f0fdf4;
+            transform: translateY(-2px);
+        }
+
+        .quiz-option.selected {
+            border-color: #333;
+            background: #eee;
+        }
+
+        .quiz-option.correct {
+            border-color: var(--correct-color);
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .quiz-option.wrong {
+            border-color: var(--incorrect-color);
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .feedback-box {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 8px;
+            display: none;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .feedback-box.success {
+            background-color: #d4edda;
+            border-left: 5px solid var(--correct-color);
+            color: #155724;
+        }
+
+        .feedback-box.error {
+            background-color: #f8d7da;
+            border-left: 5px solid var(--incorrect-color);
+            color: #721c24;
+        }
+    </style>
+
+    <div class="quiz-container">
+
+        <!-- SZENARIO TEMPLATE (Wiederholen für jedes Szenario) -->
+        <div class="quiz-scenario" id="scenario-{{SCENARIO_ID}}">
+            <h4><i class="{{SCENARIO_ICON}}" style="color: {{SCENARIO_ICON_COLOR}};"></i> {{SCENARIO_TITLE}}</h4>
+            <p>{{SCENARIO_DESC}}</p>
+            <p><em>{{SCENARIO_QUESTION}}</em></p>
+
+            <div class="options-grid">
+                <!-- OPTION TEMPLATE (Wiederholen für jede Antwortmöglichkeit) -->
+                <div class="quiz-option" onclick="checkQuiz({{SCENARIO_ID}}, {{OPTION_VALUE}}, this)">{{OPTION_TEXT}}
+                </div>
+                <!-- /OPTION TEMPLATE -->
+            </div>
+            <div class="feedback-box" id="feedback-{{SCENARIO_ID}}"></div>
+        </div>
+        <!-- /SZENARIO TEMPLATE -->
+
+    </div>
+
+    <script>
+        function checkQuiz(scenarioId, value, element) {
+            const container = document.getElementById(`scenario-${scenarioId}`);
+            const feedbackEl = document.getElementById(`feedback-${scenarioId}`);
+            const allOptions = container.querySelectorAll('.quiz-option');
+
+            // Reset Styles
+            allOptions.forEach(opt => {
+                opt.classList.remove('correct', 'wrong', 'selected');
+            });
+
+            let isCorrect = false;
+            let message = "";
+
+            // LOGIK TEMPLATE (Anpassen pro Szenario)
+            if (scenarioId === {{ SCENARIO_ID }
+        }) {
+            if (value === {{ CORRECT_VALUE }
+        }) {
+            isCorrect = true;
+            message = "{{CORRECT_MESSAGE}}";
+        } else {
+            message = "{{WRONG_MESSAGE}}";
+        }
+      }
+        // /LOGIK TEMPLATE
+
+        // Visualisierung
+        if (isCorrect) {
+            element.classList.add('correct');
+            feedbackEl.className = "feedback-box success";
+            feedbackEl.innerHTML = "<i class='fa-solid fa-check-circle'></i> " + message;
+        } else {
+            element.classList.add('wrong');
+            feedbackEl.className = "feedback-box error";
+            feedbackEl.innerHTML = "<i class='fa-solid fa-circle-xmark'></i> " + message;
+        }
+
+        feedbackEl.style.display = "block";
+    }
+    </script>
+</section>

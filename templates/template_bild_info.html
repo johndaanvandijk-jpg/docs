@@ -1,0 +1,107 @@
+<!-- ============================================
+     BAUSTEIN: Bild und Info
+     ============================================
+     
+     BESCHREIBUNG:
+     Ein Baustein mit Bild und erklärendem Text nebeneinander.
+     Kann auch Info-Boxen und hervorgehobene Hinweise enthalten.
+     
+     PLATZHALTER:
+     - {{SECTION_ID}}        : Eindeutige ID für die Sektion
+     - {{SECTION_EMOJI}}     : Emoji für die Sektion
+     - {{SECTION_TITLE}}     : Haupttitel der Sektion
+     - {{SUBTITLE}}          : Untertitel (h3)
+     
+     FÜR TEXT-BILD LAYOUT:
+     - {{INFO_TEXT_1}}       : Erster Absatz des Infotexts
+     - {{INFO_TEXT_2}}       : Zweiter Absatz des Infotexts
+     - {{IMAGE_SRC}}         : Pfad zum Bild
+     - {{IMAGE_ALT}}         : Alt-Text für das Bild
+     - {{IMAGE_WIDTH}}       : Breite des Bildes (z.B. "300px")
+     
+     FÜR HINWEIS-BOX:
+     - {{HINT_ICON}}         : FontAwesome Icon-Klasse
+     - {{HINT_TEXT}}         : Text des Hinweises
+     
+     FÜR FORMEL-BOX (optional):
+     - {{FORMULA_TITLE}}     : Titel der Formel
+     - {{FORMULA_LATEX}}     : LaTeX-Formel
+     - {{FORMULA_TOOLTIP}}   : Tooltip-Inhalt mit Herleitung
+============================================ -->
+
+<section class="content-section" id="{{SECTION_ID}}">
+    <div class="section-emoji">{{SECTION_EMOJI}}</div>
+    <h2>{{SECTION_TITLE}}</h2>
+    <h3>{{SUBTITLE}}</h3>
+
+    <!-- Text-Bild Layout -->
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 24px;">
+        <div style="flex: 1; min-width: 300px;">
+            <p style="margin-top: 0;">
+                {{INFO_TEXT_1}}
+            </p>
+            <p>
+                {{INFO_TEXT_2}}
+            </p>
+        </div>
+    </div>
+
+    <!-- Hinweis-Box (optional) -->
+    <p style="
+      text-align: center; 
+      font-weight: 500; 
+      color: #2c3e50; 
+      background: #e8f5e9; 
+      padding: 12px; 
+      border-radius: 8px;">
+        <i class="{{HINT_ICON}}"></i> {{HINT_TEXT}}
+    </p>
+
+    <!-- Bild-Container -->
+    <div style="
+      display: flex; 
+      justify-content: center; 
+      align-items: center;     
+      width: 100%; 
+      min-height: 50vh;         
+      padding: 24px; 
+      box-sizing: border-box;  
+      background-color: #f4f4f4;">
+        <div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+            <img src="{{IMAGE_SRC}}" alt="{{IMAGE_ALT}}"
+                style="max-width: {{IMAGE_WIDTH}}; height: auto; border: 1px solid #ccc; padding: 5px;">
+        </div>
+    </div>
+
+    <!-- Formel-Box (optional) -->
+    <div style="
+      background: #f8f9fa; 
+      border-left: 4px solid var(--kit-primary-color); 
+      padding: 20px; 
+      margin: 20px 0; 
+      border-radius: 4px; 
+      text-align: center;">
+
+        <span
+            style="font-size: 0.9rem; color: #666; text-transform: uppercase; letter-spacing: 1px;">{{FORMULA_TITLE}}</span>
+
+        <div class="tooltip" style="display: block; margin: 15px 0; cursor: help;">
+            <span style="font-size: 1.5rem; font-family: 'Times New Roman', serif;">
+                \( {{FORMULA_LATEX}} \)
+            </span>
+
+            <span class="tooltiptext">
+                <h4>{{TOOLTIP_TITLE}}</h4>
+                <p>{{FORMULA_TOOLTIP}}</p>
+            </span>
+        </div>
+    </div>
+
+    <!-- Bildunterschrift (optional) -->
+    <figure style="border: 1px solid #ccc; padding: 10px; text-align: center; background: #f9f9f9;">
+        <figcaption>
+            <em>{{IMAGE_CAPTION}}</em>
+        </figcaption>
+    </figure>
+
+</section>

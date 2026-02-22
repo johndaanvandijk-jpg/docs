@@ -1,0 +1,174 @@
+<!-- ============================================
+     BAUSTEIN: Aufbau / Schaltplan Flipcard
+     ============================================
+     
+     BESCHREIBUNG:
+     Eine klickbare Karte, die zwischen zwei Ansichten wechselt
+     (z.B. Foto ↔ Schaltplan). Mit 3D-Flip-Animation.
+     
+     PLATZHALTER:
+     - {{FLIPCARD_ID}}       : Eindeutige ID für die Flipcard (z.B. "flip-spannungs")
+     - {{FLIPCARD_WIDTH}}    : Breite der Karte (z.B. "650px")
+     - {{FLIPCARD_HEIGHT}}   : Höhe der Karte (z.B. "450px")
+     
+     VORDERSEITE:
+     - {{FRONT_IMAGE_SRC}}   : Pfad zum Bild der Vorderseite
+     - {{FRONT_IMAGE_ALT}}   : Alt-Text für das Vorderseiten-Bild
+     - {{FRONT_FALLBACK}}    : Fallback-URL wenn Bild nicht gefunden
+     
+     RÜCKSEITE:
+     - {{BACK_IMAGE_SRC}}    : Pfad zum Bild der Rückseite
+     - {{BACK_IMAGE_ALT}}    : Alt-Text für das Rückseiten-Bild
+     - {{BACK_FALLBACK}}     : Fallback-URL wenn Bild nicht gefunden
+     
+     - {{FLIP_HINT}}         : Hinweistext unter der Karte (z.B. "Klicken: Foto ↔ Schaltplan")
+     - {{CAPTION_TEXT}}      : Bildunterschrift
+============================================ -->
+
+<style>
+    /* Grundgerüst der Flipcard */
+    .flip-card {
+        background-color: transparent;
+
+        width: {
+                {
+                FLIPCARD_WIDTH
+            }
+        }
+
+        ;
+        max-width: 100%;
+
+        height: {
+                {
+                FLIPCARD_HEIGHT
+            }
+        }
+
+        ;
+        perspective: 1000px;
+        cursor: pointer;
+        margin-bottom: 16px;
+    }
+
+    /* Der innere Container, der sich dreht */
+    .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+    }
+
+    /* Die Klasse, die für die Drehung sorgt */
+    .flip-card.flipped .flip-card-inner {
+        transform: rotateY(180deg);
+    }
+
+    /* Vorder- und Rückseite */
+    .flip-front,
+    .flip-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        background-color: #fff;
+    }
+
+    /* Rückseite gedreht */
+    .flip-back {
+        transform: rotateY(180deg);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Bilder anpassen */
+    .flip-front img,
+    .flip-back img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+    /* Hinweis-Text */
+    .flip-hint {
+        font-family: sans-serif;
+        color: #333;
+        font-size: 0.9rem;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 8px 16px;
+        border-radius: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<!-- Flipcard Container -->
+<div style="
+    display: flex; 
+    justify-content: center; 
+    align-items: center;     
+    width: 100%; 
+    min-height: 50vh;        
+    padding: 24px; 
+    box-sizing: border-box;  
+    background-color: #f4f4f4;
+    flex-direction: column;">
+
+    <div class="flip-card" id="{{FLIPCARD_ID}}" role="button" tabindex="0" onclick="toggleFlip('{{FLIPCARD_ID}}')">
+        <div class="flip-card-inner">
+
+            <!-- Vorderseite -->
+            <div class="flip-front">
+                <img src="{{FRONT_IMAGE_SRC}}" alt="{{FRONT_IMAGE_ALT}}" onerror="this.src='{{FRONT_FALLBACK}}'">
+            </div>
+
+            <!-- Rückseite -->
+            <div class="flip-back">
+                <img src="{{BACK_IMAGE_SRC}}" alt="{{BACK_IMAGE_ALT}}" onerror="this.src='{{BACK_FALLBACK}}'">
+            </div>
+
+        </div>
+    </div>
+
+    <p class="flip-hint">{{FLIP_HINT}}</p>
+
+</div>
+
+<!-- Bildunterschrift -->
+<figure style="border: 1px solid #ccc; padding: 10px; text-align: center; background: #f9f9f9;">
+    <figcaption>
+        <em>{{CAPTION_TEXT}}</em>
+    </figcaption>
+</figure>
+
+<!-- JavaScript für Flip-Funktion -->
+<script>
+    function toggleFlip(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.toggle('flipped');
+
+        // Accessibility Update
+        const pressed = el.classList.contains('flipped');
+        el.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+    }
+
+    // Keyboard Support
+    document.addEventListener('keydown', function (e) {
+        const active = document.activeElement;
+        if (!active) return;
+        if (active.classList && active.classList.contains('flip-card')) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleFlip(active.id);
+            }
+        }
+    });
+</script>

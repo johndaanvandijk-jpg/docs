@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -18,6 +19,13 @@
   <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
   <!-- highlight.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <!-- mermaid.js -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    });
+  </script>
 
   <style>
     :root {
@@ -30,14 +38,15 @@
       --font-main: 'Roboto', sans-serif;
       --font-title: 'Roboto', sans-serif;
       --section-radius: 18px;
-      --section-shadow: 0 8px 32px rgba(44,62,80,0.08);
+      --section-shadow: 0 8px 32px rgba(44, 62, 80, 0.08);
       --section-bg: #fff;
       --section-margin: 36px;
       --section-padding: 48px 24px;
       --emoji-opacity: 0.08;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       font-family: var(--font-main);
@@ -48,16 +57,19 @@
 
     .kit-header {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       height: var(--header-height);
       background: #fff;
-      box-shadow: 0 2px 8px rgba(44,62,80,0.06);
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
       z-index: 100;
       display: flex;
       align-items: center;
       padding: 0 32px;
       gap: 24px;
     }
+
     .kit-header img {
       height: 48px;
       width: 48px;
@@ -65,10 +77,12 @@
       background: #f4f4f4;
       object-fit: contain;
     }
+
     .kit-header .header-titles {
       flex: 1;
       min-width: 0;
     }
+
     .kit-header .header-titles .title {
       font-family: var(--font-title);
       font-size: 1.5rem;
@@ -79,6 +93,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .kit-header .header-titles .subtitle {
       font-size: 1rem;
       color: #555;
@@ -91,11 +106,13 @@
     .progress-container {
       position: fixed;
       top: var(--header-height);
-      left: 0; right: 0;
+      left: 0;
+      right: 0;
       height: var(--progressbar-height);
       background: #e0e0e0;
       z-index: 101;
     }
+
     .progress-bar {
       height: 100%;
       width: 0%;
@@ -120,10 +137,15 @@
       position: relative;
       opacity: 0;
       transform: translateY(40px);
-      transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+      transition: opacity 0.7s cubic-bezier(.4, 0, .2, 1), transform 0.7s cubic-bezier(.4, 0, .2, 1);
       will-change: opacity, transform;
     }
-    .content-section.is-visible { opacity: 1; transform: none; }
+
+    .content-section.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+
     .section-emoji {
       position: absolute;
       right: 24px;
@@ -133,13 +155,43 @@
       pointer-events: none;
       user-select: none;
     }
-    h1, h2, h3, h4 { font-family: var(--font-title); color: var(--kit-primary-color); margin-top: 0; }
-    h1 { font-size: 2.2rem; }
-    .lead { font-size: 1.05rem; color:#333; margin-top:0; }
 
-    .material-list { list-style: none; padding: 0; margin: 0 0 16px 0; }
-    .material-list li { margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-    .material-list li i { color: var(--kit-primary-color); font-size: 1.1em; }
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: var(--font-title);
+      color: var(--kit-primary-color);
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+    }
+
+    .lead {
+      font-size: 1.05rem;
+      color: #333;
+      margin-top: 0;
+    }
+
+    .material-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px 0;
+    }
+
+    .material-list li {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .material-list li i {
+      color: var(--kit-primary-color);
+      font-size: 1.1em;
+    }
 
     /* Small styles for details accordion (copied from fotometer) */
     .intro-accordion details {
@@ -149,59 +201,281 @@
       margin-bottom: 14px;
       background: #fbfffb;
     }
-    .intro-accordion summary { list-style: none; font-weight: 600; cursor: pointer; outline: none; padding: 6px 4px; color: var(--kit-primary-color); }
-    .intro-accordion summary::-webkit-details-marker { display: none; }
-    .intro-accordion summary:before { content: "▸"; display: inline-block; margin-right: 8px; transform-origin: 6px 6px; transition: transform 0.18s ease; }
-    .intro-accordion details[open] summary:before { transform: rotate(90deg); }
 
-    @media (max-width: 700px) { main { padding: 0 4vw; } .content-section { padding: 32px 8px; } .kit-header { padding: 0 8px; } }
+    .intro-accordion summary {
+      list-style: none;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+      padding: 6px 4px;
+      color: var(--kit-primary-color);
+    }
+
+    .intro-accordion summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .intro-accordion summary:before {
+      content: "▸";
+      display: inline-block;
+      margin-right: 8px;
+      transform-origin: 6px 6px;
+      transition: transform 0.18s ease;
+    }
+
+    .intro-accordion details[open] summary:before {
+      transform: rotate(90deg);
+    }
+
+    @media (max-width: 700px) {
+      main {
+        padding: 0 4vw;
+      }
+
+      .content-section {
+        padding: 32px 8px;
+      }
+
+      .kit-header {
+        padding: 0 8px;
+      }
+    }
 
     /* Flip card for BME280 (keine externen Klassen, Stil ähnlich zu bestehenden Sektionen) */
-    .flip-card { background: transparent; width: 220px; height: 140px; perspective: 1000px; margin: 12px 0; }
-    .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; box-shadow: 0 6px 18px rgba(44,62,80,0.08); border-radius: 12px; }
-    .flip-card:hover .flip-card-inner, .flip-card:focus-within .flip-card-inner { transform: rotateY(180deg); }
-    .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 12px; display:flex; align-items:center; justify-content:center; padding:12px; background:#fbfffb; }
-    .flip-card-front img { max-width:100%; max-height:100%; border-radius:8px; }
-    .flip-card-back { transform: rotateY(180deg); font-size:0.95rem; color:#333; }
+    .flip-card {
+      background: transparent;
+      width: 220px;
+      height: 140px;
+      perspective: 1000px;
+      margin: 12px 0;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      box-shadow: 0 6px 18px rgba(44, 62, 80, 0.08);
+      border-radius: 12px;
+    }
+
+    .flip-card:hover .flip-card-inner,
+    .flip-card:focus-within .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      background: #fbfffb;
+    }
+
+    .flip-card-front img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 8px;
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+      font-size: 0.95rem;
+      color: #333;
+    }
 
     /* Plotly container */
-    #solar-plot { width:100%; height:320px; }
+    #solar-plot {
+      width: 100%;
+      height: 320px;
+    }
 
     /* Simple diagram placeholder for ESP32 pinout */
-    .pinout-placeholder { background:linear-gradient(180deg,#fff,#f6f6f6); border:1px dashed #e0e0e0; padding:14px; border-radius:12px; color:#333; text-align:center; font-size:0.95rem; }
+    .pinout-placeholder {
+      background: linear-gradient(180deg, #fff, #f6f6f6);
+      border: 1px dashed #e0e0e0;
+      padding: 14px;
+      border-radius: 12px;
+      color: #333;
+      text-align: center;
+      font-size: 0.95rem;
+    }
 
-    @media (max-width:700px) { .flip-card{ width:100%; height:auto; } }
+    @media (max-width:700px) {
+      .flip-card {
+        width: 100%;
+        height: auto;
+      }
+    }
 
     /* Zusatz-Styles für diese Seite (angepasst an fotometer.html) */
-    .custom-code-block { background:#e8f5e9; color:#222; border:1.5px solid var(--kit-primary-color); border-radius:8px; padding:18px 18px 12px 18px; margin:18px 0; position:relative; font-family:'Fira Mono','Consolas','Menlo','Monaco',monospace; overflow-x:auto; }
-    .custom-code-block pre { margin:0; background:transparent; color:inherit; font-size:1em; overflow-x:auto; }
-    .custom-code-block .copy-btn { position:absolute; top:10px; right:12px; background:var(--kit-primary-color); color:#fff; border:none; border-radius:4px; padding:5px 10px; font-size:1em; cursor:pointer; transition:background .2s; z-index:2; display:flex; align-items:center; gap:4px; }
-    .custom-code-block .copy-btn:hover,.custom-code-block .copy-btn:focus{ background:var(--kit-secondary-color); color:#fff; }
-    .custom-code-block .copy-btn.copied{ background:#388e3c; color:#fff; }
+    .custom-code-block {
+      background: #e8f5e9;
+      color: #222;
+      border: 1.5px solid var(--kit-primary-color);
+      border-radius: 8px;
+      padding: 18px 18px 12px 18px;
+      margin: 18px 0;
+      position: relative;
+      font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+      overflow-x: auto;
+    }
 
-    .warn-box { background:#fff8e1; border-left:5px solid #ff9800; padding:14px 16px; border-radius:8px; margin:16px 0; color:#4a3b00; }
+    .custom-code-block pre {
+      margin: 0;
+      background: transparent;
+      color: inherit;
+      font-size: 1em;
+      overflow-x: auto;
+    }
 
-    .media-placeholder { border:1.5px dashed #cfcfcf; background:#f6f6f6; color:#666; display:flex; align-items:center; justify-content:center; min-height:140px; border-radius:12px; font-size:0.95rem; padding:12px; text-align:center; }
+    .custom-code-block .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: var(--kit-primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background .2s;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
 
-    .card-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
-    .mini-card { border:1px solid #e0e0e0; border-radius:12px; padding:14px; background:#fbfffb; display:flex; flex-direction:column; gap:10px; }
-    .mini-card h4 { margin:0; color:#2c3e50; font-size:1.05rem; display:flex; align-items:center; gap:8px; }
-    .mini-card p { margin:0; color:#444; font-size:0.95rem; }
+    .custom-code-block .copy-btn:hover,
+    .custom-code-block .copy-btn:focus {
+      background: var(--kit-secondary-color);
+      color: #fff;
+    }
+
+    .custom-code-block .copy-btn.copied {
+      background: #388e3c;
+      color: #fff;
+    }
+
+    .warn-box {
+      background: #fff8e1;
+      border-left: 5px solid #ff9800;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+      color: #4a3b00;
+    }
+
+    .media-placeholder {
+      border: 1.5px dashed #cfcfcf;
+      background: #f6f6f6;
+      color: #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 140px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .mini-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 14px;
+      background: #fbfffb;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .mini-card h4 {
+      margin: 0;
+      color: #2c3e50;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: #444;
+      font-size: 0.95rem;
+    }
 
     /* Flip-Unterstützung per Klick (zusätzlich zu :hover) */
-    .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
 
     /* IP-Hinweisbox */
-    .ip-box { background:#e3f2fd; border-left:5px solid #2196f3; padding:14px 16px; border-radius:8px; margin:16px 0; color:#0d47a1; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-weight:600; }
+    .ip-box {
+      background: #e3f2fd;
+      border-left: 5px solid #2196f3;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+      color: #0d47a1;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-weight: 600;
+    }
 
     /* Prozess-Schritte (3-Schritt-Logik) */
-    .process-steps { display:flex; gap:14px; flex-wrap:wrap; margin:10px 0 16px; }
-    .process-step { flex:1; min-width:220px; border:1px solid #e0e0e0; border-radius:12px; padding:14px; background:#fbfffb; text-align:center; }
-    .process-step i { color: var(--kit-primary-color); font-size:1.4rem; margin-bottom:8px; }
-    .process-step h4 { margin:6px 0 4px; font-size:1.05rem; color:#2c3e50; }
-    .process-step p { margin:0; color:#444; font-size:0.95rem; }
+    .process-steps {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 10px 0 16px;
+    }
+
+    .process-step {
+      flex: 1;
+      min-width: 220px;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 14px;
+      background: #fbfffb;
+      text-align: center;
+    }
+
+    .process-step i {
+      color: var(--kit-primary-color);
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+
+    .process-step h4 {
+      margin: 6px 0 4px;
+      font-size: 1.05rem;
+      color: #2c3e50;
+    }
+
+    .process-step p {
+      margin: 0;
+      color: #444;
+      font-size: 0.95rem;
+    }
   </style>
 </head>
+
 <body>
   <header class="kit-header" role="banner" aria-label="Modultitel und Fortschrittsanzeige">
     <img src="Media/Images/NWTLOGO.png" alt="NWT Logo" />
@@ -211,32 +485,38 @@
     </div>
   </header>
 
-  <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+  <div class="progress-container">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
 
   <main>
     <section class="content-section" id="intro">
       <div class="section-emoji">🌤️</div>
       <h1>Wetterapp-Test 2.0</h1>
-      <p class="lead">Leitfrage: Wie zuverlässig ist eine Wettervorhersage? Dieses Modul begleitet Sie vom Aufbau einer einfachen vernetzten Wetterstation bis zur Auswertung und zum Vergleich eigener Messdaten mit Vorhersage‑Apps.</p>
+      <p class="lead">Leitfrage: Wie zuverlässig ist eine Wettervorhersage? Dieses Modul begleitet Sie vom Aufbau einer
+        einfachen vernetzten Wetterstation bis zur Auswertung und zum Vergleich eigener Messdaten mit Vorhersage‑Apps.
+      </p>
       <p><strong>Autor:</strong> John van Dijk</p>
       <p><strong>Lizenzhinweis:</strong> CC BY-SA 4.0</p>
 
-      <p>In diesem Lernmodul lernen Schülerinnen und Schüler, eine kleine IoT‑Wetterstation mit ESP32 und BME280 aufzubauen, Messdaten per WLAN in die Cloud zu senden und die Daten wissenschaftlich auszuwerten. Ziel ist es, die Güte von Vorhersagen kritisch zu hinterfragen und eigene Messreihen zu produzieren.</p>
+      <p>In diesem Lernmodul lernen sie, eine kleine IoT‑Wetterstation mit ESP32 und BME280
+        aufzubauen, Messdaten per WLAN in die Cloud zu senden und die Daten wissenschaftlich auszuwerten. Ziel ist es,
+        die Güte von Vorhersagen kritisch zu hinterfragen und eigene Messreihen zu produzieren.</p>
 
       <div class="intro-accordion">
         <details open>
           <summary>Vorbereitung & Werkzeuge</summary>
           <ul class="material-list">
-        <li>
-          <a href="ESP32.html" style="color: blue; text-decoration: underline; font-weight: bold;">
-           <i class="fa-solid fa-microchip"></i> Zum zentralen ESP32-Setup
-          </a>
-          <ul style="margin-top: 0.5rem; font-size: 0.95rem; color: #555;">
-            <li><i class="fa-solid fa-check-circle"></i> Vorbereitung der Programmierumgebung (Arduino IDE)</li>
-            <li><i class="fa-solid fa-check-circle"></i> Verbindungs-Strategien</li>
-            <li><i class="fa-solid fa-check-circle"></i> Erster Test-Code</li>
-          </ul>
-        </li>
+            <li>
+              <a href="ESP32.html" style="color: blue; text-decoration: underline; font-weight: bold;">
+                <i class="fa-solid fa-microchip"></i> Zum zentralen ESP32-Setup
+              </a>
+              <ul style="margin-top: 0.5rem; font-size: 0.95rem; color: #555;">
+                <li><i class="fa-solid fa-check-circle"></i> Vorbereitung der Programmierumgebung (Arduino IDE)</li>
+                <li><i class="fa-solid fa-check-circle"></i> Verbindungs-Strategien</li>
+                <li><i class="fa-solid fa-check-circle"></i> Erster Test-Code</li>
+              </ul>
+            </li>
         </details>
 
         <details>
@@ -249,10 +529,10 @@
           </ul>
         </details>
 
-       
+
       </div>
 
-      
+
     </section>
 
     <section class="content-section" id="phase-2-1">
@@ -260,22 +540,23 @@
       <h2>Hardware-Basis (ESP32 & Sensoren)</h2>
 
       <h3>Der Umstieg auf den ESP32</h3>
-      <p class="lead">Mehr Leistung und integriertes WLAN schaffen Reserven für spätere Cloud‑Anbindung. Der ESP32 lässt sich gleich programmieren wie einen Arduino und nach der Vorbereitung, auch im gleichem Programm !</p>
+      <p class="lead">Mehr Leistung und integriertes WLAN schaffen Reserven für spätere Cloud‑Anbindung. Der ESP32 lässt
+        sich gleich programmieren wie einen Arduino und nach der Vorbereitung, auch im gleichem Programm !</p>
 
-     <div style="display:flex; justify-content:center; margin:10px 0 22px;">
-  <div style="flex:1; max-width:100%; text-align:center;">
-    <img src="/docs/Media/Images/Vergleich.png" 
-         alt="Vergleich: Arduino vs. ESP32" 
-         style="width:100%; height:auto; border-radius:8px; border:1px solid #ddd;">
-  </div>
-</div>
+      <div style="display:flex; justify-content:center; margin:10px 0 22px;">
+        <div style="flex:1; max-width:100%; text-align:center;">
+          <img src="Media/Images/Vergleich.png" alt="Vergleich: Arduino vs. ESP32"
+            style="width:100%; height:auto; border-radius:8px; border:1px solid #ddd;">
+        </div>
+      </div>
 
       <h3>Die neuen Sinnesorgane</h3>
       <div class="card-grid" role="list" aria-label="Hardware‑Checkliste">
         <div class="mini-card" role="listitem">
           <h4><i class="fa-solid fa-square-rss" style="color: var(--kit-primary-color);"></i> BME280</h4>
           <p>Der digitale Alleskönner: Temperatur, Luftdruck, Feuchtigkeit – präzise über I2C.</p>
-          <div class="media-placeholder" aria-label="Platzhalter: BME280 Produktbild" title="Media/Images/BME280_Schaltung.png">
+          <div class="media-placeholder" aria-label="Platzhalter: BME280 Produktbild"
+            title="Media/Images/BME280_Schaltung.png">
             Platzhalter – BME280 (Media/Images/BME280_Schaltung.png)
           </div>
         </div>
@@ -288,30 +569,35 @@
         </div>
       </div>
 
-      <h3>Achtung: Die 3,3V Welt</h3>
+      <h3>Achtung: 3,3V</h3>
       <div class="warn-box" role="note" aria-label="Wichtiger Sicherheitshinweis">
-        Der ESP32 arbeitet mit 3,3 V Logik. 5‑V‑Signale (Arduino‑Niveau) können ihn zerstören – Pegel und Spannungsteiler prüfen!
-        <br><em>Lerneffekt:</em> Logikspannungen vergleichen und Grenzen kennen.
+        Der ESP32 arbeitet mit 3,3 V Logik. 5‑V‑Signale können ihn zerstören – Pegel und
+        Spannungsteiler prüfen!
       </div>
 
-      <h3>Verdrahtung ohne Kabelsalat</h3>
-      <p style="margin-top:-6px; color:#444;">I2C: BME280 an SDA/SCL (i. d. R. 21/22). Analog‑In: Solarzelle an GPIO34.</p>
+      <h3>Verbindung</h3>
+      <p style="margin-top:-6px; color:#444;">I2C: BME280 an SDA/SCL (i. d. R. 21/22). Analog‑In: Solarzelle an GPIO34.
+      </p>
       <div style="display:flex; justify-content:center; margin:12px 0 8px;">
-        <div class="flip-card" id="flip-verdrahtung" role="button" tabindex="0" aria-pressed="false" onclick="toggleFlip('flip-verdrahtung')" style="width:650px; max-width:100%; height:360px;">
+        <div class="flip-card" id="flip-verdrahtung" role="button" tabindex="0" aria-pressed="false"
+          onclick="toggleFlip('flip-verdrahtung')" style="width:650px; max-width:100%; height:360px;">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="Media/Images/BME280_Schaltung.png" alt="Fritzing‑Schaltplan BME280 + Solarzelle" onerror="this.src='https://placehold.co/650x360?text=Schaltplan'">
+              <img src="Media/Images/BME280_Schaltung.png" alt="Fritzing‑Schaltplan BME280 + Solarzelle"
+                onerror="this.src='https://placehold.co/650x360?text=Schaltplan'">
             </div>
             <div class="flip-card-back">
-              <img src="#" alt="Reales Foto des Breadboards" onerror="this.src='https://placehold.co/650x360?text=Aufbaufoto'">
+              <img src="#" alt="Reales Foto des Breadboards"
+                onerror="this.src='https://placehold.co/650x360?text=Aufbaufoto'">
             </div>
           </div>
         </div>
       </div>
       <p style="text-align:center; color:#666; font-size:0.95rem;">Klicken/Tippen: Foto ↔ Schaltplan</p>
 
-      <h3>Die Sprache der Sensoren</h3>
-      <p style="margin-top:-6px; color:#444;">Minimal‑Sketch: Liest BME280 und Solarzelle aus und gibt Daten via Serial aus.</p>
+      <h3>Code</h3>
+      <p style="margin-top:-6px; color:#444;">Minimal‑Sketch: Liest BME280 und Solarzelle aus und gibt Daten via Serial
+        aus.</p>
       <div class="custom-code-block">
         <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
         <pre><code class="language-cpp">// ESP32 + BME280 + Solarzelle (Minimaltest)
@@ -355,9 +641,121 @@ void loop() {
       </div>
 
       <h3>Der Check im Seriellen Monitor</h3>
-      <p style="margin-top:-6px; color:#444;">Erwartet: Spalten mit T, p, rH und Solar‑Spannung. Werte ändern sich bei Handwärme, Druck auf den Sensor oder Lichtwechsel.</p>
+      <p style="margin-top:-6px; color:#444;">Erwartet: Spalten mit T, p, rH und Solar‑Spannung. Werte ändern sich bei
+        Handwärme, Druck auf den Sensor oder Lichtwechsel.</p>
       <div class="media-placeholder" aria-label="Platzhalter: Screenshot Serieller Monitor">
         Platzhalter – Screenshot Serieller Monitor
+      </div>
+    </section>
+
+    <section class="content-section" id="phase-2-2">
+      <div class="section-emoji">📡</div>
+      <h2>WLAN-Access Point &amp; Datenausgabe</h2>
+      <p class="lead">Der ESP32 spannt nun sein eigenes WLAN (Access Point) auf, um die Messwerte direkt im Browser an
+        Smartphones oder Laptops in der Nähe zu senden.</p>
+
+      <h3>Das eigene Netzwerk</h3>
+      <div style="min-height: 250px; padding: 20px; display: flex; justify-content: center; align-items: center;">
+        <pre class="mermaid"
+          style="background: transparent; color: inherit; font-size: 1.2rem; margin: 0; white-space: pre-wrap; width: 100%; max-width: 800px;">
+sequenceDiagram
+    participant Sensoren as 🌡️ Sensoren (BME280 &amp; Solar)
+    participant ESP32 as ⚙️ ESP32 (Webserver)
+    participant Handy as 📱 Smartphone (Nutzer)
+
+    Note over ESP32: 1. Setup Phase
+    ESP32-&gt;&gt;ESP32: WLAN "Wetterstation_ESP32" aufspannen
+    ESP32-&gt;&gt;ESP32: Webserver auf Port 80 starten
+
+    Note over Sensoren, ESP32: 2. Betriebs-Phase (Loop)
+    Sensoren--&gt;&gt;ESP32: Aktuelle Temperatur / Helligkeit senden
+    ESP32-&gt;&gt;ESP32: Variablen mit neuen Werten überschreiben
+
+    Note over ESP32, Handy: 3. Datenabruf (Nutzer-Interaktion)
+    Handy-&gt;&gt;ESP32: Verbindet sich mit WLAN
+    Handy-&gt;&gt;ESP32: Öffnet IP im Browser (Anfrage / Request)
+    ESP32-&gt;&gt;ESP32: Baut HTML-Seite mit aktuellen Messwerten zusammen
+    ESP32--&gt;&gt;Handy: Sendet fertige Webseite (Antwort / Response)
+    Note over Handy: Browser zeigt Webseite &lt;br&gt;mit Messwerten an!
+        </pre>
+      </div>
+
+      <h3>Code-Kern</h3>
+      <div class="custom-code-block">
+        <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
+        <pre><code class="language-cpp">#include &lt;WiFi.h&gt;
+#include &lt;WebServer.h&gt;
+#include &lt;Wire.h&gt;
+#include &lt;Adafruit_Sensor.h&gt;
+#include &lt;Adafruit_BME280.h&gt;
+
+const char* ssid = "Wetterstation_ESP32";
+const char* pass = "12345678"; // Mindestens 8 Zeichen!
+
+WebServer server(80);
+Adafruit_BME280 bme;
+const int SOLAR_PIN = 34;
+
+// Globale Variablen für Messwerte
+float temp = 0.0, press = 0.0, hum = 0.0, solarV = 0.0;
+
+void setup() {
+  Serial.begin(115200);
+  
+  // --- Sensor-Setup (BME280 etc.) hier einfügen ---
+  Wire.begin();
+  if(!bme.begin(0x76)) { Serial.println("Kein BME280"); }
+  analogReadResolution(12);
+  // ------------------------------------------------
+
+  // WLAN Access Point starten
+  WiFi.softAP(ssid, pass); 
+  Serial.print("AP IPs: "); Serial.println(WiFi.softAPIP());
+  
+  // Wenn jemand die IP im Browser öffnet, wird diese Route ausgeführt:
+  server.on("/", []() {
+    String html = "&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;body style='font-family:sans-serif; text-align:center;'&gt;";
+    html += "&lt;h1&gt;ESP32 Wetterstation&lt;/h1&gt;";
+    html += "&lt;p&gt;Temperatur: " + String(temp, 1) + " &amp;deg;C&lt;/p&gt;";
+    html += "&lt;p&gt;Luftfeuchte: " + String(hum, 1) + " %&lt;/p&gt;";
+    html += "&lt;p&gt;Luftdruck: " + String(press, 1) + " hPa&lt;/p&gt;";
+    html += "&lt;p&gt;Solar (Helligkeit): " + String(solarV, 2) + " V&lt;/p&gt;";
+    html += "&lt;/body&gt;&lt;/html&gt;";
+    
+    server.send(200, "text/html", html);
+  });
+  
+  server.begin();
+}
+
+void loop() {
+  server.handleClient(); // Webserver-Anfragen entgegennehmen
+
+  // --- Sensor-Auslesen (Temperatur, Solar etc.) hier einfügen ---
+  temp = bme.readTemperature();
+  hum = bme.readHumidity();
+  press = bme.readPressure() / 100.0;
+  solarV = analogRead(SOLAR_PIN) * (3.3 / 4095.0);
+  // --------------------------------------------------------------
+  
+  delay(10); // Kleines Delay für die Stabilität
+}</code></pre>
+      </div>
+
+      <h3>Verbindung &amp; Anzeige</h3>
+      <p style="margin-top:-6px; color:#444;">Nach dem Aufspielen: Mit dem neuen WLAN verbinden und die Standard-IP im
+        Browser öffnen.</p>
+
+      <div class="ip-box" aria-label="Standard IP-Adresse für den ESP32 Access Point">
+        IP-Adresse: http://192.168.4.1
+      </div>
+
+      <div class="media-placeholder" aria-label="Platzhalter: Screenshot Smartphone WLAN">
+        Platzhalter – Screenshot WLAN-Verbindung (Smartphone)
+      </div>
+      <div style="margin-top:14px;"></div>
+      <div class="media-placeholder" aria-label="Platzhalter: Screenshot Webseite Messwerte">
+        Platzhalter – Screenshot Weboberfläche mit Messwerten
       </div>
     </section>
 
@@ -386,19 +784,19 @@ void loop() {
     sections.forEach(sec => observer.observe(sec));
 
     // highlight.js init
-    document.addEventListener('DOMContentLoaded', ()=>{ if(window.hljs && typeof hljs.highlightAll==='function') hljs.highlightAll(); });
+    document.addEventListener('DOMContentLoaded', () => { if (window.hljs && typeof hljs.highlightAll === 'function') hljs.highlightAll(); });
 
     // Copy-to-Clipboard für custom code blocks
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.custom-code-block .copy-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.custom-code-block .copy-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
           const code = btn.parentElement.querySelector('pre code');
           if (!code) return;
           let text = code.innerText.replace(/^\s*\n/, '').replace(/\s*$/, '');
-          navigator.clipboard.writeText(text).then(function() {
+          navigator.clipboard.writeText(text).then(function () {
             btn.classList.add('copied');
             btn.innerHTML = '<i class="fa fa-check"></i> Kopiert!';
-            setTimeout(function() {
+            setTimeout(function () {
               btn.classList.remove('copied');
               btn.innerHTML = '<i class="fa fa-copy"></i>';
             }, 1200);
@@ -408,18 +806,18 @@ void loop() {
     });
 
     // Flip-Logik per Klick/Tastatur (Foto ↔ Schaltplan)
-    function toggleFlip(id){
+    function toggleFlip(id) {
       const el = document.getElementById(id);
-      if(!el) return;
+      if (!el) return;
       el.classList.toggle('flipped');
       const pressed = el.classList.contains('flipped');
       el.setAttribute('aria-pressed', pressed ? 'true' : 'false');
     }
-    document.addEventListener('keydown', function(e){
+    document.addEventListener('keydown', function (e) {
       const active = document.activeElement;
-      if(!active) return;
-      if(active.classList && active.classList.contains('flip-card')){
-        if(e.key === 'Enter' || e.key === ' '){
+      if (!active) return;
+      if (active.classList && active.classList.contains('flip-card')) {
+        if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           toggleFlip(active.id);
         }
@@ -428,4 +826,5 @@ void loop() {
   </script>
 
 </body>
+
 </html>

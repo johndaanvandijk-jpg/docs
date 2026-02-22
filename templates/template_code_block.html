@@ -1,0 +1,105 @@
+<!-- ============================================
+     BAUSTEIN: Code Block
+     ============================================
+     
+     BESCHREIBUNG:
+     Ein Code-Block mit Syntax-Highlighting und Copy-Button.
+     Ideal für Arduino-Code oder andere Programmierbeispiele.
+     
+     PLATZHALTER:
+     - {{CODE_TITLE}}        : Titel über dem Code-Block (z.B. "Arduino Code")
+     - {{CODE_INTRO}}        : Einleitungstext zum Code
+     - {{CODE_LANGUAGE}}     : Sprache für Syntax-Highlighting (z.B. "cpp", "python")
+     - {{CODE_CONTENT}}      : Der eigentliche Code
+     - {{CODE_INSTRUCTIONS}} : Anleitung zur Verwendung des Codes
+============================================ -->
+
+<!-- Styles für Code-Block (falls noch nicht im Haupt-CSS) -->
+<style>
+    .custom-code-block {
+        background: #e8f5e9;
+        color: #222;
+        border: 1.5px solid var(--kit-primary-color);
+        border-radius: 8px;
+        padding: 18px 18px 12px 18px;
+        margin: 18px 0;
+        position: relative;
+        font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+        overflow-x: auto;
+    }
+
+    .custom-code-block pre {
+        margin: 0;
+        background: transparent;
+        color: inherit;
+        font-size: 1em;
+        overflow-x: auto;
+    }
+
+    .custom-code-block .copy-btn {
+        position: absolute;
+        top: 10px;
+        right: 12px;
+        background: var(--kit-primary-color);
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 5px 10px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background 0.2s;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .custom-code-block .copy-btn:hover,
+    .custom-code-block .copy-btn:focus {
+        background: var(--kit-secondary-color);
+        color: #fff;
+    }
+
+    .custom-code-block .copy-btn.copied {
+        background: #388e3c;
+        color: #fff;
+    }
+</style>
+
+<!-- Code Block Baustein -->
+<h4>{{CODE_TITLE}}</h4>
+<p>{{CODE_INTRO}}</p>
+
+<div class="custom-code-block">
+    <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
+    <pre><code class="language-{{CODE_LANGUAGE}}">
+{{CODE_CONTENT}}
+  </code></pre>
+</div>
+
+<p style="margin-top:15px;">
+    <strong>Anleitung:</strong> {{CODE_INSTRUCTIONS}}
+</p>
+
+<!-- JavaScript für Copy-Funktion (falls noch nicht im Haupt-Script) -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.custom-code-block .copy-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const code = btn.parentElement.querySelector('pre code');
+                if (!code) return;
+                // Remove leading/trailing whitespace
+                let text = code.innerText.replace(/^\s*\n/, '').replace(/\s*$/, '');
+                // Copy to clipboard
+                navigator.clipboard.writeText(text).then(function () {
+                    btn.classList.add('copied');
+                    btn.innerHTML = '<i class="fa fa-check"></i> Kopiert!';
+                    setTimeout(function () {
+                        btn.classList.remove('copied');
+                        btn.innerHTML = '<i class="fa fa-copy"></i>';
+                    }, 1200);
+                });
+            });
+        });
+    });
+</script>
