@@ -1,0 +1,192 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{booktabs}
+\usepackage{eurosym}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{calc}
+
+\geometry{margin=2.5cm}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  urlcolor=blue!60!black,
+  pdftitle={Kostenplanung Fotometer-Set},
+  pdfauthor={John van Dijk}
+}
+
+\title{%
+  \vspace{-1.5cm}
+  Kostenplanung: Fotometer-Set\\[6pt]
+  \large Materialliste und Preisübersicht für ein Set
+}
+
+\date{Stand: Februar 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Übersicht}
+Diese Kostenaufstellung listet die benötigten Bauteile für \textbf{ein Fotometer-Set}
+gemäß dem Lernmodul \emph{,,Vom LDR zum Fotometer``} auf.
+Die Preise wurden bei den folgenden Online-Shops recherchiert:
+
+\begin{itemize}
+  \item \href{https://www.roboter-bausatz.de}{roboter-bausatz.de}
+  \item \href{https://www.reichelt.de}{reichelt.de}
+  \item \href{https://www.conrad.de}{conrad.de}
+  \item \href{https://www.galaxus.de}{galaxus.de}
+\end{itemize}
+
+\noindent
+
+
+%------------------------------------------------------------------
+\section{Stückliste und Preise (Kombinierte Bestellung)}
+%------------------------------------------------------------------
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l c r l @{}}
+\toprule
+\textbf{Bauteil} & \textbf{Anz.} & \textbf{Preis} & \textbf{Link} \\
+\midrule
+
+Arduino Nano V3 (ATmega328P, CH340)
+  & 1 & 4,95\,\euro{}
+  & \href{https://www.roboter-bausatz.de/p/nano-mega328p-v3.0-usb-ch340-modul}{RB} \\
+
+Breadboard 830 Kontakte (MB-102)
+  & 1 & 1,49\,\euro{}
+  & \href{https://www.roboter-bausatz.de/p/mb102-breadboard-830-kontakte}{RB} \\
+
+Jumper-Kabel Set (65\,Stk.)
+  & 1 & 2,40\,\euro{}
+  & \href{https://www.reichelt.de/de/de/shop/produkt/entwicklerboards_-_kabel-set_verschiedene_laengen_65er-pack_-282690}{Reichelt} \\
+
+LDR (spezielle Bauform)
+  & 1 & 0,28\,\euro{}
+  & \href{https://www.reichelt.de/de/de/shop/produkt/ldr_100mw_150_300kohm_560nm_150vdc_led_5mm-379958}{Reichelt} \\
+
+LED\ weiß)
+  & 1 & 0,16\,\euro{}
+  & \href{https://www.reichelt.de/de/de/shop/produkt/led_5mm_bedrahtet_weiss_20000_mcd_15_-361626}{Reichelt} \\
+
+Widerstandssortiment (600\,Stk., 10\,$\Omega$\,--\,1\,M$\Omega$)
+  & 1 & 4,45\,\euro{}
+  & \href{https://www.roboter-bausatz.de/p/600-metallschicht-widerstaende-30-werte-zu-je-20-stueck-10-1m-ohm}{RB} \\
+
+Mini-USB-Kabel (30\,cm)
+  & 1 & 0,59\,\euro{}
+  & \href{https://www.roboter-bausatz.de/p/mini-usb-kabel-30-cm-usb-a-stecker-auf-mini-b-stecker}{RB} \\
+
+\midrule
+\multicolumn{2}{l}{\textbf{Zwischensumme Bauteile}}
+  & 14,22\,\euro{} & \\
+\multicolumn{2}{l}{Versandkosten roboter-bausatz.de (geschätzt)}
+  & 3,90\,\euro{} & \\
+\multicolumn{2}{l}{Versandkosten reichelt.de (geschätzt)}
+  & 5,95\,\euro{} & \\
+\midrule
+\multicolumn{2}{l}{\textbf{Gesamt (inkl. Versand)}}
+  & \textbf{24,07\,\euro{}} & \\
+\bottomrule
+\end{tabular}
+
+\label{tab:kosten-rb}
+\end{table}
+
+\smallskip\noindent
+\textit{Hinweis: Das Widerstandssortiment reicht für mehrere Sets.
+Der Stückpreis pro Set sinkt daher bei Klassensätzen.}
+
+\newpage
+\section{Preisvergleich -- weitere Shops}
+%------------------------------------------------------------------
+
+Die folgende Tabelle zeigt beispielhafte Einzelpreise bei den anderen
+Anbietern, soweit dort vergleichbare Produkte verfügbar sind.
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l r r r @{}}
+\toprule
+\textbf{Bauteil}
+  & \textbf{reichelt.de}
+  & \textbf{conrad.de}
+  & \textbf{galaxus.de} \\
+\midrule
+
+Arduino Nano (kompatibel/Original)
+  & ab~20,00\,\euro{}
+  & ab~22,00\,\euro{}
+  & ab~20,00\,\euro{} \\
+
+
+
+Breadboard 830 Kontakte
+  & \href{https://www.reichelt.de/de/de/shop/produkt/experimentier-steckboard_830_kontakte-282600}{3,85\,\euro{}}
+  & \href{https://www.conrad.de/de/p/joy-it-breadboard-830-steckplatine-polzahl-gesamt-830-l-x-b-165-mm-x-55-mm-1-st-2253827.html}{4,49\,\euro{}}
+  & -- \\
+
+\bottomrule
+\end{tabular}
+
+\label{tab:vergleich}
+\end{table}
+
+\smallskip\noindent
+\textit{Hinweis: Bei reichelt.de, conrad.de und galaxus.de sind die Arduino-Boards
+meist Original-Boards und daher deutlich teurer als kompatible Klone.
+Für den Unterrichtseinsatz sind die günstigen Klone von roboter-bausatz.de
+in der Regel ausreichend.}
+
+%------------------------------------------------------------------
+\section{Zusätzlich benötigt (nicht im Set)}
+%------------------------------------------------------------------
+
+\begin{itemize}
+  \item \textbf{Transparenter Flüssigkeitsbehälter} (z.\,B.\ Küvette oder kleines Glas)
+    -- ggf.\ aus dem Chemie-Fachraum
+  \item \textbf{Farbstofflösungen} zum Messen (z.\,B.\ Lebensmittelfarbe)
+\end{itemize}
+
+%------------------------------------------------------------------
+\section{Kalkulationsbeispiel: Klassensatz (15 Sets)}
+%------------------------------------------------------------------
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l c r r @{}}
+\toprule
+\textbf{Bauteil} & \textbf{Anz.} & \textbf{Einzelpreis} & \textbf{Gesamt} \\
+\midrule
+Arduino Nano V3            & 15 & 4,95\,\euro{} &  74,25\,\euro{} \\
+Breadboard 830             & 15 & 1,49\,\euro{} &  22,35\,\euro{} \\
+Jumper-Kabel Set (65\,Stk.)& 15 & 2,10\,\euro{} &  31,50\,\euro{} \\
+LDR (spezielle Bauform)    & 15 & 0,28\,\euro{} &   4,20\,\euro{} \\
+LED-Sortiment (reicht f.~5 Sets) & 3 & 3,50\,\euro{} & 10,50\,\euro{} \\
+Widerstandssort.\ (reicht f.~5 Sets) & 3 & 4,45\,\euro{} & 13,35\,\euro{} \\
+Mini-USB-Kabel             & 15 & 0,59\,\euro{} &   8,85\,\euro{} \\
+\midrule
+\multicolumn{3}{l}{\textbf{Zwischensumme Bauteile}} & 165,00\,\euro{} \\
+\multicolumn{3}{l}{Versandkosten (RB + Reichelt)} & 9,85\,\euro{} \\
+\midrule
+\multicolumn{3}{l}{\textbf{Gesamt (15 Sets inkl.\ Versand)}} & \textbf{174,85\,\euro{}} \\
+\multicolumn{3}{l}{\textit{Preis pro Set}} & \textit{$\approx$\,11,66\,\euro{}} \\
+\bottomrule
+\end{tabular}
+\caption{Kalkulationsbeispiel für einen Klassensatz (15 Gruppen)}
+\label{tab:klassensatz}
+\end{table}
+
+
+\end{document}

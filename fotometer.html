@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,16 +30,19 @@
       --font-main: 'Roboto', sans-serif;
       --font-title: 'Roboto', sans-serif;
       --section-radius: 18px;
-      --section-shadow: 0 8px 32px rgba(44,62,80,0.08);
+      --section-shadow: 0 8px 32px rgba(44, 62, 80, 0.08);
       --section-bg: #fff;
       --section-margin: 36px;
       --section-padding: 48px 24px;
       --emoji-opacity: 0.08;
     }
+
     .content-section p {
       line-height: 1.6;
     }
-    html, body {
+
+    html,
+    body {
       margin: 0;
       padding: 0;
       font-family: var(--font-main);
@@ -46,18 +50,22 @@
       color: #222;
       min-height: 100vh;
     }
+
     .kit-header {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       height: var(--header-height);
       background: #fff;
-      box-shadow: 0 2px 8px rgba(44,62,80,0.06);
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
       z-index: 100;
       display: flex;
       align-items: center;
       padding: 0 32px;
       gap: 24px;
     }
+
     .kit-header img {
       height: 48px;
       width: 48px;
@@ -65,10 +73,12 @@
       background: #f4f4f4;
       object-fit: contain;
     }
+
     .kit-header .header-titles {
       flex: 1;
       min-width: 0;
     }
+
     .kit-header .header-titles .title {
       font-family: var(--font-title);
       font-size: 1.5rem;
@@ -79,6 +89,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .kit-header .header-titles .subtitle {
       font-size: 1rem;
       color: #555;
@@ -87,6 +98,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .kit-header .header-btn {
       background: var(--kit-primary-color);
       color: #fff;
@@ -99,24 +111,30 @@
       transition: background 0.2s, transform 0.2s;
       margin-left: 12px;
     }
-    .kit-header .header-btn:hover, .kit-header .header-btn:focus {
+
+    .kit-header .header-btn:hover,
+    .kit-header .header-btn:focus {
       background: var(--kit-secondary-color);
       transform: scale(1.05);
     }
+
     .progress-container {
       position: fixed;
       top: var(--header-height);
-      left: 0; right: 0;
+      left: 0;
+      right: 0;
       height: var(--progressbar-height);
       background: #e0e0e0;
       z-index: 101;
     }
+
     .progress-bar {
       height: 100%;
       width: 0%;
       background: var(--kit-primary-color);
       transition: width 0.2s;
     }
+
     main {
       margin-top: calc(var(--header-height) + var(--progressbar-height) + 24px);
       padding-bottom: 48px;
@@ -124,6 +142,7 @@
       margin-left: auto;
       margin-right: auto;
     }
+
     .content-section {
       background: var(--section-bg);
       border-radius: var(--section-radius);
@@ -133,13 +152,15 @@
       position: relative;
       opacity: 0;
       transform: translateY(40px);
-      transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+      transition: opacity 0.7s cubic-bezier(.4, 0, .2, 1), transform 0.7s cubic-bezier(.4, 0, .2, 1);
       will-change: opacity, transform;
     }
+
     .content-section.is-visible {
       opacity: 1;
       transform: none;
     }
+
     .section-emoji {
       position: absolute;
       right: 24px;
@@ -149,39 +170,57 @@
       pointer-events: none;
       user-select: none;
     }
-    h1, h2, h3, h4 {
+
+    h1,
+    h2,
+    h3,
+    h4 {
       font-family: var(--font-title);
       color: var(--kit-primary-color);
       margin-top: 0;
     }
-    h1 { font-size: 2.2rem; }
-    h2 { font-size: 1.5rem; }
-    h3 { font-size: 1.2rem; }
+
+    h1 {
+      font-size: 2.2rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+    }
+
     .material-list {
       list-style: none;
       padding: 0;
       margin: 0 0 16px 0;
     }
+
     .material-list li {
       margin-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
+
     .material-list li i {
       color: var(--kit-primary-color);
       font-size: 1.1em;
     }
+
     .ldr-simulation-container {
       margin: 24px 0;
       background: #f8f8f8;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(44,62,80,0.04);
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
       padding: 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
+
     #ohmmeter-display-1-1 {
       background-color: #f4f4f4;
       border: 2px solid #333;
@@ -194,100 +233,125 @@
       font-weight: bold;
       color: #000;
     }
+
     /* ... weitere Styles für Akkordeon, Flip-Karten, Reveal-Boxen, Quiz, Copy-Button, Mermaid, etc. ... */
     /* Responsive */
     @media (max-width: 700px) {
-      main { padding: 0 4vw; }
-      .content-section { padding: 32px 8px; }
-      .kit-header { padding: 0 8px; }
+      main {
+        padding: 0 4vw;
+      }
+
+      .content-section {
+        padding: 32px 8px;
+      }
+
+      .kit-header {
+        padding: 0 8px;
+      }
     }
+
     .ldr-simulator-container-adv {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background-color: #f7f9fc;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 20px;
-        max-width: 500px;
-        margin: 20px auto;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f7f9fc;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      max-width: 500px;
+      margin: 20px auto;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
+
     .ldr-simulator-container-adv h3,
     .ldr-simulator-container-adv h4 {
-        margin-top: 0;
-        text-align: center;
-        color: #333;
+      margin-top: 0;
+      text-align: center;
+      color: #333;
     }
+
     .slider-group {
-        margin-bottom: 25px;
-        padding: 15px;
-        background: #fff;
-        border-radius: 6px;
-        border: 1px solid #e0e0e0;
+      margin-bottom: 25px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
     }
+
     .slider-group label {
-        display: block;
-        margin-bottom: 10px;
-        font-weight: 600;
-        color: #005a9c;
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #005a9c;
     }
+
     .slider-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        font-size: 0.9em;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 0.9em;
     }
+
     .slider-wrapper input[type="range"] {
-        flex-grow: 1;
-        cursor: pointer;
+      flex-grow: 1;
+      cursor: pointer;
     }
+
     /* Anzeige für R1-Wert */
-    [classid="r1-value-display"] { 
-        text-align: center;
-        margin-top: 10px;
-        font-size: 0.9em;
-        color: #444;
+    [classid="r1-value-display"] {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #444;
     }
+
     .circuit-info-adv {
-        font-size: 0.9em;
-        color: #555;
-        background-color: #e9ecef;
-        padding: 10px 15px;
-        border-radius: 6px;
-        margin-bottom: 20px;
+      font-size: 0.9em;
+      color: #555;
+      background-color: #e9ecef;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
     }
+
     .circuit-info-adv p {
-        margin: 4px 0;
-        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      margin: 4px 0;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
     }
+
     .data-display-adv {
-        background-color: #fff;
-        border: 1px solid #e0e0e0;
-        padding: 10px 15px;
-        border-radius: 6px;
+      background-color: #fff;
+      border: 1px solid #e0e0e0;
+      padding: 10px 15px;
+      border-radius: 6px;
     }
+
     .data-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
     .data-display-adv p {
-        margin: 12px 0;
-        display: flex;
-        justify-content: space-between;
-        font-size: 1.1em;
+      margin: 12px 0;
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1em;
     }
+
     .data-display-adv hr {
-        border: 0;
-        border-top: 1px dashed #ccc;
-        margin: 10px 0;
+      border: 0;
+      border-top: 1px dashed #ccc;
+      margin: 10px 0;
     }
+
     .data-display-adv strong {
-        color: #d9534f; /* Auffällige Farbe für Ergebnisse */
-        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-        font-size: 1.1em;
+      color: #d9534f;
+      /* Auffällige Farbe für Ergebnisse */
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 1.1em;
     }
+
     /* Custom Code Block Styles */
     .custom-code-block {
       background: #e8f5e9;
@@ -300,6 +364,7 @@
       font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
       overflow-x: auto;
     }
+
     .custom-code-block pre {
       margin: 0;
       background: transparent;
@@ -307,6 +372,7 @@
       font-size: 1em;
       overflow-x: auto;
     }
+
     .custom-code-block .copy-btn {
       position: absolute;
       top: 10px;
@@ -324,20 +390,25 @@
       align-items: center;
       gap: 4px;
     }
-    .custom-code-block .copy-btn:hover, .custom-code-block .copy-btn:focus {
+
+    .custom-code-block .copy-btn:hover,
+    .custom-code-block .copy-btn:focus {
       background: var(--kit-secondary-color);
       color: #fff;
     }
+
     .custom-code-block .copy-btn.copied {
       background: #388e3c;
       color: #fff;
     }
+
     /* Tooltip Styles */
     .tooltip {
       position: relative;
       display: inline-block;
       cursor: help;
     }
+
     .tooltip .tooltiptext {
       visibility: hidden;
       width: 320px;
@@ -350,23 +421,27 @@
       z-index: 10;
       bottom: 110%;
       left: 50%;
-      margin-left: -160px; /* Half of the width */
+      margin-left: -160px;
+      /* Half of the width */
       opacity: 0;
       transition: opacity 0.3s ease, transform 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       transform: translateY(10px);
     }
+
     .tooltip .tooltiptext h4 {
-        color: var(--kit-primary-color);
-        margin-top: 0;
-        margin-bottom: 8px;
-        font-size: 1.1rem;
+      color: var(--kit-primary-color);
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
     }
+
     .tooltip .tooltiptext p {
-        font-size: 0.9rem;
-        line-height: 1.5;
-        margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin: 0;
     }
+
     .tooltip:hover .tooltiptext {
       visibility: visible;
       opacity: 1;
@@ -374,6 +449,7 @@
     }
   </style>
 </head>
+
 <body>
   <header class="kit-header" role="banner" aria-label="Modultitel und Fortschrittsanzeige">
     <img src="Media/Images/NWTLOGO.png" alt="NWT Logo" />
@@ -383,7 +459,9 @@
     </div>
 
   </header>
-  <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+  <div class="progress-container">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
   <main>
     <!-- Einführung -->
     <section class="content-section" id="intro">
@@ -393,9 +471,11 @@
       <p><strong>Autor:</strong> John van Dijk</p>
       <p><strong>Lizenzhinweis:</strong> CC BY-SA 4.0</p>
       <p>
-       Dieses Modul liefert das technische Fundament für die <a href="..." target="_blank">UE Fotometer</a>: Sie lernen, einen optischen Sensor zu bauen, am Microcontroller zu betreiben und die Rohdaten für den Unterricht nutzbar zu machen.
+        Dieses Modul liefert das technische Fundament für die <a href="..." target="_blank">UE Fotometer</a>: Sie
+        lernen, einen optischen Sensor zu bauen, am Microcontroller zu betreiben und die Rohdaten für den Unterricht
+        nutzbar zu machen.
       </p>
-      
+
       <style>
         /* Kleine Styles für das native <details> Akkordeon */
         .intro-accordion details {
@@ -405,6 +485,7 @@
           margin-bottom: 14px;
           background: #fbfffb;
         }
+
         .intro-accordion summary {
           list-style: none;
           font-weight: 600;
@@ -413,7 +494,11 @@
           padding: 6px 4px;
           color: var(--kit-primary-color);
         }
-        .intro-accordion summary::-webkit-details-marker { display: none; }
+
+        .intro-accordion summary::-webkit-details-marker {
+          display: none;
+        }
+
         .intro-accordion summary:before {
           content: "▸";
           display: inline-block;
@@ -421,17 +506,28 @@
           transform-origin: 6px 6px;
           transition: transform 0.18s ease;
         }
-        .intro-accordion details[open] summary:before { transform: rotate(90deg); }
-        .intro-accordion .material-list { margin-top: 8px; }
+
+        .intro-accordion details[open] summary:before {
+          transform: rotate(90deg);
+        }
+
+        .intro-accordion .material-list {
+          margin-top: 8px;
+        }
       </style>
 
       <div class="intro-accordion">
         <details open>
           <summary>Vorbereitung & Werkzeuge</summary>
           <ul class="material-list">
-            <li><i class="fa-solid fa-download"></i> Arduino IDE installieren: <a href="https://www.arduino.cc/en/software" target="_blank" rel="noopener">arduino.cc/en/software</a></li>
-            <li><i class="fa-solid fa-download"></i> CH340-Treiber (für Arduino-Klone): <a href="https://sparks.gogo.co.nz/ch340.html" target="_blank" rel="noopener">sparks.gogo.co.nz/ch340.html</a></li>
-            <li><i class="fa-solid fa-bread-slice"></i> Breadboard verstehen: <a href="https://learn.sparkfun.com/tutorials/how-to-use-a-breadboard/all" target="_blank" rel="noopener">SparkFun Breadboard Guide</a></li>
+            <li><i class="fa-solid fa-download"></i> Arduino IDE installieren: <a
+                href="https://www.arduino.cc/en/software" target="_blank" rel="noopener">arduino.cc/en/software</a></li>
+            <li><i class="fa-solid fa-download"></i> CH340-Treiber (für Arduino-Klone): <a
+                href="https://sparks.gogo.co.nz/ch340.html" target="_blank"
+                rel="noopener">sparks.gogo.co.nz/ch340.html</a></li>
+            <li><i class="fa-solid fa-bread-slice"></i> Breadboard verstehen: <a
+                href="https://learn.sparkfun.com/tutorials/how-to-use-a-breadboard/all" target="_blank"
+                rel="noopener">SparkFun Breadboard Guide</a></li>
           </ul>
         </details>
 
@@ -455,26 +551,29 @@
       <h2>1. Technische Grundlagen: LDR am Microcontroller</h2>
       <h3>1.1. Funktionsprinzip LDR</h3>
       <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 24px;">
-  <div style="flex: 1; min-width: 300px;">
-    <p style="margin-top: 0;">
-      Ein LDR (<b>Light Dependent Resistor</b>, auch Fotowiderstand genannt) ist ein elektronisches Bauteil, dessen Widerstand sich mit der Helligkeit ändert. 
-    </p>
-    <p>
-      Je mehr Licht auf den LDR fällt, desto kleiner wird sein elektrischer Widerstand. Im Dunkeln ist der Widerstand sehr hoch (bis zu 200 kΩ), bei starkem Licht sinkt er auf wenige hundert Ohm.
-    </p>
-  </div>
-</div>
+        <div style="flex: 1; min-width: 300px;">
+          <p style="margin-top: 0;">
+            Ein LDR (<b>Light Dependent Resistor</b>, auch Fotowiderstand genannt) ist ein elektronisches Bauteil,
+            dessen Widerstand sich mit der Helligkeit ändert.
+          </p>
+          <p>
+            Je mehr Licht auf den LDR fällt, desto kleiner wird sein elektrischer Widerstand. Im Dunkeln ist der
+            Widerstand sehr hoch (bis zu 200 kΩ), bei starkem Licht sinkt er auf wenige hundert Ohm.
+          </p>
+        </div>
+      </div>
 
-        
-        <p style="
+
+      <p style="
     text-align: center; 
     font-weight: 500; 
     color: #2c3e50; 
     background: #e8f5e9; 
     padding: 12px; 
     border-radius: 8px;">
-        <i class="fa-regular fa-lightbulb"></i> Der Zusammenhang ist <u>invers</u>: Viel Licht → kleiner Widerstand, wenig Licht → großer Widerstand.
-        </p>
+        <i class="fa-regular fa-lightbulb"></i> Der Zusammenhang ist <u>invers</u>: Viel Licht → kleiner Widerstand,
+        wenig Licht → großer Widerstand.
+      </p>
       </p>
       <div style="
               display: flex; 
@@ -486,78 +585,82 @@
               box-sizing: border-box;  /* Stellt sicher, dass Padding die Höhe/Breite nicht sprengt */
              background-color: #f4f4f4; /* Nur zur Demo */
                ">
-       <div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
-        <img src="Media/Images/LDRneu.jpeg" alt="Foto eines LDR" style="max-width: 300px; height: auto;border: 1px solid #ccc; padding: 5px;">
-        
-          
+        <div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
+          <img src="Media/Images/LDRneu.jpeg" alt="Foto eines LDR"
+            style="max-width: 300px; height: auto;border: 1px solid #ccc; padding: 5px;">
+
+
           <svg viewBox="0 0 100 100" style="width: 300px; height: auto; border: 1px solid #ccc; padding: 5px;">
-            <line x1="10" y1="10" x2="10" y2="90" stroke="black" stroke-width="0.5"/>
-            
-            
-            <text x="5" y="50" font-size="5" dominant-baseline="middle" text-anchor="end" transform="rotate(-90, 5, 50)">Widerstand (Ω)</text>
-            <line x1="10" y1="90" x2="90" y2="90" stroke="black" stroke-width="0.5"/>
+            <line x1="10" y1="10" x2="10" y2="90" stroke="black" stroke-width="0.5" />
+
+
+            <text x="5" y="50" font-size="5" dominant-baseline="middle" text-anchor="end"
+              transform="rotate(-90, 5, 50)">Widerstand (Ω)</text>
+            <line x1="10" y1="90" x2="90" y2="90" stroke="black" stroke-width="0.5" />
             <text x="15" y="95" font-size="5" dominant-baseline="middle" text-anchor="middle">Dunkel</text>
             <text x="85" y="95" font-size="5" dominant-baseline="middle" text-anchor="middle">Hell</text>
             <text x="50" y="98" font-size="5" dominant-baseline="middle" text-anchor="middle">Lichtintensität</text>
-            <path d="M 15 15 Q 20 90 90 90" fill="none" stroke="#d9534f" stroke-width="2"/>
+            <path d="M 15 15 Q 20 90 90 90" fill="none" stroke="#d9534f" stroke-width="2" />
           </svg>
         </div>
       </div>
       <h3 style="margin-top:32px;">1.2. Der Spannungsteiler</h3>
 
-<div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 24px;">
-  <div style="flex: 1; min-width: 300px;">
-    <p style="margin-top: 0;">
-      Ein <b>Spannungsteiler</b> ist eine einfache Schaltung aus zwei Widerständen, mit der man eine Eingangsspannung in eine kleinere Ausgangsspannung umwandeln kann.
-    </p>
-    <p>
-      Im Fotometer wird der LDR mit einem festen Widerstand in Reihe geschaltet. Die Ausgangsspannung zwischen den beiden Widerständen hängt davon ab, wie hell es ist – und damit vom Widerstand des LDR.
-    </p>
-  </div>
-</div>
+      <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 24px;">
+        <div style="flex: 1; min-width: 300px;">
+          <p style="margin-top: 0;">
+            Ein <b>Spannungsteiler</b> ist eine einfache Schaltung aus zwei Widerständen, mit der man eine
+            Eingangsspannung in eine kleinere Ausgangsspannung umwandeln kann.
+          </p>
+          <p>
+            Im Fotometer wird der LDR mit einem festen Widerstand in Reihe geschaltet. Die Ausgangsspannung zwischen den
+            beiden Widerständen hängt davon ab, wie hell es ist – und damit vom Widerstand des LDR.
+          </p>
+        </div>
+      </div>
 
-<div style="
+      <div style="
     background: #f8f9fa; 
     border-left: 4px solid var(--kit-primary-color); 
     padding: 20px; 
     margin: 20px 0; 
     border-radius: 4px; 
     text-align: center;">
-  
-  <span style="font-size: 0.9rem; color: #666; text-transform: uppercase; letter-spacing: 1px;">Die Formel</span>
-  
-  <div class="tooltip" style="display: block; margin: 15px 0; cursor: help;">
-    <span style="font-size: 1.5rem; font-family: 'Times New Roman', serif;">
-      \( V_{out} = V_{in} \cdot \frac{R_{LDR}}{R1 + R_{LDR}} \)
-    </span>
-    
-    <br>
-    <span style="font-size: 0.8rem; color: var(--kit-primary-color); border-bottom: 1px dashed currentColor;">
-      
-    </span>
 
-    <span class="tooltiptext">
-        <h4>Herleitung der Formel</h4>
-        <p>
-            Ohmsches Gesetz \(U = R \cdot I\).
-            <br>1. <strong>Gesamtwiderstand:</strong> \(R_{ges} = R1 + R_{LDR}\)
-            <br>2. <strong>Gesamtstrom:</strong> \(I = \frac{V_{in}}{R_{ges}} = \frac{V_{in}}{R1 + R_{LDR}}\)
-            <br>3. <strong>Spannung am LDR (\(V_{out}\)):</strong> \(V_{out} = R_{LDR} \cdot I\)
-            <br>4. <strong>Einsetzen:</strong> \(V_{out} = R_{LDR} \cdot \frac{V_{in}}{R1 + R_{LDR}}\)
-        </p>
-    </span>
-  </div>
-</div>
+        <span style="font-size: 0.9rem; color: #666; text-transform: uppercase; letter-spacing: 1px;">Die Formel</span>
 
-<p style="
+        <div class="tooltip" style="display: block; margin: 15px 0; cursor: help;">
+          <span style="font-size: 1.5rem; font-family: 'Times New Roman', serif;">
+            \( V_{out} = V_{in} \cdot \frac{R_{LDR}}{R1 + R_{LDR}} \)
+          </span>
+
+          <br>
+          <span style="font-size: 0.8rem; color: var(--kit-primary-color); border-bottom: 1px dashed currentColor;">
+
+          </span>
+
+          <span class="tooltiptext">
+            <h4>Herleitung der Formel</h4>
+            <p>
+              Ohmsches Gesetz \(U = R \cdot I\).
+              <br>1. <strong>Gesamtwiderstand:</strong> \(R_{ges} = R1 + R_{LDR}\)
+              <br>2. <strong>Gesamtstrom:</strong> \(I = \frac{V_{in}}{R_{ges}} = \frac{V_{in}}{R1 + R_{LDR}}\)
+              <br>3. <strong>Spannung am LDR (\(V_{out}\)):</strong> \(V_{out} = R_{LDR} \cdot I\)
+              <br>4. <strong>Einsetzen:</strong> \(V_{out} = R_{LDR} \cdot \frac{V_{in}}{R1 + R_{LDR}}\)
+            </p>
+          </span>
+        </div>
+      </div>
+
+      <p style="
     text-align: center; 
     font-weight: 500; 
     color: #2c3e50; 
     background: #e8f5e9; 
     padding: 12px; 
     border-radius: 8px;">
-  <i class="fa-regular fa-lightbulb"></i> So kann der Mikrocontroller die Helligkeit als Spannung messen!
-</p>
+        <i class="fa-regular fa-lightbulb"></i> So kann der Mikrocontroller die Helligkeit als Spannung messen!
+      </p>
       <div style="
       display: flex; 
       justify-content: center; 
@@ -570,432 +673,464 @@
       flex-direction: column; /* Damit der Hint unter der Karte steht */
        ">
 
-  <style>
-    /* 1. Container für die Karte: Feste Größe oder responsive relative Größe */
-    .flip-card {
-      background-color: transparent;
-      width: 650px;             /* Vernünftige Breite setzen */
-      max-width: 100%;          /* Damit es auf Handys nicht übersteht */
-      height: 450px;            /* Feste Höhe ist wichtig für den 3D-Effekt */
-      perspective: 1000px;      /* Tiefenwahrnehmung */
-      cursor: pointer;          /* Zeigt an, dass es klickbar ist */
-      margin-bottom: 16px;      /* Platz zum Text darunter */
-    }
+        <style>
+          /* 1. Container für die Karte: Feste Größe oder responsive relative Größe */
+          .flip-card {
+            background-color: transparent;
+            width: 650px;
+            /* Vernünftige Breite setzen */
+            max-width: 100%;
+            /* Damit es auf Handys nicht übersteht */
+            height: 450px;
+            /* Feste Höhe ist wichtig für den 3D-Effekt */
+            perspective: 1000px;
+            /* Tiefenwahrnehmung */
+            cursor: pointer;
+            /* Zeigt an, dass es klickbar ist */
+            margin-bottom: 16px;
+            /* Platz zum Text darunter */
+          }
 
-    /* 2. Der innere Container, der sich dreht */
-    .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
-    }
+          /* 2. Der innere Container, der sich dreht */
+          .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+          }
 
-    /* Die Klasse, die per JS hinzugefügt wird */
-    .flip-card.flipped .flip-card-inner {
-      transform: rotateY(180deg);
-    }
+          /* Die Klasse, die per JS hinzugefügt wird */
+          .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+          }
 
-    /* 3. Vorder- und Rückseite */
-    .flip-front, .flip-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      border-radius: 12px;      /* Abgerundete Ecken sehen besser aus */
-      overflow: hidden;         /* Damit das Bild nicht über die Ecken ragt */
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Kleiner Schatten für Tiefe */
-      background-color: #fff;
-    }
+          /* 3. Vorder- und Rückseite */
+          .flip-front,
+          .flip-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            /* Abgerundete Ecken sehen besser aus */
+            overflow: hidden;
+            /* Damit das Bild nicht über die Ecken ragt */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            /* Kleiner Schatten für Tiefe */
+            background-color: #fff;
+          }
 
-    /* Spezifische Styles für die Rückseite */
-    .flip-back {
-      transform: rotateY(180deg);
-      display: flex;            /* Zentriert den Inhalt der Rückseite */
-      justify-content: center;
-      align-items: center;
-    }
+          /* Spezifische Styles für die Rückseite */
+          .flip-back {
+            transform: rotateY(180deg);
+            display: flex;
+            /* Zentriert den Inhalt der Rückseite */
+            justify-content: center;
+            align-items: center;
+          }
 
-    /* 4. Bild-Styling */
-    .flip-front img, .flip-back img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;       /* Füllt die Karte (schneidet ggf. Ränder ab) */
-      /* Alternativ: object-fit: contain; nutzen, wenn ALLES vom Schaltplan sichtbar sein muss */
-      display: block;
-    }
+          /* 4. Bild-Styling */
+          .flip-front img,
+          .flip-back img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* Füllt die Karte (schneidet ggf. Ränder ab) */
+            /* Alternativ: object-fit: contain; nutzen, wenn ALLES vom Schaltplan sichtbar sein muss */
+            display: block;
+          }
 
-    /* 5. Hinweis-Text Styling */
-    .flip-hint {
-      font-family: sans-serif;
-      color: #333;
-      font-size: 0.9rem;
-      background: rgba(255,255,255,0.8);
-      padding: 8px 16px;
-      border-radius: 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-  </style>
+          /* 5. Hinweis-Text Styling */
+          .flip-hint {
+            font-family: sans-serif;
+            color: #333;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          }
+        </style>
 
-  <div class="flip-card" id="flip-spannungs" role="button" tabindex="0" onclick="toggleFlip('flip-spannungs')">
-    <div class="flip-card-inner">
-      
-      <div class="flip-front">
-        <img src="Media/Images/Spannungsteiler.png" alt="Foto der Spannungsteiler-Schaltung" onerror="this.src='https://placehold.co/350x450?text=Foto+Spannungsteiler'">
-      </div>
-      
-      <div class="flip-back">
-        <img src="Media/Images/Schaltplan1.png" alt="Schematischer Aufbau" onerror="this.src='https://placehold.co/350x450?text=Schaltplan'">
-      </div>
+        <div class="flip-card" id="flip-spannungs" role="button" tabindex="0" onclick="toggleFlip('flip-spannungs')">
+          <div class="flip-card-inner">
 
-    </div>
-  </div>
+            <div class="flip-front">
+              <img src="Media/Images/Nanoteiler.png" alt="Foto der Spannungsteiler-Schaltung"
+                onerror="this.src='https://placehold.co/350x450?text=Foto+Spannungsteiler'">
+            </div>
 
-  <p class="flip-hint">Klicken: Foto ↔ Schaltplan</p>
+            <div class="flip-back">
+              <img src="Media/Images/Schaltplan1.png" alt="Schematischer Aufbau"
+                onerror="this.src='https://placehold.co/350x450?text=Schaltplan'">
+            </div>
 
-</div>
-
-<script>
-  function toggleFlip(id){
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.classList.toggle('flipped');
-    
-    // Accessibility Update
-    const pressed = el.classList.contains('flipped');
-    el.setAttribute('aria-pressed', pressed ? 'true' : 'false');
-  }
-
-  // Keyboard Support
-  document.addEventListener('keydown', function(e){
-    const active = document.activeElement;
-    if(!active) return;
-    if(active.classList && active.classList.contains('flip-card')){
-      if(e.key === 'Enter' || e.key === ' '){
-        e.preventDefault();
-        toggleFlip(active.id);
-      }
-    }
-  });
-</script>
           </div>
         </div>
 
-         <figure style="border: 1px solid #ccc; padding: 10px; text-align: center; background: #f9f9f9;">
+        <p class="flip-hint">Klicken: Foto ↔ Schaltplan</p>
+
+      </div>
+
+      <script>
+        function toggleFlip(id) {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.classList.toggle('flipped');
+
+          // Accessibility Update
+          const pressed = el.classList.contains('flipped');
+          el.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+        }
+
+        // Keyboard Support
+        document.addEventListener('keydown', function (e) {
+          const active = document.activeElement;
+          if (!active) return;
+          if (active.classList && active.classList.contains('flip-card')) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              toggleFlip(active.id);
+            }
+          }
+        });
+      </script>
+      </div>
+      </div>
+
+      <figure style="border: 1px solid #ccc; padding: 10px; text-align: center; background: #f9f9f9;">
         <figcaption>
-          <em>Bei dieser Schaltung, steigt die Ausgangsspannung wenn es dunkler wird. Wenn der LDR mit dem Widerstand vertauscht werden würde, wäre es umgekehrt</em>
+          <em>Bei dieser Schaltung, steigt die Ausgangsspannung wenn es dunkler wird. Wenn der LDR mit dem Widerstand
+            vertauscht werden würde, wäre es umgekehrt</em>
         </figcaption>
       </figure>
-    
+
       <h3 style="margin-top:32px;">1.3. Simulation</h3>
       <div class="ldr-simulator-container-adv">
-          <h3>⚡ Interaktive LDR-Schaltung (Spannungsteiler)</h3>
-          <p>Experimentieren Sie mit der Lichtstärke und dem Festwiderstand (R1),
-              um zu sehen, wie sich Spannung und ADC-Wert verändern. Optimiere die Sensitivität
-            des Lichtsensors mit verschiedenen R1-Werten.</p>
-      
-          <div class="slider-group">
-              <label for="light-slider-adv"><strong>Lichtintensität</strong></label>
-              <div class="slider-wrapper">
-                  <span>🌙 Dunkel</span>
-                  <input type="range" id="light-slider-adv" min="0" max="100" value="0">
-                  <span>☀️ Hell</span>
-              </div>
+        <h3>⚡ Interaktive LDR-Schaltung (Spannungsteiler)</h3>
+        <p>Experimentieren Sie mit der Lichtstärke und dem Festwiderstand (R1),
+          um zu sehen, wie sich Spannung und ADC-Wert verändern. Optimiere die Sensitivität
+          des Lichtsensors mit verschiedenen R1-Werten.</p>
+
+        <div class="slider-group">
+          <label for="light-slider-adv"><strong>Lichtintensität</strong></label>
+          <div class="slider-wrapper">
+            <span>🌙 Dunkel</span>
+            <input type="range" id="light-slider-adv" min="0" max="100" value="0">
+            <span>☀️ Hell</span>
           </div>
-      
-          <div class="slider-group">
-              <label for="fixed-resistor-slider"><strong>Festwiderstand (R1)</strong></label>
-              <div class="slider-wrapper">
-                  <span>1 kΩ</span>
-                  <input type="range" id="fixed-resistor-slider" min="1" max="200" value="10">
-                  <span>200 kΩ</span>
-              </div>
-              <div classid="r1-value-display">Aktuell R1: <strong id="fixed-res-display">...</strong></div>
+        </div>
+
+        <div class="slider-group">
+          <label for="fixed-resistor-slider"><strong>Festwiderstand (R1)</strong></label>
+          <div class="slider-wrapper">
+            <span>1 kΩ</span>
+            <input type="range" id="fixed-resistor-slider" min="1" max="200" value="10">
+            <span>200 kΩ</span>
           </div>
-      
-          <div class="data-display-adv">
-    <h4>Simulierte Messwerte:</h4>
-    
-    <div class="data-row">
-        <span class="label"><i>R</i><sub>LDR</sub></span>
-        <span class="equals">=</span>
-        <span class="value"><strong id="ldr-res-display">...</strong> </span>
-    </div>
+          <div classid="r1-value-display">Aktuell R1: <strong id="fixed-res-display">...</strong></div>
+        </div>
 
-    <div class="data-row">
-        <span class="label"><i>V</i><sub>out</sub></span>
-        <span class="equals">=</span>
-        <span class="value"><strong id="output-volt-display">...</strong> </span>
-    </div>
+        <div class="data-display-adv">
+          <h4>Simulierte Messwerte:</h4>
 
-    <div class="data-row">
-        <span class="label">ADC (0-1023)</span>
-        <span class="equals">=</span>
-        <span class="value"><strong id="adc-value-display">...</strong></span>
-    </div>
-</div>
-          
+          <div class="data-row">
+            <span class="label"><i>R</i><sub>LDR</sub></span>
+            <span class="equals">=</span>
+            <span class="value"><strong id="ldr-res-display">...</strong> </span>
+          </div>
 
-      
-      <script>
-          document.addEventListener('DOMContentLoaded', function() {
-      
-              // 1. Alle HTML-Elemente holen
-              const lightSlider = document.getElementById('light-slider-adv');
-              const r1Slider = document.getElementById('fixed-resistor-slider');
-      
-              const ldrResDisplay = document.getElementById('ldr-res-display');
-              const fixedResDisplay = document.getElementById('fixed-res-display');
-              const voltDisplay = document.getElementById('output-volt-display');
-              const adcDisplay = document.getElementById('adc-value-display');
-      
-              // 2. Physische Konstanten
-              const V_IN = 5.0;      // 5 Volt Versorgungsspannung
-              const ADC_MAX = 1023;  // 10-Bit ADC (wie Arduino)
-      
-              // 3. Die Hauptfunktion
-              function updateSimulation() {
-                  
-                  // --- INPUTS auslesen ---
-                  
-                  // Lichtlevel (0-100)
-                  const lightLevel = parseFloat(lightSlider.value);
-                  
-                  // Festwiderstand R1 (1-50 kΩ)
-                  const r1_kOhm = parseFloat(r1Slider.value);
-                  
-                  
-                  // --- BERECHNUNGEN ---
-      
-                  // A) LDR-Widerstand (R_LDR) simulieren
-                  // (Exponentielle Abnahme, um realistischer zu sein als linear)
-                  // (100% Licht -> 1 kΩ, 0% Licht -> ~200 kΩ)
-                  const minRes = 1.0;  // kΩ bei max Licht
-                  const maxRes = 200.0; // kΩ bei min Licht
-                  const ldr_kOhm = minRes + (maxRes - minRes) * Math.pow(1 - (lightLevel / 100), 4);
-                  
-                  // B) Spannungsteiler (V_out) berechnen
-                  // V_out = V_in * (R_LDR / (R1 + R_LDR))
-                  const vOut = V_IN * (ldr_kOhm / (r1_kOhm + ldr_kOhm));
-      
-                  // C) ADC-Wert (Analog-Digital-Wandler) berechnen
-                  // (vOut / V_IN) * ADC_MAX
-                  const adcValue = (vOut / V_IN) * ADC_MAX;
-      
-                  
-                  // --- OUTPUTS anzeigen ---
-                  
-                  // LDR-Wert
-                  ldrResDisplay.textContent = `${ldr_kOhm.toFixed(1)} kΩ`;
-                  
-                  // R1-Wert
-                  fixedResDisplay.textContent = `${r1_kOhm.toFixed(0)} kΩ`;
-                  
-                  // Spannung
-                  voltDisplay.textContent = `${vOut.toFixed(2)} V`;
-                  
-                  // ADC-Wert
-                  adcDisplay.textContent = `${Math.round(adcValue)}`;
-              }
-      
-              // 4. Event-Listener an BEIDE Slider hängen
-              lightSlider.addEventListener('input', updateSimulation);
-              r1Slider.addEventListener('input', updateSimulation);
-      
-              // 5. Simulation beim Laden der Seite initialisieren
-              updateSimulation();
+          <div class="data-row">
+            <span class="label"><i>V</i><sub>out</sub></span>
+            <span class="equals">=</span>
+            <span class="value"><strong id="output-volt-display">...</strong> </span>
+          </div>
+
+          <div class="data-row">
+            <span class="label">ADC (0-1023)</span>
+            <span class="equals">=</span>
+            <span class="value"><strong id="adc-value-display">...</strong></span>
+          </div>
+        </div>
+
+
+
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+
+            // 1. Alle HTML-Elemente holen
+            const lightSlider = document.getElementById('light-slider-adv');
+            const r1Slider = document.getElementById('fixed-resistor-slider');
+
+            const ldrResDisplay = document.getElementById('ldr-res-display');
+            const fixedResDisplay = document.getElementById('fixed-res-display');
+            const voltDisplay = document.getElementById('output-volt-display');
+            const adcDisplay = document.getElementById('adc-value-display');
+
+            // 2. Physische Konstanten
+            const V_IN = 5.0;      // 5 Volt Versorgungsspannung
+            const ADC_MAX = 1023;  // 10-Bit ADC (wie Arduino)
+
+            // 3. Die Hauptfunktion
+            function updateSimulation() {
+
+              // --- INPUTS auslesen ---
+
+              // Lichtlevel (0-100)
+              const lightLevel = parseFloat(lightSlider.value);
+
+              // Festwiderstand R1 (1-50 kΩ)
+              const r1_kOhm = parseFloat(r1Slider.value);
+
+
+              // --- BERECHNUNGEN ---
+
+              // A) LDR-Widerstand (R_LDR) simulieren
+              // (Exponentielle Abnahme, um realistischer zu sein als linear)
+              // (100% Licht -> 1 kΩ, 0% Licht -> ~200 kΩ)
+              const minRes = 1.0;  // kΩ bei max Licht
+              const maxRes = 200.0; // kΩ bei min Licht
+              const ldr_kOhm = minRes + (maxRes - minRes) * Math.pow(1 - (lightLevel / 100), 4);
+
+              // B) Spannungsteiler (V_out) berechnen
+              // V_out = V_in * (R_LDR / (R1 + R_LDR))
+              const vOut = V_IN * (ldr_kOhm / (r1_kOhm + ldr_kOhm));
+
+              // C) ADC-Wert (Analog-Digital-Wandler) berechnen
+              // (vOut / V_IN) * ADC_MAX
+              const adcValue = (vOut / V_IN) * ADC_MAX;
+
+
+              // --- OUTPUTS anzeigen ---
+
+              // LDR-Wert
+              ldrResDisplay.textContent = `${ldr_kOhm.toFixed(1)} kΩ`;
+
+              // R1-Wert
+              fixedResDisplay.textContent = `${r1_kOhm.toFixed(0)} kΩ`;
+
+              // Spannung
+              voltDisplay.textContent = `${vOut.toFixed(2)} V`;
+
+              // ADC-Wert
+              adcDisplay.textContent = `${Math.round(adcValue)}`;
+            }
+
+            // 4. Event-Listener an BEIDE Slider hängen
+            lightSlider.addEventListener('input', updateSimulation);
+            r1Slider.addEventListener('input', updateSimulation);
+
+            // 5. Simulation beim Laden der Seite initialisieren
+            updateSimulation();
           });
-      </script>
+        </script>
     </section>
 
-  
-    
-<section class="content-section" id="quiz-r1">
-  <div class="section-emoji">🧠</div>
-  <h2>Teste dein Wissen: Der Widerstands-Optimierer</h2>
-  <p>
-    In der Simulation oben haben Sie gesehen, dass sich die Messung unterschiedlich verhält, wenn man R1 anpasst. 
-    Ziel ist es immer, den <strong>Messbereich maximal auszunutzen</strong>. Das bedeutet: Wir wollen große Sprünge in den Zahlenwerten sehen, wenn sich das Licht ändert.
-  </p>
-  <p>
-    Versuchen Sie, für die folgenden zwei Szenarien den besten Festwiderstand aus dem Labor-Vorrat zu wählen.
-  </p>
 
-  <style>
-    /* Spezifische Styles für das Quiz */
-    .quiz-container {
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-      margin-top: 24px;
-    }
-    .quiz-scenario {
-      background: #fff;
-      border: 2px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 24px;
-      transition: all 0.3s ease;
-    }
-    .quiz-scenario h4 {
-      margin-top: 0;
-      color: #333;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .options-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
-    }
-    .quiz-option {
-      background: #f9f9f9;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      padding: 16px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s;
-      font-weight: 500;
-      color: #555;
-    }
-    .quiz-option:hover {
-      border-color: var(--kit-primary-color);
-      background: #f0fdf4;
-      transform: translateY(-2px);
-    }
-    .quiz-option.selected {
-      border-color: #333;
-      background: #eee;
-    }
-    .quiz-option.correct {
-      border-color: var(--correct-color);
-      background-color: #d4edda;
-      color: #155724;
-    }
-    .quiz-option.wrong {
-      border-color: var(--incorrect-color);
-      background-color: #f8d7da;
-      color: #721c24;
-    }
-    .feedback-box {
-      margin-top: 16px;
-      padding: 16px;
-      border-radius: 8px;
-      display: none; /* Hidden by default */
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-    .feedback-box.success {
-      background-color: #d4edda;
-      border-left: 5px solid var(--correct-color);
-      color: #155724;
-    }
-    .feedback-box.error {
-      background-color: #f8d7da;
-      border-left: 5px solid var(--incorrect-color);
-      color: #721c24;
-    }
-  </style>
 
-  <div class="quiz-container">
-    
-    <div class="quiz-scenario" id="scenario-1">
-      <h4><i class="fa-solid fa-moon" style="color: #6c757d;"></i> Szenario A: Dunkle Umgebung</h4>
+    <section class="content-section" id="quiz-r1">
+      <div class="section-emoji">🧠</div>
+      <h2>Teste dein Wissen: Der Widerstands-Optimierer</h2>
       <p>
-        Sie bauen ein Fotometer für sehr dicke, dunkle Flüssigkeiten (hohe Trübung). Es kommt nur wenig Licht am Sensor an. 
-        Der LDR hat in dieser Dunkelheit einen <strong>sehr hohen Widerstand (ca. 100 kΩ)</strong>.
+        In der Simulation oben haben Sie gesehen, dass sich die Messung unterschiedlich verhält, wenn man R1 anpasst.
+        Ziel ist es immer, den <strong>Messbereich maximal auszunutzen</strong>. Das bedeutet: Wir wollen große Sprünge
+        in den Zahlenwerten sehen, wenn sich das Licht ändert.
       </p>
-      <p><em>Welchen Festwiderstand (R1) wählen Sie, um Änderungen fein messen zu können?</em></p>
-      
-      <div class="options-grid">
-        <div class="quiz-option" onclick="checkQuiz(1, 1000, this)">1 kΩ (Klein)</div>
-        <div class="quiz-option" onclick="checkQuiz(1, 10000, this)">10 kΩ (Mittel)</div>
-        <div class="quiz-option" onclick="checkQuiz(1, 100000, this)">100 kΩ (Groß)</div>
-      </div>
-      <div class="feedback-box" id="feedback-1"></div>
-    </div>
-
-    <div class="quiz-scenario" id="scenario-2">
-      <h4><i class="fa-solid fa-sun" style="color: #ffc107;"></i> Szenario B: Helle Umgebung</h4>
       <p>
-        Sie messen im Freien bei Sonnenlicht (Modul 2 Wetterstation) oder direkt an einer starken LED. 
-        Der LDR wird stark beleuchtet und hat einen <strong>sehr kleinen Widerstand (ca. 1 kΩ)</strong>.
+        Versuchen Sie, für die folgenden zwei Szenarien den besten Festwiderstand aus dem Labor-Vorrat zu wählen.
       </p>
-      <p><em>Welchen Festwiderstand (R1) wählen Sie hier für maximale Genauigkeit?</em></p>
-      
-      <div class="options-grid">
-        <div class="quiz-option" onclick="checkQuiz(2, 1000, this)">1 kΩ (Klein)</div>
-        <div class="quiz-option" onclick="checkQuiz(2, 10000, this)">10 kΩ (Mittel)</div>
-        <div class="quiz-option" onclick="checkQuiz(2, 100000, this)">100 kΩ (Groß)</div>
+
+      <style>
+        /* Spezifische Styles für das Quiz */
+        .quiz-container {
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+          margin-top: 24px;
+        }
+
+        .quiz-scenario {
+          background: #fff;
+          border: 2px solid #e0e0e0;
+          border-radius: 12px;
+          padding: 24px;
+          transition: all 0.3s ease;
+        }
+
+        .quiz-scenario h4 {
+          margin-top: 0;
+          color: #333;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .options-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+          gap: 16px;
+          margin-top: 16px;
+        }
+
+        .quiz-option {
+          background: #f9f9f9;
+          border: 2px solid #ccc;
+          border-radius: 8px;
+          padding: 16px;
+          cursor: pointer;
+          text-align: center;
+          transition: all 0.2s;
+          font-weight: 500;
+          color: #555;
+        }
+
+        .quiz-option:hover {
+          border-color: var(--kit-primary-color);
+          background: #f0fdf4;
+          transform: translateY(-2px);
+        }
+
+        .quiz-option.selected {
+          border-color: #333;
+          background: #eee;
+        }
+
+        .quiz-option.correct {
+          border-color: var(--correct-color);
+          background-color: #d4edda;
+          color: #155724;
+        }
+
+        .quiz-option.wrong {
+          border-color: var(--incorrect-color);
+          background-color: #f8d7da;
+          color: #721c24;
+        }
+
+        .feedback-box {
+          margin-top: 16px;
+          padding: 16px;
+          border-radius: 8px;
+          display: none;
+          /* Hidden by default */
+          font-size: 0.95rem;
+          line-height: 1.5;
+        }
+
+        .feedback-box.success {
+          background-color: #d4edda;
+          border-left: 5px solid var(--correct-color);
+          color: #155724;
+        }
+
+        .feedback-box.error {
+          background-color: #f8d7da;
+          border-left: 5px solid var(--incorrect-color);
+          color: #721c24;
+        }
+      </style>
+
+      <div class="quiz-container">
+
+        <div class="quiz-scenario" id="scenario-1">
+          <h4><i class="fa-solid fa-moon" style="color: #6c757d;"></i> Szenario A: Dunkle Umgebung</h4>
+          <p>
+            Sie bauen ein Fotometer für sehr dicke, dunkle Flüssigkeiten (hohe Trübung). Es kommt nur wenig Licht am
+            Sensor an.
+            Der LDR hat in dieser Dunkelheit einen <strong>sehr hohen Widerstand (ca. 100 kΩ)</strong>.
+          </p>
+          <p><em>Welchen Festwiderstand (R1) wählen Sie, um Änderungen fein messen zu können?</em></p>
+
+          <div class="options-grid">
+            <div class="quiz-option" onclick="checkQuiz(1, 1000, this)">1 kΩ (Klein)</div>
+            <div class="quiz-option" onclick="checkQuiz(1, 10000, this)">10 kΩ (Mittel)</div>
+            <div class="quiz-option" onclick="checkQuiz(1, 100000, this)">100 kΩ (Groß)</div>
+          </div>
+          <div class="feedback-box" id="feedback-1"></div>
+        </div>
+
+        <div class="quiz-scenario" id="scenario-2">
+          <h4><i class="fa-solid fa-sun" style="color: #ffc107;"></i> Szenario B: Helle Umgebung</h4>
+          <p>
+            Sie messen im Freien bei Sonnenlicht (Modul 2 Wetterstation) oder direkt an einer starken LED.
+            Der LDR wird stark beleuchtet und hat einen <strong>sehr kleinen Widerstand (ca. 1 kΩ)</strong>.
+          </p>
+          <p><em>Welchen Festwiderstand (R1) wählen Sie hier für maximale Genauigkeit?</em></p>
+
+          <div class="options-grid">
+            <div class="quiz-option" onclick="checkQuiz(2, 1000, this)">1 kΩ (Klein)</div>
+            <div class="quiz-option" onclick="checkQuiz(2, 10000, this)">10 kΩ (Mittel)</div>
+            <div class="quiz-option" onclick="checkQuiz(2, 100000, this)">100 kΩ (Groß)</div>
+          </div>
+          <div class="feedback-box" id="feedback-2"></div>
+        </div>
+
       </div>
-      <div class="feedback-box" id="feedback-2"></div>
-    </div>
 
-  </div>
+      <script>
+        function checkQuiz(scenarioId, value, element) {
+          // Container und Feedback-Elemente finden
+          const container = document.getElementById(`scenario-${scenarioId}`);
+          const feedbackEl = document.getElementById(`feedback-${scenarioId}`);
+          const allOptions = container.querySelectorAll('.quiz-option');
 
-  <script>
-    function checkQuiz(scenarioId, value, element) {
-      // Container und Feedback-Elemente finden
-      const container = document.getElementById(`scenario-${scenarioId}`);
-      const feedbackEl = document.getElementById(`feedback-${scenarioId}`);
-      const allOptions = container.querySelectorAll('.quiz-option');
+          // Reset Styles
+          allOptions.forEach(opt => {
+            opt.classList.remove('correct', 'wrong', 'selected');
+          });
 
-      // Reset Styles
-      allOptions.forEach(opt => {
-        opt.classList.remove('correct', 'wrong', 'selected');
-      });
+          // Logik
+          let isCorrect = false;
+          let message = "";
 
-      // Logik
-      let isCorrect = false;
-      let message = "";
+          if (scenarioId === 1) { // Dunkel (LDR ~ 100k)
+            if (value === 100000) {
+              isCorrect = true;
+              message = "<strong>Richtig!</strong> Da der LDR-Widerstand hoch ist, brauchen wir auch einen hohen Gegenspieler ($R_1$). Wäre $R_1$ zu klein (1 kΩ), würde fast die gesamte Spannung am LDR abfallen und wir würden ständig Werte nahe 1023 messen, ohne kleine Änderungen zu sehen.";
+            } else {
+              message = "<strong>Nicht optimal.</strong> Wenn der Widerstand $R_1$ viel kleiner ist als der LDR (der hier ca. 100 kΩ hat), wird das Spannungsteiler-Verhältnis extrem einseitig. Wir brauchen ein 'Gleichgewicht der Kräfte'. Versuchen Sie einen größeren Widerstand.";
+            }
+          } else if (scenarioId === 2) { // Hell (LDR ~ 1k)
+            if (value === 1000) {
+              isCorrect = true;
+              message = "<strong>Exzellent!</strong> Bei starkem Licht sinkt der LDR-Widerstand massiv ab. Damit die Spannung nicht auf fast 0 abfällt, muss auch $R_1$ klein sein. So liegt der Messpunkt wieder in der 'Mitte' des Bereichs und wir können Änderungen gut auflösen.";
+            } else {
+              message = "<strong>Nicht ganz.</strong> Der LDR hat hier nur ca. 1 kΩ. Wenn Sie einen viel größeren Widerstand (10k oder 100k) dagegensetzen, 'gewinnt' der Festwiderstand. Die gemessene Spannung am LDR wäre winzig und Änderungen kaum messbar. Wählen Sie einen kleineren Widerstand.";
+            }
+          }
 
-      if (scenarioId === 1) { // Dunkel (LDR ~ 100k)
-        if (value === 100000) {
-          isCorrect = true;
-          message = "<strong>Richtig!</strong> Da der LDR-Widerstand hoch ist, brauchen wir auch einen hohen Gegenspieler ($R_1$). Wäre $R_1$ zu klein (1 kΩ), würde fast die gesamte Spannung am LDR abfallen und wir würden ständig Werte nahe 1023 messen, ohne kleine Änderungen zu sehen.";
-        } else {
-          message = "<strong>Nicht optimal.</strong> Wenn der Widerstand $R_1$ viel kleiner ist als der LDR (der hier ca. 100 kΩ hat), wird das Spannungsteiler-Verhältnis extrem einseitig. Wir brauchen ein 'Gleichgewicht der Kräfte'. Versuchen Sie einen größeren Widerstand.";
+          // Visualisierung
+          if (isCorrect) {
+            element.classList.add('correct');
+            feedbackEl.className = "feedback-box success";
+            feedbackEl.innerHTML = "<i class='fa-solid fa-check-circle'></i> " + message;
+          } else {
+            element.classList.add('wrong');
+            feedbackEl.className = "feedback-box error";
+            feedbackEl.innerHTML = "<i class='fa-solid fa-circle-xmark'></i> " + message;
+          }
+
+          // Feedback anzeigen
+          feedbackEl.style.display = "block";
         }
-      } else if (scenarioId === 2) { // Hell (LDR ~ 1k)
-        if (value === 1000) {
-          isCorrect = true;
-          message = "<strong>Exzellent!</strong> Bei starkem Licht sinkt der LDR-Widerstand massiv ab. Damit die Spannung nicht auf fast 0 abfällt, muss auch $R_1$ klein sein. So liegt der Messpunkt wieder in der 'Mitte' des Bereichs und wir können Änderungen gut auflösen.";
-        } else {
-          message = "<strong>Nicht ganz.</strong> Der LDR hat hier nur ca. 1 kΩ. Wenn Sie einen viel größeren Widerstand (10k oder 100k) dagegensetzen, 'gewinnt' der Festwiderstand. Die gemessene Spannung am LDR wäre winzig und Änderungen kaum messbar. Wählen Sie einen kleineren Widerstand.";
-        }
-      }
-
-      // Visualisierung
-      if (isCorrect) {
-        element.classList.add('correct');
-        feedbackEl.className = "feedback-box success";
-        feedbackEl.innerHTML = "<i class='fa-solid fa-check-circle'></i> " + message;
-      } else {
-        element.classList.add('wrong');
-        feedbackEl.className = "feedback-box error";
-        feedbackEl.innerHTML = "<i class='fa-solid fa-circle-xmark'></i> " + message;
-      }
-      
-      // Feedback anzeigen
-      feedbackEl.style.display = "block";
-    }
-  </script>
-</section>
+      </script>
+    </section>
     <section class="content-section" id="aufbau">
       <div class="section-emoji">🧰</div>
       <h2>2. Der Messaufbau</h2>
       <p>
-        Nachdem die elektronischen Grundlagen (LDR und Spannungsteiler) geklärt sind, folgt der Aufbau des Fotometers. 
-        Für die Demonstration des Messprinzips genügt eine stark reduzierte, <strong>modellhafte Anordnung</strong> von nur drei Komponenten. 
-        Wir erweitern dafür einfach den Aufbau aus Teil 1 um eine LED. Die Optimierung dieses Aufbaus wird später zum Gegenstand der Unterrichtseinheit.
+        Nachdem die elektronischen Grundlagen (LDR und Spannungsteiler) geklärt sind, folgt der Aufbau des Fotometers.
+        Für die Demonstration des Messprinzips genügt eine stark reduzierte, <strong>modellhafte Anordnung</strong> von
+        nur drei Komponenten.
+        Wir erweitern dafür einfach den Aufbau aus Teil 1 um eine LED. Die Optimierung dieses Aufbaus wird später zum
+        Gegenstand der Unterrichtseinheit.
       </p>
 
 
- <div style="
+      <div style="
       display: flex; 
       justify-content: center; 
       align-items: center;     
@@ -1007,124 +1142,130 @@
       flex-direction: column;
        ">
 
-  <style>
-    /* Grundgerüst der Karte */
-    .flip-card {
-      background-color: transparent;
-      width: 650px;             
-      max-width: 100%;          
-      height: 450px;            
-      perspective: 1000px;      
-      cursor: pointer;          
-      margin-bottom: 16px;      
-    }
+        <style>
+          /* Grundgerüst der Karte */
+          .flip-card {
+            background-color: transparent;
+            width: 650px;
+            max-width: 100%;
+            height: 450px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin-bottom: 16px;
+          }
 
-    /* Der innere Container, der sich dreht */
-    .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
-    }
+          /* Der innere Container, der sich dreht */
+          .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+          }
 
-    /* Die Klasse, die für die Drehung sorgt */
-    .flip-card.flipped .flip-card-inner {
-      transform: rotateY(180deg);
-    }
+          /* Die Klasse, die für die Drehung sorgt */
+          .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+          }
 
-    /* Vorder- und Rückseite */
-    .flip-front, .flip-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      border-radius: 12px;      
-      overflow: hidden;         
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
-      background-color: #fff;
-    }
+          /* Vorder- und Rückseite */
+          .flip-front,
+          .flip-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+          }
 
-    /* Rückseite gedreht */
-    .flip-back {
-      transform: rotateY(180deg);
-      display: flex;            
-      justify-content: center;
-      align-items: center;
-    }
+          /* Rückseite gedreht */
+          .flip-back {
+            transform: rotateY(180deg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
 
-    /* Bilder anpassen */
-    .flip-front img, .flip-back img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;       
-      display: block;
-    }
+          /* Bilder anpassen */
+          .flip-front img,
+          .flip-back img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+          }
 
-    /* Hinweis-Text */
-    .flip-hint {
-      font-family: sans-serif;
-      color: #333;
-      font-size: 0.9rem;
-      background: rgba(255,255,255,0.8);
-      padding: 8px 16px;
-      border-radius: 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-  </style>
+          /* Hinweis-Text */
+          .flip-hint {
+            font-family: sans-serif;
+            color: #333;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          }
+        </style>
 
-  <div class="flip-card" id="flip-fotometer" role="button" tabindex="0" onclick="toggleFlip('flip-fotometer')">
-    <div class="flip-card-inner">
-      
-      <div class="flip-front">
-        <img src="Media/Images/Fotometer.png" alt="Foto Fotometer" onerror="this.src='https://placehold.co/350x450?text=Foto+Fotometer'">
+        <div class="flip-card" id="flip-fotometer" role="button" tabindex="0" onclick="toggleFlip('flip-fotometer')">
+          <div class="flip-card-inner">
+
+            <div class="flip-front">
+              <img src="Media/Images/Fotometernano.png" alt="Foto Fotometer"
+                onerror="this.src='https://placehold.co/350x450?text=Foto+Fotometer'">
+            </div>
+
+            <div class="flip-back">
+              <img src="Media/Images/Schaltplan2.png" alt="Schaltplan Fotometer"
+                onerror="this.src='https://placehold.co/350x450?text=Schaltplan+Fotometer'">
+            </div>
+
+          </div>
+        </div>
+
+        <p class="flip-hint">Klicken: Foto ↔ Schaltplan</p>
+
       </div>
-      
-      <div class="flip-back">
-        <img src="Media/Images/Schaltplan2.png" alt="Schaltplan Fotometer" onerror="this.src='https://placehold.co/350x450?text=Schaltplan+Fotometer'">
-      </div>
 
-    </div>
-  </div>
+      <script>
+        // Falls die Funktion oben schon im Code steht, ist das hier eigentlich doppelt, 
+        // schadet aber meistens nicht, solange der Name gleich bleibt.
+        function toggleFlip(id) {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.classList.toggle('flipped');
 
-  <p class="flip-hint">Klicken: Foto ↔ Schaltplan</p>
-
-</div>
-
-<script>
-  // Falls die Funktion oben schon im Code steht, ist das hier eigentlich doppelt, 
-  // schadet aber meistens nicht, solange der Name gleich bleibt.
-  function toggleFlip(id){
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.classList.toggle('flipped');
-    
-    const pressed = el.classList.contains('flipped');
-    el.setAttribute('aria-pressed', pressed ? 'true' : 'false');
-  }
-</script>
+          const pressed = el.classList.contains('flipped');
+          el.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+        }
+      </script>
 
 
       <figure style="border: 1px solid #ccc; padding: 10px; text-align: center; background: #f9f9f9;">
         <figcaption>
-          <em>Fotometer: Probenbehälter in Rot zwischen LDR und LED</em>
+          <em>Fotometer: Probenbehälter zwischen LDR und LED</em>
         </figcaption>
       </figure>
-     <p>
-      Für den Widerstand nach der LED wird 100 Ohm empfohlen. Der Festwiderstand des Spannungsteilers (R1) entscheidet über die Sensitivität des Sensors. Für eine große Spannweite der Messwerte in helleren Umgebungen sind kleinere Widerstände sinnvoll. Hier wurde 2k Ohm verwendet.
+      <p>
+        Für den Widerstand der LED wird 100 Ohm empfohlen. Der Festwiderstand des Spannungsteilers (R1) entscheidet
+        über die Sensitivität des Sensors. Für eine große Spannweite der Messwerte in helleren Umgebungen sind kleinere
+        Widerstände sinnvoll (z.B. 1k Ohm).
       </p>
 
-    <h4>Test Arduino Code</h4>
-    <p>
-        Um den Aufbau zu testen, benötigen wir einen einfachen Code. Dieser schaltet die Lichtquelle dauerhaft ein 
+      <h4>Test Arduino Code</h4>
+      <p>
+        Um den Aufbau zu testen, benötigen wir einen einfachen Code. Dieser schaltet die Lichtquelle dauerhaft ein
         und sendet die gemessenen Helligkeitswerte an den Computer (Serieller Monitor).
-    </p>
+      </p>
 
-    <div class="custom-code-block">
-      <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
-      <pre><code class="language-cpp">
+      <div class="custom-code-block">
+        <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
+        <pre><code class="language-cpp">
 /*
   Einfacher Fotometer-Test
   Zweck: LED einschalten und LDR-Werte im Seriellen Monitor anzeigen.
@@ -1155,29 +1296,42 @@ void loop() {
   delay(500); 
 }
       </code></pre>
-    </div>
+      </div>
 
-    <p style="margin-top:15px;">
-        <strong>Test-Anleitung:</strong> Kopieren sie diesen Code in Arduino IDE. Passen Sie eventuell die Pin-Belegung im code an. Laden Sie diesen Code auf den Arduino (Upload) und öffnen Sie den <em>Seriellen Monitor</em> (Lupe oben rechts). 
-        Halten Sie nun einen Gegenstand oder eine gefüllte Küvette zwischen LED und LDR. Der Zahlenwert muss sich deutlich verändern.
-    </p>
+      <p style="margin-top:15px;">
+        <strong>Test-Anleitung:</strong> Kopieren sie diesen Code in Arduino IDE. Passen Sie eventuell die Pin-Belegung
+        im code an. Laden Sie diesen Code auf den Arduino (Upload) und öffnen Sie den <em>Seriellen Monitor</em> (Lupe
+        oben rechts).
+        Halten Sie nun einen Gegenstand oder eine gefüllte Küvette zwischen LED und LDR. Der Zahlenwert muss sich
+        deutlich verändern.
+      </p>
 
-    <hr>
+      <hr>
       <p style="margin-top: 15px;">
-        Das Prinzip der <strong>Transmissionsmessung</strong> ist einfach: Je weniger Licht am LDR ankommt (durch Absorption oder Streuung), 
-        desto höher ist die Konzentration der untersuchten Substanz (z.B. Fett im Milchtest oder Farbstoff im Cola-Test).
+        Das Prinzip der <strong>Transmissionsmessung</strong> ist einfach: Je weniger Licht am LDR ankommt (durch
+        Absorption oder Streuung),
+        desto höher ist die Konzentration der untersuchten Substanz (z.B. Fett im Milchtest oder Farbstoff im
+        Cola-Test).
       </p>
       <hr>
       <h3>Ansätze zur späteren Optimierung</h3>
       <ul>
         <li><strong>Fremdlicht (Störfaktor):</strong> Schon das Umgebungslicht verfälscht die Messung massiv.
-          <em>Optimierung:</em> Bau eines <strong>lichtdichten Gehäuses</strong> (z.B. aus schwarz lackiertem Holz oder Karton).</li>
-        <li><strong>Geometrische Stabilität:</strong> Geringfügige Bewegungen von LED oder LDR führen zu Schwankungen im Rohwert.
-          <em>Optimierung:</em> <strong>Feste Montage</strong> der Komponenten und Einhaltung eines konstanten Abstands.</li>
+          <em>Optimierung:</em> Bau eines <strong>lichtdichten Gehäuses</strong> (z.B. aus schwarz lackiertem Holz oder
+          Karton).
+        </li>
+        <li><strong>Geometrische Stabilität:</strong> Geringfügige Bewegungen von LED oder LDR führen zu Schwankungen im
+          Rohwert.
+          <em>Optimierung:</em> <strong>Feste Montage</strong> der Komponenten und Einhaltung eines konstanten Abstands.
+        </li>
         <li><strong>Lichtbündelung:</strong> Die LED strahlt diffus ab, was die Messgenauigkeit mindert.
-          <em>Optimierung:</em> Einsatz von <strong>Lochblenden</strong> oder lichtdichten Trennwänden, um den Strahl zu fokussieren.</li>
+          <em>Optimierung:</em> Einsatz von <strong>Lochblenden</strong> oder lichtdichten Trennwänden, um den Strahl zu
+          fokussieren.
+        </li>
         <li><strong>Wellenlänge (Farbe):</strong> Die gewählte LED-Farbe muss zur Probe passen.
-          <em>Optimierung:</em> Auswahl der optimalen LED-Farbe für die spezifische Messung (z.B. rote LED für blaue Flüssigkeiten).</li>
+          <em>Optimierung:</em> Auswahl der optimalen LED-Farbe für die spezifische Messung (z.B. rote LED für blaue
+          Flüssigkeiten).
+        </li>
       </ul>
     </section>
 
@@ -1185,7 +1339,8 @@ void loop() {
       <div class="section-emoji">🧪</div>
       <h2>3. Messwerterfassung & Kalibrierung</h2>
       <p class="lead">
-        Hier verwandeln wir den Arduino vom einfachen Stromkreis-Bauteil in ein echtes wissenschaftliches Messinstrument.
+        Hier verwandeln wir den Arduino vom einfachen Stromkreis-Bauteil in ein echtes wissenschaftliches
+        Messinstrument.
       </p>
 
       <article>
@@ -1193,13 +1348,13 @@ void loop() {
         <div style="display: flex; gap: 20px; align-items: center;">
           <div style="flex: 1;">
             <p>
-              Ihr Arduino liefert über <code>analogRead()</code> einen Wert zwischen <strong>0 und 1023</strong>. 
-              Das ist technisch korrekt, aber physikalisch nutzlos. Ein Wert von "850" sagt nichts darüber aus, 
+              Ihr Arduino liefert über <code>analogRead()</code> einen Wert zwischen <strong>0 und 1023</strong>.
+              Das ist technisch korrekt, aber physikalisch nutzlos. Ein Wert von "850" sagt nichts darüber aus,
               ob die Milch fettarm ist oder wie viel Sirup im Wasser ist.
             </p>
-        
+
           </div>
-          
+
         </div>
       </article>
 
@@ -1208,11 +1363,12 @@ void loop() {
       <article>
         <h3>3.2. Die Lösung: Die 2-Punkt-Kalibrierung</h3>
         <p>
-          Damit der Sensor "versteht", was er sieht, müssen wir ihm die Grenzen der Realität beibringen. 
+          Damit der Sensor "versteht", was er sieht, müssen wir ihm die Grenzen der Realität beibringen.
           Wir benötigen zwei Referenzpunkte.
         </p>
-        
-        <div style="display: flex; justify-content: space-around; background: #f4f4f4; padding: 15px; border-radius: 8px;">
+
+        <div
+          style="display: flex; justify-content: space-around; background: #f4f4f4; padding: 15px; border-radius: 8px;">
           <div style="text-align: center; width: 30%;">
             <strong>Schritt 1: Hell</strong><br>
             Klares Wasser messen.<br>
@@ -1236,13 +1392,15 @@ void loop() {
         </p>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-          
+
           <div style="border: 1px solid #ccc; padding: 15px; border-radius: 5px;">
             <h4 style="color: #2c3e50;">Weg A: Der "Wissenschaftler" (Excel)</h4>
             <p>
               <strong>Ziel:</strong> Datenerfassung und Analyse.
             </p>
-            <p>Der Arduino sendet nur Rohwerte an den PC. Die Schüler erstellen in Excel eine <strong>Kalibrierkurve</strong>.</p>
+            <p>Der Arduino sendet nur Rohwerte an den PC. Die Schüler erstellen in Excel eine
+              <strong>Kalibrierkurve</strong>.
+            </p>
             <p><em>Vorteil: Schüler erkennen Messfehler und Nicht-Linearitäten sichtbar.</em></p>
           </div>
 
@@ -1252,7 +1410,8 @@ void loop() {
               <strong>Ziel:</strong> Automatisierung.
             </p>
             <p>Der Arduino rechnet selbst. Das Gerät zeigt direkt "%" an.</p>
-            <p><em>Vorteil: Das Gerät arbeitet autonom ohne PC und könnte mit den Ergebnissen potentiell eine Pumpe betreiben (UE Neutralisationsautomat).</em></p>
+            <p><em>Vorteil: Das Gerät arbeitet autonom ohne PC und könnte mit den Ergebnissen potentiell eine Pumpe
+                betreiben (UE Neutralisationsautomat).</em></p>
           </div>
         </div>
       </article>
@@ -1260,7 +1419,8 @@ void loop() {
       <article>
         <h3>3.4. Umsetzung von Weg B </h3>
         <p>
-          Für Weg B nutzen wir den Befehl <code>map()</code>. Der map()-Befehl verteilt die gemessenen Rohwerte eines Sensors (z.B. \(200\) bis \(380\) proportional auf die angegebene Zielspanne (z.B. \(0\) bis \(100\)).
+          Für Weg B nutzen wir den Befehl <code>map()</code>. Der map()-Befehl verteilt die gemessenen Rohwerte eines
+          Sensors (z.B. \(200\) bis \(380\) proportional auf die angegebene Zielspanne (z.B. \(0\) bis \(100\)).
         </p>
 
         <div class="custom-code-block">
@@ -1306,24 +1466,32 @@ void loop() {
         </div>
 
         <div style="display: flex; flex-direction: column; align-items: center; margin: 32px 0;">
-          <h4 style="text-align:center; color:#2c3e50; margin-bottom:18px;">Beispielmessungen: Experiment mit Waldmeistersirup und zugehöriger Serieller Monitor</h4>
+          <h4 style="text-align:center; color:#2c3e50; margin-bottom:18px;">Beispielmessungen: Experiment mit
+            Waldmeistersirup und zugehöriger Serieller Monitor</h4>
           <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; margin-bottom: 24px;">
             <div style="display: flex; flex-direction: column; align-items: center;">
-              <img src="Media/Images/Konz0.jpg" alt="Experiment: 0% Konzentration" style="max-width:220px; width:100%; border-radius:8px; box-shadow:0 2px 8px #0001;">
+              <img src="Media/Images/Konz0.jpg" alt="Experiment: 0% Konzentration"
+                style="max-width:220px; width:100%; border-radius:8px; box-shadow:0 2px 8px #0001;">
               <span style="margin-top:8px; font-size:0.97em; color:#333;">Experiment: klares Wasser</span>
-              <img src="Media/Images/Serial0.png" alt="Serieller Monitor: 0% Konzentration" style="max-width:220px; width:100%; margin-top:10px; border-radius:8px; box-shadow:0 2px 8px #0001;">
+              <img src="Media/Images/Serial0.png" alt="Serieller Monitor: 0% Konzentration"
+                style="max-width:220px; width:100%; margin-top:10px; border-radius:8px; box-shadow:0 2px 8px #0001;">
               <span style="margin-top:4px; font-size:0.97em; color:#333;">Serieller Monitor: 0% Konzentration</span>
             </div>
             <div style="display: flex; flex-direction: column; align-items: center;">
-              <img src="Media/Images/Konz50.jpg" alt="Experiment: 50% Konzentration" style="max-width:220px; width:100%; border-radius:8px; box-shadow:0 2px 8px #0001;">
+              <img src="Media/Images/Konz50.jpg" alt="Experiment: 50% Konzentration"
+                style="max-width:220px; width:100%; border-radius:8px; box-shadow:0 2px 8px #0001;">
               <span style="margin-top:8px; font-size:0.97em; color:#333;">Experiment: Verdünnte Mischung</span>
-              <img src="Media/Images/Serial50.png" alt="Serieller Monitor: 50% Konzentration" style="max-width:220px; width:100%; margin-top:10px; border-radius:8px; box-shadow:0 2px 8px #0001;">
-              <span style="margin-top:4px; font-size:0.97em; color:#333;">Serieller Monitor: &asymp; 50% Konzentration</span>
+              <img src="Media/Images/Serial50.png" alt="Serieller Monitor: 50% Konzentration"
+                style="max-width:220px; width:100%; margin-top:10px; border-radius:8px; box-shadow:0 2px 8px #0001;">
+              <span style="margin-top:4px; font-size:0.97em; color:#333;">Serieller Monitor: &asymp; 50%
+                Konzentration</span>
             </div>
             <div style="display: flex; flex-direction: column; align-items: center;">
-              <img src="Media/Images/Konz100.jpg" alt="Experiment: 100% Konzentration" style="max-width:220px; width:100%; border-radius:8px; box-shadow:0 2px 8px #0001;">
+              <img src="Media/Images/Konz100.jpg" alt="Experiment: 100% Konzentration"
+                style="max-width:220px; width:100%; border-radius:8px; box-shadow:0 2px 8px #0001;">
               <span style="margin-top:8px; font-size:0.97em; color:#333;">Experiment: Sirup </span>
-              <img src="Media/Images/Serial100.png" alt="Serieller Monitor: 100% Konzentration" style="max-width:220px; width:100%; margin-top:10px; border-radius:8px; box-shadow:0 2px 8px #0001;">
+              <img src="Media/Images/Serial100.png" alt="Serieller Monitor: 100% Konzentration"
+                style="max-width:220px; width:100%; margin-top:10px; border-radius:8px; box-shadow:0 2px 8px #0001;">
               <span style="margin-top:4px; font-size:0.97em; color:#333;">Serieller Monitor: 100% Konzentration</span>
             </div>
           </div>
@@ -1335,7 +1503,8 @@ void loop() {
   </main>
   <footer>
     <div>CC BY Lizenz, Andreas Sexauer, Zentrum für Mediales Lernen am Karlsruher Institut für Technologie (KIT).</div>
-    <div><small>Dieses Lernmodul wurde mithilfe von künstlicher Intelligenz (KI) konzipiert und programmiert.</small></div>
+    <div><small>Dieses Lernmodul wurde mithilfe von künstlicher Intelligenz (KI) konzipiert und programmiert.</small>
+    </div>
   </footer>
   <script>
     // Progressbar
@@ -1359,18 +1528,18 @@ void loop() {
   </script>
   <script>
     // Copy-to-Clipboard for custom code blocks
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.custom-code-block .copy-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.custom-code-block .copy-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
           const code = btn.parentElement.querySelector('pre code');
           if (!code) return;
           // Remove leading/trailing whitespace and dedent
           let text = code.innerText.replace(/^\s*\n/, '').replace(/\s*$/, '');
           // Copy to clipboard
-          navigator.clipboard.writeText(text).then(function() {
+          navigator.clipboard.writeText(text).then(function () {
             btn.classList.add('copied');
             btn.innerHTML = '<i class="fa fa-check"></i> Kopiert!';
-            setTimeout(function() {
+            setTimeout(function () {
               btn.classList.remove('copied');
               btn.innerHTML = '<i class="fa fa-copy"></i>';
             }, 1200);
@@ -1381,4 +1550,5 @@ void loop() {
   </script>
 
 </body>
+
 </html>

@@ -1,0 +1,239 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{booktabs}
+\usepackage{eurosym}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{calc}
+
+\geometry{margin=2.5cm}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  urlcolor=blue!60!black,
+  pdftitle={Kostenplanung Wetterstation-Set},
+  pdfauthor={John van Dijk}
+}
+
+\title{%
+  \vspace{-1.5cm}
+  Kostenplanung: Wetterstation-Set\\[6pt]
+  \large Materialliste und Preisübersicht für ein Set
+}
+
+\date{Stand: März 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Übersicht}
+Diese Kostenaufstellung listet die benötigten Bauteile für \textbf{ein Wetterstation-Set} gemäß dem Lernmodul \emph{,,Wetterapp-Test 2.0``} auf. Da der BME280-Umweltsensor verhältnismäßig teuer ist, wird zusätzlich eine kostengünstigere Alternative mit einem DHT11-Sensor betrachtet.
+
+Die Preise wurden bei den folgenden Online-Shops recherchiert:
+\begin{itemize}
+  \item \href{https://www.roboter-bausatz.de}{roboter-bausatz.de}
+  \item \href{https://www.reichelt.de}{reichelt.de}
+  \item \href{https://www.conrad.de}{conrad.de}
+  \item \href{https://www.galaxus.de}{galaxus.de}
+\end{itemize}
+
+\noindent
+
+%------------------------------------------------------------------
+\section{Stückliste und Preise (Standard-Variante mit BME280)}
+%------------------------------------------------------------------
+Der BME280 misst Temperatur, Luftfeuchtigkeit und Luftdruck sehr präzise, schlägt sich aber im Preis deutlich nieder.
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l c r l @{}}
+\toprule
+\textbf{Bauteil} & \textbf{Anz.} & \textbf{Preis} & \textbf{Link} \\
+\midrule
+
+ESP32 NodeMCU 
+  & 1 & 8,89\,\euro{}
+  & \href{https://www.roboter-bausatz.de/p/nodemcu-esp32-usb-c-38-pin}{RB} \\
+
+BME280 Umweltsensor 
+  & 1 & 5,85\,\euro{}
+  & \href{https://www.roboter-bausatz.de/p/digital-bme280-temperatur-sensor-luftdruck-feuchtigkeit-i2c-5v-barometer-arduino?number=RBS15806}{RB} \\
+
+
+Kleines Solarmodul (z.\,B.\ 5V, 1W)
+  & 1 & 2,99\,\euro{}
+  & \href{https://www.reichelt.de/de/de/shop/produkt/entwicklerboards_-_solarpanel_0_5_w-254385}{Reichelt} \\
+
+Breadboard 830 Kontakte (MB-102)
+  & 1 & 1,49\,\euro{}
+  & \href{https://www.roboter-bausatz.de/p/mb102-breadboard-830-kontakte}{RB} \\
+
+Jumper-Kabel Set (65\,Stk.)
+  & 1 & 2,40\,\euro{}
+  & \href{https://www.reichelt.de/de/de/shop/produkt/entwicklerboards_-_kabel-set_verschiedene_laengen_65er-pack_-282690}{Reichelt} \\
+  
+USB-C-Datenkabel
+  & 1 & 2,09\,\euro{}
+  & \href{https://www.reichelt.de/de/de/shop/produkt/sync-_ladekabel_usb-a_-_usb-c_0_5_m_schwarz-215846}{Reichelt} \\
+
+\midrule
+\multicolumn{2}{l}{\textbf{Zwischensumme Bauteile}}
+  & 23,71\,\euro{} & \\
+\multicolumn{2}{l}{Versandkosten abgerundet (geschätzt)}
+  & 6,00\,\euro{} & \\
+\midrule
+\multicolumn{2}{l}{\textbf{Gesamt (inkl. Versand)}}
+  & \textbf{29,71\,\euro{}} & \\
+\bottomrule
+\end{tabular}
+\label{tab:kosten-bme280}
+\end{table}
+
+\newpage
+%------------------------------------------------------------------
+\section{Alternative: Kostengünstigere Variante mit DHT11}
+%------------------------------------------------------------------
+Um Kosten zu sparen, kann der teure BME280 durch einen einfachen DHT11-Sensor ersetzt werden. Der DHT11 misst ebenfalls Temperatur und Luftfeuchtigkeit, erfasst jedoch \textbf{keinen Luftdruck} und ist weniger präzise. Für den grundlegenden Aufbau einer Wetterstation im Unterricht ist dies jedoch oft ausreichend und reduziert die Kosten pro Set erheblich.
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l c r l @{}}
+\toprule
+\textbf{Bauteil} & \textbf{Anz.} & \textbf{Preis} & \textbf{Link} \\
+\midrule
+
+ESP32 NodeMCU
+  & 1 & 8,89\,\euro{}
+  & \href{https://www.roboter-bausatz.de/p/nodemcu-esp32-usb-c-38-pin}{RB} \\
+
+\textbf{DHT11 Sensor (Temperatur/Feuchte)}
+  & 1 & \textbf{1,85\,\euro{}}
+  & \href{https://www.roboter-bausatz.de/p/dht11-digitaler-feuchtigkeits-und-temperatursensor}{RB} \\
+
+Kleines Solarmodul
+  & 1 & 2,99\,\euro{}
+  & \href{https://www.reichelt.de/de/de/shop/produkt/entwicklerboards_-_solarpanel_0_5_w-254385}{Reichelt} \\
+
+Breadboard 830 Kontakte
+  & 1 & 1,49\,\euro{}
+  & \href{https://www.roboter-bausatz.de/p/mb102-breadboard-830-kontakte}{RB} \\
+
+Jumper-Kabel Set (65\,Stk.)
+  & 1 & 2,40\,\euro{}
+  & \href{https://www.reichelt.de/de/de/shop/produkt/entwicklerboards_-_kabel-set_verschiedene_laengen_65er-pack_-282690}{Reichelt} \\
+
+USB-C-Datenkabel
+  & 1 & 2,09\,\euro{}
+  & \href{https://www.reichelt.de/de/de/shop/produkt/sync-_ladekabel_usb-a_-_usb-c_0_5_m_schwarz-215846}{Reichelt} \\
+
+\midrule
+\multicolumn{2}{l}{\textbf{Zwischensumme Bauteile}}
+  & 19,71\,\euro{} & \\
+\multicolumn{2}{l}{Versandkosten abgerundet (geschätzt)}
+  & 6,00\,\euro{} & \\
+\midrule
+\multicolumn{2}{l}{\textbf{Gesamt (inkl. Versand)}}
+  & \textbf{25,71\,\euro{}} & \\
+\bottomrule
+\end{tabular}
+\label{tab:kosten-dht11}
+\end{table}
+
+\smallskip\noindent
+\textit{Zusätzlicher Hinweis zur Software:} Der Code in der \emph{Wetterapp-Test 2.0} Anleitung müsste für die Nutzung des DHT11-Sensors geringfügig angepasst werden, da auf die Adafruit DHT Bibliothek statt auf die BME280 Bibliothek zurückgegriffen wird.
+
+\section{Preisvergleich -- weitere Shops}
+%------------------------------------------------------------------
+
+Die folgende Tabelle zeigt beispielhafte Einzelpreise bei den anderen Anbietern, soweit dort vergleichbare Produkte verfügbar sind.
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l r r r @{}}
+\toprule
+\textbf{Bauteil}
+  & \textbf{reichelt.de}
+  & \textbf{conrad.de}
+  & \textbf{galaxus.de} \\
+\midrule
+
+ESP32 NodeMCU
+  & ab~8,00\,\euro{}
+  & ab~10,00\,\euro{}
+  & ab~9,00\,\euro{} \\
+
+BME280 Sensor
+  & ab~12,00\,\euro{}
+  & ab~15,00\,\euro{}
+  & ab~12,00\,\euro{} \\
+
+DHT11 Sensor
+  & ab~3,00\,\euro{}
+  & ab~4,50\,\euro{}
+  & ab~3,50\,\euro{} \\
+
+Breadboard 830 Kontakte
+  & 3,85\,\euro{}
+  & 4,49\,\euro{}
+  & -- \\
+
+\bottomrule
+\end{tabular}
+\label{tab:vergleich}
+\end{table}
+
+\smallskip\noindent
+\textit{Hinweis: Bei conrad.de und galaxus.de können Markenboards (z.\,B. von Adafruit oder Joy-IT) angeboten werden, wodurch die Preise deutlich höher ausfallen. Für den Unterrichtseinsatz sind die günstigen kompatiblen Modelle von roboter-bausatz.de in der Regel ausreichend.}
+
+
+%------------------------------------------------------------------
+\section{Kalkulationsbeispiel: Klassensatz (15 Sets)}
+%------------------------------------------------------------------
+
+Hier vergleichen wir einen Klassensatz mit der BME280- und der DHT11-Variante. Da Lötmaterial und Jumper-Kabel oft im Bestand sind, können die tatsächlichen Kosten variieren. In dieser Aufstellung wird von kompletten Neuanschaffungen für alle 15 Gruppen ausgegangen.
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{} l r r @{}}
+\toprule
+\textbf{Bauteil (15 Sets)} & \textbf{Mit BME280} & \textbf{Mit DHT11} \\
+\midrule
+ESP32 NodeMCU (15\,x 8,89\,\euro{}) & 133,35\,\euro{} & 133,35\,\euro{} \\
+Sensoren (BME280: 5,85\,\euro{} | DHT11: 1,85\,\euro{}) & 87,75\,\euro{} & 27,75\,\euro{} \\
+Solarmodule (15\,x 2,99\,\euro{}) & 44,85\,\euro{} & 44,85\,\euro{} \\
+Breadboards (15\,x 1,49\,\euro{}) & 22,35\,\euro{} & 22,35\,\euro{} \\
+Jumper-Kabel (15\,x 2,40\,\euro{}) & 36,00\,\euro{} & 36,00\,\euro{} \\
+USB-C-Datenkabel (15\,x 2,09\,\euro{}) & 31,35\,\euro{} & 31,35\,\euro{} \\
+\midrule
+\textbf{Zwischensumme Bauteile} & 355,65\,\euro{} & 295,65\,\euro{} \\
+Versandkosten (RB + Reichelt) & 9,85\,\euro{} & 9,85\,\euro{} \\
+\midrule
+\textbf{Gesamtpreis (15 Sets)} & \textbf{365,50\,\euro{}} & \textbf{305,50\,\euro{}} \\
+\textit{Preis pro Set} & \textit{$\approx$\,24,37\,\euro{}} & \textit{$\approx$\,20,37\,\euro{}} \\
+\bottomrule
+\end{tabular}
+\caption{Kalkulationsbeispiel für einen Klassensatz (15 Gruppen)}
+\label{tab:klassensatz}
+\end{table}
+
+%------------------------------------------------------------------
+\section{Synergie-Effekte (Kombination mit Fotometer-Set)}
+%------------------------------------------------------------------
+Wenn die Bauteile aus dem Lernmodul \emph{,,Vom LDR zum Fotometer``} bereits vorhanden sind, können einige Artikel (wie Breadboard und Jumper-Kabel) wiederverwendet werden. Dadurch entfallen Kosten in Höhe von \textbf{3,89\,\euro{}} pro Set (1,49\,\euro{} + 2,40\,\euro{}). 
+
+Die reinen Materialkosten für ein Aufrüst-Set sinken entsprechend:
+\begin{itemize}
+  \item \textbf{Mit BME280-Sensor:} von 23,71\,\euro{} auf \textbf{19,82\,\euro{}}
+  \item \textbf{Mit DHT11-Sensor:} von 19,71\,\euro{} auf \textbf{15,82\,\euro{}}
+\end{itemize}
+
+\end{document}
