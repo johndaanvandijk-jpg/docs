@@ -241,7 +241,7 @@
       }
     }
 
-    /* Flip card for BME280 (keine externen Klassen, Stil ähnlich zu bestehenden Sektionen) */
+    /* Flip card for DHT11 (keine externen Klassen, Stil ähnlich zu bestehenden Sektionen) */
     .flip-card {
       background: transparent;
       width: 220px;
@@ -261,10 +261,7 @@
       border-radius: 12px;
     }
 
-    .flip-card:hover .flip-card-inner,
-    .flip-card:focus-within .flip-card-inner {
-      transform: rotateY(180deg);
-    }
+    /* Hover Effekt für Flipcard entfernt -> Wird durch Klick auf ".flipped" Klasse gesteuert */
 
     .flip-card-front,
     .flip-card-back {
@@ -421,7 +418,7 @@
       font-size: 0.95rem;
     }
 
-    /* Flip-Unterstützung per Klick (zusätzlich zu :hover) */
+    /* Flip-Unterstützung per Klick */
     .flip-card.flipped .flip-card-inner {
       transform: rotateY(180deg);
     }
@@ -499,7 +496,7 @@
       <p><strong>Autor:</strong> John van Dijk</p>
       <p><strong>Lizenzhinweis:</strong> CC BY-SA 4.0</p>
 
-      <p>In diesem Lernmodul lernen sie, eine kleine IoT‑Wetterstation mit ESP32 und BME280
+      <p>In diesem Lernmodul lernen sie, eine kleine IoT‑Wetterstation mit ESP32 und DHT11
         aufzubauen, Messdaten per WLAN in die Cloud zu senden und die Daten wissenschaftlich auszuwerten. Ziel ist es,
         die Güte von Vorhersagen kritisch zu hinterfragen und eigene Messreihen zu produzieren.</p>
 
@@ -523,7 +520,7 @@
           <summary>Benötigte Materialien</summary>
           <ul class="material-list">
             <li><i class="fa-solid fa-microchip"></i> ESP32 NodeMCU (oder kompatibles ESP32-Board)</li>
-            <li><i class="fa-solid fa-square-rss"></i> BME280 Umweltsensor (Temperatur, Luftfeuchte, Luftdruck)</li>
+            <li><i class="fa-solid fa-square-rss"></i> DHT11 Umweltsensor (Temperatur und Luftfeuchte)</li>
             <li><i class="fa-solid fa-solar-panel"></i> Kleines Solarmodul</li>
             <li><i class="fa-solid fa-cable-minijack"></i> Jumperkabel, Steckbrett oder Lötzubehör</li>
           </ul>
@@ -553,11 +550,11 @@
       <h3>Die neuen Sinnesorgane</h3>
       <div class="card-grid" role="list" aria-label="Hardware‑Checkliste">
         <div class="mini-card" role="listitem">
-          <h4><i class="fa-solid fa-square-rss" style="color: var(--kit-primary-color);"></i> BME280</h4>
-          <p>Der digitale Alleskönner: Temperatur, Luftdruck, Feuchtigkeit – präzise über I2C.</p>
-          <div class="media-placeholder" aria-label="Platzhalter: BME280 Produktbild"
-            title="Media/Images/BME280_Schaltung.png">
-            Platzhalter – BME280 (Media/Images/BME280_Schaltung.png)
+          <h4><i class="fa-solid fa-square-rss" style="color: var(--kit-primary-color);"></i> DHT11</h4>
+          <p>Der gängige Sensor für: Temperatur und Luftfeuchtigkeit.</p>
+          <div class="media-placeholder" aria-label="Platzhalter: DHT11 Produktbild"
+            title="Media/Images/DHT11 2.JPG" style="padding: 0; overflow: hidden; border: none;">
+            <img src="Media/Images/DHT11 2.JPG" alt="DHT11 Sensor" style="width: 100%; height: 100%; object-fit: cover;">
           </div>
         </div>
         <div class="mini-card" role="listitem">
@@ -576,19 +573,19 @@
       </div>
 
       <h3>Verbindung</h3>
-      <p style="margin-top:-6px; color:#444;">I2C: BME280 an SDA/SCL (i. d. R. 21/22). Analog‑In: Solarzelle an GPIO34.
+      <p style="margin-top:-6px; color:#444;">DHT11 Datenpin z.B. an GPIO4. Analog‑In: Solarzelle an GPIO34.
       </p>
       <div style="display:flex; justify-content:center; margin:12px 0 8px;">
         <div class="flip-card" id="flip-verdrahtung" role="button" tabindex="0" aria-pressed="false"
           onclick="toggleFlip('flip-verdrahtung')" style="width:650px; max-width:100%; height:360px;">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="Media/Images/BME280_Schaltung.png" alt="Fritzing‑Schaltplan BME280 + Solarzelle"
-                onerror="this.src='https://placehold.co/650x360?text=Schaltplan'">
+              <img src="#" alt="Fritzing‑Schaltplan DHT11 + Solarzelle"
+                onerror="this.src='https://placehold.co/650x360?text=Schaltplan+folgt'">
             </div>
             <div class="flip-card-back">
               <img src="#" alt="Reales Foto des Breadboards"
-                onerror="this.src='https://placehold.co/650x360?text=Aufbaufoto'">
+                onerror="this.src='https://placehold.co/650x360?text=Aufbaufoto+folgt'">
             </div>
           </div>
         </div>
@@ -596,53 +593,51 @@
       <p style="text-align:center; color:#666; font-size:0.95rem;">Klicken/Tippen: Foto ↔ Schaltplan</p>
 
       <h3>Code</h3>
-      <p style="margin-top:-6px; color:#444;">Minimal‑Sketch: Liest BME280 und Solarzelle aus und gibt Daten via Serial
+      <p style="margin-top:-6px; color:#444;">Minimal‑Sketch: Liest DHT11 und Solarzelle aus und gibt Daten via Serial
         aus.</p>
       <div class="custom-code-block">
         <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
-        <pre><code class="language-cpp">// ESP32 + BME280 + Solarzelle (Minimaltest)
-// Verkabelung: BME280 an 3V3, GND, SDA(21), SCL(22); Solar an GPIO34 (max. 3,3 V sicherstellen)
-#include <Wire.h>
-#include <Adafruit_Sensor.h>
-#include <Adafruit_BME280.h>
+        <pre><code class="language-cpp">// ESP32 + DHT11 + Solarzelle (Minimaltest)
+// Verkabelung: DHT11 Daten an GPIO4; Solar an GPIO34 (max. 3,3 V sicherstellen)
+#include "DHT.h"
 
-Adafruit_BME280 bme;            // I2C
+#define DHTPIN 4
+#define DHTTYPE DHT11
+DHT dht(DHTPIN, DHTTYPE);
 const int SOLAR_PIN = 34;       // ADC1_CH6 (nur Eingang)
 
 void setup() {
   Serial.begin(115200);
   while(!Serial) { delay(10); }
-  Wire.begin();                 // ESP32 Default: SDA=21, SCL=22
 
-  if(!bme.begin(0x76)) {        // Alternative Adresse: 0x77
-    Serial.println("BME280 nicht gefunden! Adresse prüfen (0x76/0x77) und Verdrahtung kontrollieren.");
-    while(1) delay(10);
-  }
+  dht.begin();
   analogReadResolution(12);     // 0..4095
-  Serial.println("Start: ESP32 + BME280 + Solarzelle");
+  Serial.println("Start: ESP32 + DHT11 + Solarzelle");
 }
 
 void loop() {
-  float t = bme.readTemperature();      // &deg;C
-  float p = bme.readPressure() / 100.0; // hPa
-  float h = bme.readHumidity();         // % rF
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
 
   int raw = analogRead(SOLAR_PIN);      // 0..4095
   float v  = raw * (3.3 / 4095.0);      // Volt (Referenz 3,3 V)
 
-  Serial.print("T[°C]: "); Serial.print(t, 1);
-  Serial.print("  p[hPa]: "); Serial.print(p, 1);
-  Serial.print("  rH[%]: "); Serial.print(h, 1);
+  if (isnan(h) || isnan(t)) {
+    Serial.println("Fehler beim Auslesen des DHT11!");
+  } else {
+    Serial.print("T[°C]: "); Serial.print(t, 1);
+    Serial.print("  rH[%]: "); Serial.print(h, 1);
+  }
   Serial.print("  Solar[V]: "); Serial.println(v, 2);
 
-  delay(1000);
+  delay(2000); // DHT11 braucht etwas länger zwischen den Messungen
 }
 </code></pre>
       </div>
 
       <h3>Der Check im Seriellen Monitor</h3>
-      <p style="margin-top:-6px; color:#444;">Erwartet: Spalten mit T, p, rH und Solar‑Spannung. Werte ändern sich bei
-        Handwärme, Druck auf den Sensor oder Lichtwechsel.</p>
+      <p style="margin-top:-6px; color:#444;">Erwartet: Spalten mit T, rH und Solar‑Spannung. Werte ändern sich bei
+        Handwärme (oder Anhauchen) auf den Sensor oder Lichtwechsel.</p>
       <div class="media-placeholder" aria-label="Platzhalter: Screenshot Serieller Monitor">
         Platzhalter – Screenshot Serieller Monitor
       </div>
@@ -659,7 +654,7 @@ void loop() {
         <pre class="mermaid"
           style="background: transparent; color: inherit; font-size: 1.2rem; margin: 0; white-space: pre-wrap; width: 100%; max-width: 800px;">
 sequenceDiagram
-    participant Sensoren as 🌡️ Sensoren (BME280 &amp; Solar)
+    participant Sensoren as 🌡️ Sensoren (DHT11 &amp; Solar)
     participant ESP32 as ⚙️ ESP32 (Webserver)
     participant Handy as 📱 Smartphone (Nutzer)
 
@@ -685,26 +680,26 @@ sequenceDiagram
         <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
         <pre><code class="language-cpp">#include &lt;WiFi.h&gt;
 #include &lt;WebServer.h&gt;
-#include &lt;Wire.h&gt;
-#include &lt;Adafruit_Sensor.h&gt;
-#include &lt;Adafruit_BME280.h&gt;
+#include "DHT.h"
 
 const char* ssid = "Wetterstation_ESP32";
 const char* pass = "12345678"; // Mindestens 8 Zeichen!
 
 WebServer server(80);
-Adafruit_BME280 bme;
+#define DHTPIN 4
+#define DHTTYPE DHT11
+DHT dht(DHTPIN, DHTTYPE);
 const int SOLAR_PIN = 34;
 
 // Globale Variablen für Messwerte
-float temp = 0.0, press = 0.0, hum = 0.0, solarV = 0.0;
+float temp = 0.0, hum = 0.0, solarV = 0.0;
+unsigned long lastDHTRead = 0;
 
 void setup() {
   Serial.begin(115200);
   
-  // --- Sensor-Setup (BME280 etc.) hier einfügen ---
-  Wire.begin();
-  if(!bme.begin(0x76)) { Serial.println("Kein BME280"); }
+  // --- Sensor-Setup (DHT11 etc.) hier einfügen ---
+  dht.begin();
   analogReadResolution(12);
   // ------------------------------------------------
 
@@ -716,9 +711,12 @@ void setup() {
   server.on("/", []() {
     String html = "&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;body style='font-family:sans-serif; text-align:center;'&gt;";
     html += "&lt;h1&gt;ESP32 Wetterstation&lt;/h1&gt;";
-    html += "&lt;p&gt;Temperatur: " + String(temp, 1) + " &amp;deg;C&lt;/p&gt;";
-    html += "&lt;p&gt;Luftfeuchte: " + String(hum, 1) + " %&lt;/p&gt;";
-    html += "&lt;p&gt;Luftdruck: " + String(press, 1) + " hPa&lt;/p&gt;";
+    if (isnan(temp) || isnan(hum)) {
+      html += "&lt;p&gt;Fehler beim Auslesen des DHT11-Sensors!&lt;/p&gt;";
+    } else {
+      html += "&lt;p&gt;Temperatur: " + String(temp, 1) + " &amp;deg;C&lt;/p&gt;";
+      html += "&lt;p&gt;Luftfeuchte: " + String(hum, 1) + " %&lt;/p&gt;";
+    }
     html += "&lt;p&gt;Solar (Helligkeit): " + String(solarV, 2) + " V&lt;/p&gt;";
     html += "&lt;/body&gt;&lt;/html&gt;";
     
@@ -732,9 +730,11 @@ void loop() {
   server.handleClient(); // Webserver-Anfragen entgegennehmen
 
   // --- Sensor-Auslesen (Temperatur, Solar etc.) hier einfügen ---
-  temp = bme.readTemperature();
-  hum = bme.readHumidity();
-  press = bme.readPressure() / 100.0;
+  if (millis() - lastDHTRead &gt; 2000) {
+    temp = dht.readTemperature();
+    hum = dht.readHumidity();
+    lastDHTRead = millis();
+  }
   solarV = analogRead(SOLAR_PIN) * (3.3 / 4095.0);
   // --------------------------------------------------------------
   
