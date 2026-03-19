@@ -1344,8 +1344,8 @@ void loop() {
       </p>
 
       <article>
-        <h3>3.1. Das Problem: Der "dumme" Rohwert</h3>
-        <div style="display: flex; gap: 20px; align-items: center;">
+        <h3 style="margin-bottom: 8px;">3.1. Das Problem: Der "dumme" Rohwert</h3>
+        <div style="display: flex; gap: 20px; align-items: center; margin-top: 0;">
           <div style="flex: 1;">
             <p>
               Ihr Arduino liefert über <code>analogRead()</code> einen Wert zwischen <strong>0 und 1023</strong>.
@@ -1368,16 +1368,18 @@ void loop() {
         </p>
 
         <div
-          style="display: flex; justify-content: space-around; background: #f4f4f4; padding: 15px; border-radius: 8px;">
+          style="display: flex; justify-content: space-around; align-items: center; background: #f4f4f4; padding: 15px; border-radius: 8px;">
           <div style="text-align: center; width: 30%;">
             <strong>Schritt 1: Hell</strong><br>
+            <img src="Media/Images/Konz0.jpg" alt="Klares Wasser" style="width: 100%; max-width: 140px; border-radius: 8px; margin: 12px auto; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
             Klares Wasser messen.<br>
             <em>Wert notieren (z.B. 200)</em><br>
             entspricht <strong>0%</strong>
           </div>
-          <div style="font-size: 2em;">&rarr;</div>
+          <div style="font-size: 2em; color: #888;">&rarr;</div>
           <div style="text-align: center; width: 30%;">
             <strong>Schritt 2: Dunkel</strong><br>
+            <img src="Media/Images/Konz100.jpg" alt="Trübe Lösung" style="width: 100%; max-width: 140px; border-radius: 8px; margin: 12px auto; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
             Maximal trübe Lösung messen.<br>
             <em>Wert notieren (z.B. 300)</em><br>
             entspricht <strong>100%</strong>
@@ -1401,6 +1403,11 @@ void loop() {
             <p>Der Arduino sendet nur Rohwerte an den PC. Die Schüler erstellen in Excel eine
               <strong>Kalibrierkurve</strong>.
             </p>
+            <div style="margin: 12px 0;">
+              <a href="kalibrierung.html" style="display: inline-block; background: var(--kit-primary-color); color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: background 0.2s;">
+                <i class="fa-solid fa-chart-line"></i> Direkt hier interaktiv kalibrieren
+              </a>
+            </div>
             <p><em>Vorteil: Schüler erkennen Messfehler und Nicht-Linearitäten sichtbar.</em></p>
           </div>
 
