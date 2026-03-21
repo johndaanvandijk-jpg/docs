@@ -171,6 +171,7 @@
             </tbody>
           </table>
           <button class="btn" style="margin-top: 16px; width: 100%;" onclick="addRow()"><i class="fa fa-plus"></i> Weitere Messung hinzufügen</button>
+          <button class="btn" id="fitBtn" style="margin-top: 12px; width: 100%; background: #2196F3;" onclick="toggleFitLine()"><i class="fa fa-chart-line"></i> Ausgleichsgerade anzeigen</button>
         </div>
 
         <div class="chart-section">
@@ -181,6 +182,21 @@
   </main>
 
   <script>
+    let showFitLine = false;
+
+    function toggleFitLine() {
+      showFitLine = !showFitLine;
+      const btn = document.getElementById('fitBtn');
+      if(showFitLine) {
+        btn.innerHTML = '<i class="fa fa-chart-line"></i> Ausgleichsgerade ausblenden';
+        btn.style.background = '#f44336';
+      } else {
+        btn.innerHTML = '<i class="fa fa-chart-line"></i> Ausgleichsgerade anzeigen';
+        btn.style.background = '#2196F3';
+      }
+      updatePlot();
+    }
+
     function updatePlot() {
       const xInputs = document.querySelectorAll('.val-x');
       const yInputs = document.querySelectorAll('.val-y');
@@ -211,16 +227,51 @@
         marker: { size: 10, color: '#4CAF50' }
       };
 
+      let traces = [trace1];
+
+      if (showFitLine && xData.length >= 2) {
+        let n = xData.length;
+        let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+        for (let i = 0; i < n; i++) {
+          sumX += xData[i];
+          sumY += yData[i];
+          sumXY += xData[i] * yData[i];
+          sumXX += xData[i] * xData[i];
+        }
+        
+        let denominator = (n * sumXX - sumX * sumX);
+        if (denominator !== 0) {
+          let slope = (n * sumXY - sumX * sumY) / denominator;
+          let intercept = (sumY - slope * sumX) / n;
+
+          let minX = Math.min(...xData);
+          let maxX = Math.max(...xData);
+          
+          if (minX > 0) minX = 0;
+
+          let fitTrace = {
+            x: [minX, maxX],
+            y: [slope * minX + intercept, slope * maxX + intercept],
+            mode: 'lines',
+            type: 'scatter',
+            name: `Fit: y = ${slope.toFixed(2)}x ${intercept >= 0 ? '+' : '-'} ${Math.abs(intercept).toFixed(2)}`,
+            line: { color: '#ff7f0e', dash: 'dash' }
+          };
+          traces.push(fitTrace);
+        }
+      }
+
       const layout = {
         title: 'Kalibrierkurve',
         xaxis: { title: 'Konzentration (%)', rangemode: 'tozero' },
         yaxis: { title: 'Rohwert (AnalogRead)', rangemode: 'tozero' },
         margin: { t: 40, l: 50, r: 20, b: 50 },
         paper_bgcolor: 'rgba(0,0,0,0)',
-        plot_bgcolor: 'rgba(0,0,0,0)'
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        legend: { orientation: 'h', y: -0.2 }
       };
 
-      Plotly.newPlot('plot-area', [trace1], layout, {responsive: true});
+      Plotly.newPlot('plot-area', traces, layout, {responsive: true});
     }
 
     function addRow() {
