@@ -717,7 +717,8 @@
       <h3>Achtung: 3,3V Logikpegel!</h3>
       <div class="warn-box" role="note" aria-label="Wichtiger Sicherheitshinweis">
         <p><strong>Warum brauchen wir einen Spannungsteiler?</strong></p>
-        <p>Der Analog-Digital-Converter (ADC) des ESP32 kann eine Eingangsspannung von maximal 3,3 V verarbeiten. Eine
+        <p>Der General Purpose Input Output (GPIO) des ESP32 kann eine Eingangsspannung von maximal 3,3 V verarbeiten.
+          Eine
           kleine Solarzelle kann jedoch im Leerlauf oder bei voller Sonneneinstrahlung z.B. 6 V oder sogar mehr liefern.
         </p>
         <p>Wird diese Spannung direkt an den ESP32 angeschlossen, wird der Mikrocontroller sofort zerstört! Um das zu
@@ -735,6 +736,30 @@
       </div>
 
       <h3>Code</h3>
+
+      <div class="intro-accordion" style="margin: 24px 0;">
+        <details>
+          <summary>DHT11 Bibliothek installieren!</summary>
+          <div style="padding: 8px 4px;">
+            <p style="margin-top: 0; font-size: 0.95rem;">Damit der ESP32 den Sensor auslesen kann, fehlt ihm noch ein
+              "Wörterbuch" – die richtige Bibliothek in der Arduino IDE:</p>
+            <ol style="font-size: 0.95rem; line-height: 1.6; padding-left: 20px;">
+              <li>Klicke links in der Seitenleiste auf das <strong>Buch-Symbol (Bibliotheksverwalter)</strong> oder
+                wähle <em>Sketch &gt; Bibliothek einbinden &gt; Bibliotheken verwalten...</em>.</li>
+              <li>Suche oben im Suchfeld nach <strong>"DHT sensor library"</strong>.</li>
+              <li>Scrolle den Ergebnissen in der Liste nach unten bis zum Eintrag <strong>"DHT sensor library by
+                  Adafruit"</strong> und klicke auf "Installieren".</li>
+              <li>Sollte die IDE fragen, ob weitere Abhängigkeiten (wie <em>Adafruit Unified Sensor</em>) installiert
+                werden sollen, klicke zwingend auf <strong>"Install all"</strong>!</li>
+            </ol>
+            <div style="margin-top: 16px; text-align: center;">
+              <img src="Media/Images/Bibliothek.png" alt="Screenshot Bibliotheksverwalter"
+                style="max-width: 100%; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            </div>
+          </div>
+        </details>
+      </div>
+
       <p style="margin-top:-6px; color:#444;">Minimal‑Sketch: Liest DHT11 und Solarzelle aus und gibt Daten via Serial
         aus.</p>
       <div class="custom-code-block">
@@ -780,8 +805,9 @@ void loop() {
       <h3>Der Check im Seriellen Monitor</h3>
       <p style="margin-top:-6px; color:#444;">Erwartet: Spalten mit T, rH und Solar‑Spannung. Werte ändern sich bei
         Handwärme (oder Anhauchen) auf den Sensor oder Lichtwechsel.</p>
-      <div class="media-placeholder" aria-label="Platzhalter: Screenshot Serieller Monitor">
-        Platzhalter – Screenshot Serieller Monitor
+      <div style="text-align: center; margin: 16px 0;">
+        <img src="Media/Images/Serial_Wetter.png" alt="Screenshot Serieller Monitor"
+          style="max-width: 100%; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
       </div>
     </section>
 
@@ -817,7 +843,7 @@ sequenceDiagram
         </pre>
       </div>
 
-      <h3>Code-Kern</h3>
+      <h3>Code</h3>
       <div class="custom-code-block">
         <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
         <pre><code class="language-cpp">#include &lt;WiFi.h&gt;
@@ -884,6 +910,24 @@ void loop() {
 }</code></pre>
       </div>
 
+      <div class="intro-accordion" style="margin: 24px 0;">
+        <details>
+          <summary>Hilfe: Upload funktioniert nicht?</summary>
+          <div style="padding: 8px 4px;">
+            <p style="margin-top: 0; font-size: 0.95rem;"><strong>Option 1: Upload-Geschwindigkeit reduzieren</strong></p>
+            <ul style="font-size: 0.95rem; line-height: 1.5; padding-left: 20px; margin-bottom: 12px;">
+              <li>Manche Chips verarbeiten die hohe Standard-Geschwindigkeit nicht.</li>
+              <li>Wähle im Menü <strong>Werkzeuge &gt; Upload Speed</strong> den Wert <strong>115200</strong>.</li>
+            </ul>
+            <p style="margin-top: 0; font-size: 0.95rem;"><strong>Option 2: BOOT-Taste drücken</strong></p>
+            <ul style="font-size: 0.95rem; line-height: 1.5; padding-left: 20px; margin-bottom: 0;">
+              <li>Hängt die Konsole bei <code>Connecting...</code> fest?</li>
+              <li>Halte die <strong>BOOT-Taste</strong> auf dem ESP32 gedrückt, bis der Upload startet.</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
       <h3>Verbindung &amp; Anzeige</h3>
       <p style="margin-top:-6px; color:#444;">Nach dem Aufspielen: Mit dem neuen WLAN verbinden und die Standard-IP im
         Browser öffnen.</p>
@@ -892,12 +936,12 @@ void loop() {
         IP-Adresse: http://192.168.4.1
       </div>
 
-      <div class="media-placeholder" aria-label="Platzhalter: Screenshot Smartphone WLAN">
-        Platzhalter – Screenshot WLAN-Verbindung (Smartphone)
+      <div style="text-align: center; margin: 16px 0;">
+        <img src="Media/Images/WLANphone.png" alt="Screenshot WLAN-Verbindung (Smartphone)" style="max-width: 100%; max-height: 450px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
       </div>
       <div style="margin-top:14px;"></div>
-      <div class="media-placeholder" aria-label="Platzhalter: Screenshot Webseite Messwerte">
-        Platzhalter – Screenshot Weboberfläche mit Messwerten
+      <div style="text-align: center; margin: 16px 0;">
+        <img src="Media/Images/Webserver.png" alt="Screenshot Weboberfläche mit Messwerten" style="max-width: 100%; max-height: 450px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
       </div>
     </section>
 
