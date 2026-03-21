@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spannungsteiler Simulation für ESP32</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --surface-color: #ffffff;
+            --primary-color: #3b82f6;
+            --primary-hover: #2563eb;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --safe-color: #10b981; /* Green */
+            --warning-color: #f59e0b; /* Yellow */
+            --danger-color: #ef4444; /* Red */
+            --border-color: #e2e8f0;
+            --font-family: 'Inter', sans-serif;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        p.subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .panel {
+            background-color: var(--surface-color);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        h2.panel-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Control Panel Styles */
+        .control-group {
+            margin-bottom: 1.75rem;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .control-label {
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .control-value {
+            font-family: monospace;
+            background: var(--bg-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 8px;
+            background: #cbd5e1;
+            outline: none;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            border: 2px solid white;
+            transition: transform 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        input[type="range"]:active::-webkit-slider-thumb {
+            transform: scale(0.95);
+        }
+
+        /* Visualization Panel Styles */
+        .visualization-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            height: 100%;
+        }
+
+        .status-card {
+            padding: 1.5rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            opacity: 0.1;
+            background: currentColor;
+            z-index: 0;
+        }
+
+        .status-safe { color: var(--safe-color); border: 2px solid var(--safe-color); }
+        .status-warning { color: var(--warning-color); border: 2px solid var(--warning-color); }
+        .status-danger { color: var(--danger-color); border: 2px solid var(--danger-color); animation: pulseDanger 1.5s infinite; }
+
+        @keyframes pulseDanger {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .status-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .status-message {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .voltage-display {
+            position: relative;
+            z-index: 1;
+            text-align: right;
+        }
+
+        .voltage-val {
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: monospace;
+            line-height: 1;
+        }
+
+        .voltage-unit {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* Circuit Graphic */
+        .circuit-container {
+            flex-grow: 1;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            min-height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        svg.circuit {
+            width: 100%;
+            height: 100%;
+            max-width: 500px;
+            max-height: 400px;
+        }
+
+        .wire {
+            stroke: #334155;
+            stroke-width: 4;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .resistor {
+            fill: #f1f5f9;
+            stroke: #334155;
+            stroke-width: 3;
+            rx: 2; /* slight rounding */
+        }
+
+        .node {
+            fill: #334155;
+        }
+
+        .label {
+            font-family: monospace;
+            font-size: 14px;
+            font-weight: 600;
+            fill: #475569;
+        }
+
+        .value-label {
+            font-family: monospace;
+            font-size: 16px;
+            font-weight: 700;
+            fill: var(--primary-color);
+        }
+
+        .dynamic-line {
+            stroke-dasharray: 8;
+            stroke: var(--primary-color);
+            animation: flow 1s linear infinite;
+        }
+
+        @keyframes flow {
+            to {
+                stroke-dashoffset: -16;
+            }
+        }
+
+        /* Meter Bar */
+        .meter-container {
+            margin-top: 1rem;
+        }
+        
+        .meter-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        .meter-bar-bg {
+            height: 24px;
+            background: #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .meter-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
+        }
+
+        .meter-threshold-33 {
+            position: absolute;
+            left: calc((3.3 / 12) * 100%);
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--danger-color);
+            z-index: 10;
+        }
+        
+        .meter-threshold-text {
+            position: absolute;
+            left: calc((3.3 / 12) * 100%);
+            top: 0;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-weight: 800;
+            color: #fff;
+            background: var(--danger-color);
+            padding: 2px 4px;
+            border-radius: 0 0 4px 4px;
+            z-index: 10;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .panel {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Warum ein Spannungsteiler wichtig ist</h1>
+        <p class="subtitle">Der ESP32 verträgt an seinem analogen Eingang maximal <strong>3,3 Volt</strong>. <br>Experimentiere mit den Werten, um die Ausgangsspannung (V<sub>out</sub>) im sicheren Bereich zu halten.</p>
+    </header>
+
+    <div class="container">
+        <!-- Control Panel -->
+        <div class="panel">
+            <h2 class="panel-title"><i class="fa-solid fa-sliders"></i> Parameter einstellen</h2>
+            
+            <div class="control-group">
+                <div class="control-header">
+                    <span class="control-label">Eingangsspannung (Solarzelle) [V<sub>in</sub>]</span>
+                    <span class="control-value" id="vin-val">7.0 V</span>
+                </div>
+                <input type="range" id="vin-slider" min="0" max="12" step="0.1" value="7">
+            </div>
+
+            <div class="control-group">
+                <div class="control-header">
+                    <span class="control-label">Widerstand 1 [R1]</span>
+                    <span class="control-value" id="r1-val">10.0 kΩ</span>
+                </div>
+                <input type="range" id="r1-slider" min="1" max="100" step="0.5" value="10">
+            </div>
+
+            <div class="control-group">
+                <div class="control-header">
+                    <span class="control-label">Widerstand 2 [R2]</span>
+                    <span class="control-value" id="r2-val">10.0 kΩ</span>
+                </div>
+                <input type="range" id="r2-slider" min="1" max="100" step="0.5" value="10">
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1.5rem; background: #f8fafc; border-radius: 12px; border: 1px solid var(--border-color);">
+                <h3 style="font-size: 1rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-calculator" style="color: var(--primary-color);"></i> Die Formel</h3>
+                <p style="font-family: monospace; font-size: 1.1rem; text-align: center; margin: 1rem 0; padding: 0.5rem; background: white; border-radius: 8px; border: 1px dashed #cbd5e1;">
+                    V<sub>out</sub> = V<sub>in</sub> × <span style="display: inline-block; vertical-align: middle; text-align: center;"><span style="border-bottom: 1px solid #000; display: block;">R2</span><span>R1 + R2</span></span>
+                </p>
+                <p style="font-size: 0.9rem; color: var(--text-light);">Der Widerstand R1 "verbraucht" einen Teil der Spannung, bevor sie zum ADC-Pin des ESP32 (V<sub>out</sub>) gelangt.</p>
+            </div>
+        </div>
+
+        <!-- Visualization Panel -->
+        <div class="panel">
+            <h2 class="panel-title"><i class="fa-solid fa-plug"></i> Schaltkreis & Messung</h2>
+            
+            <div class="visualization-content">
+                
+                <!-- Status & Voltage Display -->
+                <div class="status-card status-safe" id="status-card">
+                    <div class="status-content">
+                        <span class="status-title" id="status-title">Sicherer Bereich</span>
+                        <span class="status-message" id="status-message">ESP32 arbeitet einwandfrei.</span>
+                    </div>
+                    <div class="voltage-display">
+                        <span class="voltage-val" id="vout-val">3.50</span><span class="voltage-unit">V</span>
+                    </div>
+                </div>
+
+                <!-- Circuit Schematic (SVG) -->
+                <div class="circuit-container">
+                    <svg class="circuit" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+                        <!-- GND symbol at bottom -->
+                        <path class="wire" d="M200 240 L200 280" />
+                        <path class="wire" d="M180 280 L220 280" />
+                        <path class="wire" d="M190 288 L210 288" />
+                        <path class="wire" d="M196 296 L204 296" />
+                        <text x="230" y="285" class="label">GND (0V)</text>
+
+                        <!-- Vin at top -->
+                        <path class="wire dynamic-line" id="flow-line" d="M100 50 L200 50 L200 80" />
+                        <circle cx="100" cy="50" r="5" class="node" />
+                        <text x="100" y="35" class="label" fill="#1e293b" font-weight="bold">Solarzelle (Vin)</text>
+                        <text x="100" y="70" class="value-label" id="svg-vin">7.0 V</text>
+
+                        <!-- R1 -->
+                        <rect x="185" y="80" width="30" height="60" class="resistor" />
+                        <text x="225" y="105" class="label">R1</text>
+                        <text x="225" y="125" class="value-label" id="svg-r1">10.0 kΩ</text>
+
+                        <!-- Wire between R1 and R2 -->
+                        <path class="wire" d="M200 140 L200 180" />
+                        
+                        <!-- R2 -->
+                        <rect x="185" y="180" width="30" height="60" class="resistor" />
+                        <text x="225" y="205" class="label">R2</text>
+                        <text x="225" y="225" class="value-label" id="svg-r2">10.0 kΩ</text>
+
+                        <!-- Vout Connection point to ESP32 -->
+                        <circle cx="200" cy="160" r="4" class="node" />
+                        <path class="wire dynamic-line" id="flow-line-out" d="M200 160 L320 160" />
+                        <circle cx="320" cy="160" r="5" class="node" />
+                        
+                        <!-- ESP32 Label Box -->
+                        <rect x="325" y="140" width="65" height="40" rx="4" fill="#3b82f6" opacity="0.1" />
+                        <text x="330" y="155" class="label" fill="#1e293b" font-weight="bold">ESP32 Pin</text>
+                        <text x="330" y="172" class="label">(ADC)</text>
+
+                        <text x="240" y="150" class="label" fill="#1e293b" font-weight="bold">Vout</text>
+                        <text x="240" y="175" class="value-label" id="svg-vout" style="font-size: 18px;">3.50 V</text>
+
+                    </svg>
+                </div>
+
+                <!-- Voltmeter Bar -->
+                <div class="meter-container">
+                    <div class="meter-label">
+                        <span>Gemessene Spannung (0V bis 5V+)</span>
+                        <span>Maximal 3,3V erlaubt!</span>
+                    </div>
+                    <div class="meter-bar-bg">
+                        <div class="meter-fill" id="meter-fill"></div>
+                        <div class="meter-threshold-33"></div>
+                        <div class="meter-threshold-text">3.3V MAX</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const vinSlider = document.getElementById('vin-slider');
+        const r1Slider = document.getElementById('r1-slider');
+        const r2Slider = document.getElementById('r2-slider');
+        
+        const vinVal = document.getElementById('vin-val');
+        const r1Val = document.getElementById('r1-val');
+        const r2Val = document.getElementById('r2-val');
+        const voutVal = document.getElementById('vout-val');
+        
+        const svgVin = document.getElementById('svg-vin');
+        const svgR1 = document.getElementById('svg-r1');
+        const svgR2 = document.getElementById('svg-r2');
+        const svgVout = document.getElementById('svg-vout');
+        
+        const statusCard = document.getElementById('status-card');
+        const statusTitle = document.getElementById('status-title');
+        const statusMessage = document.getElementById('status-message');
+        const meterFill = document.getElementById('meter-fill');
+        
+        const flowLine = document.getElementById('flow-line');
+        const flowLineOut = document.getElementById('flow-line-out');
+
+        // Initial Update
+        updateSimulation();
+
+        // Event Listeners
+        vinSlider.addEventListener('input', updateSimulation);
+        r1Slider.addEventListener('input', updateSimulation);
+        r2Slider.addEventListener('input', updateSimulation);
+
+        function updateSimulation() {
+            // Get values
+            const Vin = parseFloat(vinSlider.value);
+            const R1 = parseFloat(r1Slider.value);
+            const R2 = parseFloat(r2Slider.value);
+
+            // Calculate Vout
+            const Vout = Vin * (R2 / (R1 + R2));
+
+            // Format strings
+            const VinStr = Vin.toFixed(1) + ' V';
+            const R1Str = R1.toFixed(1) + ' kΩ';
+            const R2Str = R2.toFixed(1) + ' kΩ';
+            const VoutStr = Vout.toFixed(2);
+
+            // Update UI texts
+            vinVal.textContent = VinStr;
+            r1Val.textContent = R1Str;
+            r2Val.textContent = R2Str;
+            
+            svgVin.textContent = VinStr;
+            svgR1.textContent = R1Str;
+            svgR2.textContent = R2Str;
+            
+            voutVal.textContent = VoutStr;
+            svgVout.textContent = VoutStr + ' V';
+
+            // Update Logic: Safe, Warning, Danger
+            statusCard.className = 'status-card';
+            
+            let strokeColor = '';
+            let animationSpeed = (1.5 - (Vin / 12)).toFixed(1) + 's'; // Faster if more Vin
+            if(Vin === 0) animationSpeed = '0s'; // Stop animation if Vin is 0
+            
+            flowLine.style.animationDuration = animationSpeed;
+            flowLineOut.style.animationDuration = animationSpeed;
+
+            if (Vout <= 3.1) {
+                // Safe
+                statusCard.classList.add('status-safe');
+                statusTitle.textContent = 'Sicherer Bereich';
+                statusMessage.textContent = 'Spannung ist ideal. Der ESP32 kann die Werte sicher auslesen.';
+                meterFill.style.backgroundColor = 'var(--safe-color)';
+                strokeColor = 'var(--safe-color)';
+            } else if (Vout > 3.1 && Vout <= 3.3) {
+                // Warning
+                statusCard.classList.add('status-warning');
+                statusTitle.textContent = 'Grenzwertig';
+                statusMessage.textContent = 'Noch im Rahmen, aber sehr nah an der absoluten Obergrenze.';
+                meterFill.style.backgroundColor = 'var(--warning-color)';
+                strokeColor = 'var(--warning-color)';
+            } else {
+                // Danger
+                statusCard.classList.add('status-danger');
+                statusTitle.textContent = 'Gefahr!';
+                statusMessage.textContent = 'Die Spannung ist zu hoch! Der ESP32 würde sofort zerstört werden!';
+                meterFill.style.backgroundColor = 'var(--danger-color)';
+                strokeColor = 'var(--danger-color)';
+            }
+
+            // Update graphics colors dynamically
+            flowLine.style.stroke = strokeColor;
+            flowLineOut.style.stroke = strokeColor;
+            svgVout.style.fill = strokeColor;
+
+            // Update meter bar (Scale 0 to 12 basically, but let's cap the visual meter at 5V for better resolution around 3.3V)
+            // If Vout > 5, it just stays at 100%
+            let fillPct = (Vout / 6.0) * 100; // Let's make the meter scale to 6V total length visually or maybe 12V? 
+            // The prompt asks to scale to 12V inputs, so a meter up to 12V makes the 3.3 threshold small. 
+            // Better to make meter max 12V to correspond directly to Vin slider
+            fillPct = (Vout / 12.0) * 100;
+            if (fillPct > 100) fillPct = 100;
+            meterFill.style.width = fillPct + '%';
+        }
+    </script>
+</body>
+</html>

@@ -551,36 +551,33 @@
       <div class="card-grid" role="list" aria-label="Hardware‑Checkliste">
         <div class="mini-card" role="listitem">
           <h4><i class="fa-solid fa-square-rss" style="color: var(--kit-primary-color);"></i> DHT11</h4>
-          <p>Der gängige Sensor für: Temperatur und Luftfeuchtigkeit.</p>
-          <div class="media-placeholder" aria-label="Platzhalter: DHT11 Produktbild"
-            title="Media/Images/DHT11 2.JPG" style="padding: 0; overflow: hidden; border: none;">
-            <img src="Media/Images/DHT11 2.JPG" alt="DHT11 Sensor" style="width: 100%; height: 100%; object-fit: cover;">
+          <p>Sensor für: Temperatur und Luftfeuchtigkeit.</p>
+          <div class="media-placeholder" aria-label="Platzhalter: DHT11 Produktbild" title="Media/Images/DHT11 2.JPG"
+            style="padding: 0; overflow: hidden; border: none;">
+            <img src="Media/Images/DHT11 2.JPG" alt="DHT11 Sensor"
+              style="width: 100%; height: 100%; object-fit: cover;">
           </div>
         </div>
         <div class="mini-card" role="listitem">
           <h4><i class="fa-solid fa-solar-panel" style="color: var(--kit-primary-color);"></i> Solarzelle</h4>
           <p>Unser analoger Helligkeitssensor </p>
-          <div class="media-placeholder" aria-label="Platzhalter: Solarzelle Produktfoto">
-            Platzhalter – Solarzelle (Foto folgt)
+          <div class="media-placeholder" aria-label="Platzhalter: Solarzelle Produktfoto" title="Media/Images/Solar.jpg"
+            style="padding: 0; overflow: hidden; border: none;">
+            <img src="Media/Images/Solar.jpg" alt="Solarzelle Sensor"
+              style="width: 100%; height: 100%; object-fit: cover;">
           </div>
         </div>
       </div>
 
-      <h3>Achtung: 3,3V</h3>
-      <div class="warn-box" role="note" aria-label="Wichtiger Sicherheitshinweis">
-        Der ESP32 arbeitet mit 3,3 V Logik. 5‑V‑Signale können ihn zerstören – Pegel und
-        Spannungsteiler prüfen!
-      </div>
-
       <h3>Verbindung</h3>
-      <p style="margin-top:-6px; color:#444;">DHT11 Datenpin z.B. an GPIO4. Analog‑In: Solarzelle an GPIO34.
+      <p style="margin-top:-6px; color:#444;">DHT11 Datenpin z.B. an GPIO4. Solarzelle über Spannungsteiler an GPIO34.
       </p>
       <div style="display:flex; justify-content:center; margin:12px 0 8px;">
         <div class="flip-card" id="flip-verdrahtung" role="button" tabindex="0" aria-pressed="false"
           onclick="toggleFlip('flip-verdrahtung')" style="width:650px; max-width:100%; height:360px;">
           <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="#" alt="Fritzing‑Schaltplan DHT11 + Solarzelle"
+              <img src="Media/Images/Wetterstation.png" alt="Fritzing‑Schaltplan DHT11 + Solarzelle"
                 onerror="this.src='https://placehold.co/650x360?text=Schaltplan+folgt'">
             </div>
             <div class="flip-card-back">
@@ -590,7 +587,28 @@
           </div>
         </div>
       </div>
-      <p style="text-align:center; color:#666; font-size:0.95rem;">Klicken/Tippen: Foto ↔ Schaltplan</p>
+      <p style="text-align:center; color:#666; font-size:0.95rem; margin-bottom: 32px;">Klicken/Tippen: Foto ↔
+        Schaltplan</p>
+
+      <h3>Achtung: 3,3V Logikpegel!</h3>
+      <div class="warn-box" role="note" aria-label="Wichtiger Sicherheitshinweis">
+        <p><strong>Warum brauchen wir einen Spannungsteiler?</strong></p>
+        <p>Der Analog-Digital-Converter (ADC) des ESP32 kann eine Eingangsspannung von maximal 3,3 V verarbeiten. Eine
+          kleine Solarzelle kann jedoch im Leerlauf oder bei voller Sonneneinstrahlung z.B. 6 V oder sogar mehr liefern.
+        </p>
+        <p>Wird diese Spannung direkt an den ESP32 angeschlossen, wird der Mikrocontroller sofort zerstört! Um das zu
+          verhindern, verwenden wir den Spannungsteiler (den du schon aus <a href="fotometer.html#spannungsteiler"
+            style="color: var(--kit-primary-color); font-weight: bold; text-decoration: underline;">Modul 1</a> kennst)
+          aus zwei Widerständen (<span style="font-family: monospace;">R1</span> und <span
+            style="font-family: monospace;">R2</span>), die die
+          Spannung auf einen sicheren Bereich (≤ 3,3 V) "herunterteilen".</p>
+        <div style="margin-top: 18px;">
+          <a href="spannungsteiler_sim.html" target="_blank"
+            style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--kit-primary-color); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 1.05rem; box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3); transition: transform 0.2s, box-shadow 0.2s;">
+            <i class="fa-solid fa-bolt"></i> Zur interaktiven Spannungsteiler-Simulation
+          </a>
+        </div>
+      </div>
 
       <h3>Code</h3>
       <p style="margin-top:-6px; color:#444;">Minimal‑Sketch: Liest DHT11 und Solarzelle aus und gibt Daten via Serial
