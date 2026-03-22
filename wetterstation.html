@@ -809,6 +809,27 @@ void loop() {
         <img src="Media/Images/Serial_Wetter.png" alt="Screenshot Serieller Monitor"
           style="max-width: 100%; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
       </div>
+
+      <div class="intro-accordion" style="margin: 24px 0;">
+        <details>
+          <summary>Wo ist der serielle Monitor?</summary>
+          <div style="padding: 8px 4px;">
+            <p style="margin-top: 0; font-size: 0.95rem;">Der <strong>Serielle Monitor</strong> (oft ein Lupe-Symbol
+              oben rechts in der Arduino IDE) ist der direkte Lese-Kanal zwischen deinem Computer und dem ESP32. Hier
+              erscheinen alle Daten im Klartext, die im Code über <code>Serial.print()</code> verschickt werden.</p>
+            <div class="warn-box" style="margin: 12px 0; padding: 10px 14px; font-size: 0.9rem;">
+              <strong>Wichtig:</strong> Wenn der Serielle Monitor geöffnet ist, "blockiert" er oft den
+              Kommunikationsport. Ein neuer Code-Upload schlägt dann mit Fehlern wie <em>"Port busy"</em> oder
+              <em>"Access denied"</em> fehl. <strong>Schließe den Monitor daher immer kurz vor einem neuen
+                Upload!</strong>
+            </div>
+            <div style="text-align: center; margin-top: 16px;">
+              <img src="Media/Images/serialmonitor.png" alt="Wo ist der Serielle Monitor?"
+                style="max-width: 100%; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            </div>
+          </div>
+        </details>
+      </div>
     </section>
 
     <section class="content-section" id="phase-2-2">
@@ -914,7 +935,8 @@ void loop() {
         <details>
           <summary>Hilfe: Upload funktioniert nicht?</summary>
           <div style="padding: 8px 4px;">
-            <p style="margin-top: 0; font-size: 0.95rem;"><strong>Option 1: Upload-Geschwindigkeit reduzieren</strong></p>
+            <p style="margin-top: 0; font-size: 0.95rem;"><strong>Option 1: Upload-Geschwindigkeit reduzieren</strong>
+            </p>
             <ul style="font-size: 0.95rem; line-height: 1.5; padding-left: 20px; margin-bottom: 12px;">
               <li>Manche Chips verarbeiten die hohe Standard-Geschwindigkeit nicht.</li>
               <li>Wähle im Menü <strong>Werkzeuge &gt; Upload Speed</strong> den Wert <strong>115200</strong>.</li>
@@ -937,11 +959,420 @@ void loop() {
       </div>
 
       <div style="text-align: center; margin: 16px 0;">
-        <img src="Media/Images/WLANphone.png" alt="Screenshot WLAN-Verbindung (Smartphone)" style="max-width: 100%; max-height: 450px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        <img src="Media/Images/WLANphone.png" alt="Screenshot WLAN-Verbindung (Smartphone)"
+          style="max-width: 100%; max-height: 450px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
       </div>
       <div style="margin-top:14px;"></div>
       <div style="text-align: center; margin: 16px 0;">
-        <img src="Media/Images/Webserver.png" alt="Screenshot Weboberfläche mit Messwerten" style="max-width: 100%; max-height: 450px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        <img src="Media/Images/Webserver.png" alt="Screenshot Weboberfläche mit Messwerten"
+          style="max-width: 100%; max-height: 450px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+      </div>
+    </section>
+
+
+    <section class="content-section" id="best-practice-example">
+      <div class="section-emoji">🚀</div>
+      <h2>Ausblick: Die erweiterte Wetterstation</h2>
+      <p class="lead">Hier findest du eine weitere Ausbaustufe der Wetterstation mit einem OLED-Display, einem schicken
+        Dashboard und Datenaufzeichnung.</p>
+
+      <div class="intro-accordion" style="margin: 24px 0;">
+        <details>
+          <summary>Erweiterte Wetterstation anzeigen</summary>
+          <div style="padding: 16px 8px;">
+            <h3>Das Setup</h3>
+            <div style="text-align: center; margin: 16px 0;">
+              <img src="WetterstationBestPractice/AufbaubildWetterbestpractice.jpg"
+                alt="Aufbaubild der Best-Practice Wetterstation"
+                style="max-width: 100%; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            </div>
+            <p>Diese erweiterte Wetterstation nutzt neben dem DHT11 und der Solarzelle ein zusätzliches
+              <strong>OLED-Display</strong>. Damit können die Live-Werte (Temperatur, Luftfeuchtigkeit, Solar-Spannung)
+              sowie die aktuelle IP-Adresse direkt an der Station abgelesen werden. Zudem werden die Daten im
+              Zeitverlauf in einem <strong>Dashboard</strong> visualisiert und per <strong>LittleFS</strong>
+              (Dateisystem auf dem ESP32) als CSV-Datei gespeichert.</p>
+
+            <h3>Das Dashboard</h3>
+            <div style="text-align: center; margin: 16px 0;">
+              <img src="WetterstationBestPractice/NWT%20Wetterstation.png"
+                alt="Dashboard der Best-Practice Wetterstation"
+                style="max-width: 100%; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            </div>
+            <p>Das Dashboard wird durch HTML, CSS und JavaScript aufgebaut, das vom ESP32 an deinen Browser gesendet
+              wird. Die Webseite nutzt <strong>Chart.js</strong>, um den Verlauf der Sensordaten in einem dynamischen
+              Liniendiagramm darzustellen. Das Dashboard ruft über die moderne JavaScript-Funktion
+              <code>fetch('/data')</code> alle 2 Sekunden die aktuellen Werte vom ESP32 im kompakten
+              <strong>JSON-Format</strong> ab. Aus diesen Daten aktualisiert es dann automatisch die Zahlenwerte und
+              zeichnet den Graphen weiter.</p>
+            <p>Zusätzlich gibt es Buttons in der Webseite, die Anfragen an den ESP32-Server schicken, um die
+              aufgezeichneten Daten als CSV-Datei herunterzuladen oder die Messung zurückzusetzen.</p>
+
+            <h3>Benötigte Bibliotheken</h3>
+            <p>Zusätzlich zur <strong>DHT sensor library</strong> (für den DHT11) brauchst du für dieses Projekt noch
+              diese Bibliotheken (beide von Adafruit) aus dem Bibliotheksverwalter:</p>
+            <ul>
+              <li><strong>Adafruit GFX Library</strong> (Grafik-Kernfunktionen)</li>
+              <li><strong>Adafruit SSD1306</strong> (für das OLED-Display)</li>
+            </ul>
+
+            <h3>Wie wird das OLED programmiert?</h3>
+            <p>Das Display wird über den I2C-Bus angesteuert. Im Code binden wir die oben genannten Bibliotheken ein und
+              erstellen ein <code>display</code>-Objekt. Mit <code>display.begin(SSD1306_SWITCHCAPVCC, 0x3C)</code> wird
+              es im <code>setup()</code> initialisiert. Vor jeder Aktualisierung leeren wir den Bildschirmpeichers mit
+              <code>display.clearDisplay()</code>, setzen den Cursor an eine Startposition (z. B.
+              <code>display.setCursor(0, 20)</code>) und schreiben unseren Text fast wie in den Seriellen Monitor mit
+              <code>display.print("Temp: ")</code>. Am Ende muss immer zwingend <code>display.display()</code>
+              aufgerufen werden, da erst dieser Befehl die frisch "gezeichneten" Texte auf den Bildschirm schiebt.</p>
+
+            <h3>Der Code</h3>
+            <p>Das Projekt ist auf zwei Dateien aufgeteilt. Beide müssen im selben Ordner <code>IoTwetter</code> liegen.
+              Der HTML/JS-Code des Dashboards liegt in der Datei <code>webpage.h</code> und wird dort als großer
+              String-Block definiert (als <code>PROGMEM</code>, das spart wertvollen Arbeitsspeicher auf dem ESP32).</p>
+
+            <h4>1. webpage.h</h4>
+            <div class="custom-code-block" style="max-height: 500px; overflow-y: auto;">
+              <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
+              <pre><code class="language-html">const char index_html[] PROGMEM = R&quot;rawliteral(
+&lt;!DOCTYPE HTML&gt;&lt;html&gt;
+&lt;head&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;NWT Wetterstation&lt;/title&gt;
+  &lt;script src=&quot;/chart.js&quot;&gt;&lt;/script&gt;
+  &lt;style&gt;
+    body { font-family: Arial; text-align: center; margin: 0px; background-color: #f4f4f4; }
+    h2 { color: #333; }
+    .card { background: white; max-width: 600px; margin: 20px auto; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .value { font-size: 2rem; font-weight: bold; color: #0275d8; }
+    .sensor-block { display: flex; justify-content: space-around; margin-bottom: 20px; }
+    canvas { max-width: 100%; }
+    button { cursor: pointer; border: none; border-radius: 5px; font-size: 1rem; margin: 5px; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h2&gt;NWT Wetterstation Dashboard&lt;/h2&gt;
+  
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;div class=&quot;sensor-block&quot;&gt;
+      &lt;div&gt;Temp&lt;br&gt;&lt;span id=&quot;temp&quot; class=&quot;value&quot;&gt;--&lt;/span&gt; &amp;deg;C&lt;/div&gt;
+      &lt;div&gt;Feuchte&lt;br&gt;&lt;span id=&quot;hum&quot; class=&quot;value&quot;&gt;--&lt;/span&gt; %&lt;/div&gt;
+      &lt;div&gt;Solar&lt;br&gt;&lt;span id=&quot;volt&quot; class=&quot;value&quot;&gt;--&lt;/span&gt; V&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;canvas id=&quot;weatherChart&quot;&gt;&lt;/canvas&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;card&quot;&gt;
+    &lt;button onclick=&quot;window.location.href=&#x27;/download&#x27;&quot; style=&quot;background: green; color: white; padding: 10px;&quot;&gt;💾 Daten als CSV speichern&lt;/button&gt;
+    &lt;button onclick=&quot;clearData()&quot; style=&quot;background: red; color: white; padding: 10px;&quot;&gt;🗑️ Messung neu starten&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+var ctx = document.getElementById(&#x27;weatherChart&#x27;).getContext(&#x27;2d&#x27;);
+var chart = new Chart(ctx, {
+    type: &#x27;line&#x27;,
+    data: {
+        labels: [],
+        datasets: [{
+            label: &#x27;Temperatur (°C)&#x27;,
+            borderColor: &#x27;rgb(255, 99, 132)&#x27;, // ROT
+            tension: 0.1,
+            data: []
+        }, {
+            label: &#x27;Solar (V)&#x27;,
+            borderColor: &#x27;rgb(255, 205, 86)&#x27;, // GELB
+            tension: 0.1,
+            data: []
+        }, {
+            label: &#x27;Luftfeuchtigkeit (%)&#x27;,
+            borderColor: &#x27;rgb(75, 192, 192)&#x27;, // TÜRKIS/GRÜN
+            tension: 0.1,
+            data: []
+        }]
+    },
+    options: { 
+        scales: { 
+            x: { title: { display: true, text: &#x27;Zeit&#x27; } },
+            y: { beginAtZero: true } 
+        },
+        animation: { duration: 0 } // Performance-Optimierung
+    }
+});
+
+function updateData() {
+  fetch(&#x27;/data&#x27;).then(response =&gt; response.json()).then(json =&gt; {
+    // 1. Textwerte in HTML aktualisieren
+    document.getElementById(&#x27;temp&#x27;).innerHTML = json.temperature.toFixed(1);
+    document.getElementById(&#x27;hum&#x27;).innerHTML = json.humidity.toFixed(0);
+    document.getElementById(&#x27;volt&#x27;).innerHTML = json.solar.toFixed(2);
+
+    // 2. Zeitstempel generieren
+    var now = new Date();
+    var timeString = now.getHours() + &quot;:&quot; + ((now.getMinutes()&lt;10?&#x27;0&#x27;:&#x27;&#x27;) + now.getMinutes()) + &quot;:&quot; + ((now.getSeconds()&lt;10?&#x27;0&#x27;:&#x27;&#x27;) + now.getSeconds());
+    
+    // 3. Ringpuffer (Rolling Window) Logik
+    if(chart.data.labels.length &gt; 50) {
+        chart.data.labels.shift();           // Zeit entfernen
+        chart.data.datasets[0].data.shift(); // Temp entfernen
+        chart.data.datasets[1].data.shift(); // Solar entfernen
+        chart.data.datasets[2].data.shift(); // &lt;--- HIER WAR DER FEHLER (Feuchte entfernen)
+    }
+
+    // 4. Neue Werte hinzufügen
+    chart.data.labels.push(timeString);
+    chart.data.datasets[0].data.push(json.temperature);
+    chart.data.datasets[1].data.push(json.solar);
+    chart.data.datasets[2].data.push(json.humidity);
+    
+    chart.update();
+  });
+}
+
+// Alle 2 Sekunden abrufen
+setInterval(updateData, 2000);
+
+function clearData() {
+    if(confirm(&quot;Alle gespeicherten Daten löschen?&quot;)) {
+        fetch(&#x27;/clear&#x27;).then(() =&gt; location.reload());
+    }
+}
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+)rawliteral&quot;;</code></pre>
+            </div>
+
+            <div style="margin-top:24px;"></div>
+            <h4>2. IoTwetter.ino</h4>
+            <div class="custom-code-block" style="max-height: 500px; overflow-y: auto;">
+              <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
+              <pre><code class="language-cpp">
+
+#include &lt;WiFi.h&gt;
+#include &lt;WebServer.h&gt;
+#include &lt;Wire.h&gt;
+#include &lt;Adafruit_GFX.h&gt;
+#include &lt;Adafruit_SSD1306.h&gt;
+#include &quot;DHT.h&quot;
+#include &quot;webpage.h&quot;
+#include &quot;LittleFS.h&quot;
+// --- KONFIGURATION ---
+const char* ssid = &quot;Wetterstation von John&quot;;
+const char* password = &quot;nwtprojekt&quot;;
+
+// OLED Einstellungen
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &amp;Wire, -1);
+
+// Sensor Einstellungen
+#define DHTPIN 4
+#define DHTTYPE DHT11
+#define SOLARPIN 34
+
+DHT dht(DHTPIN, DHTTYPE);
+WebServer server(80);
+
+// Globale Variablen für Messwerte
+float t = 0.0;
+float h = 0.0;
+float solarV = 0.0;
+// ZWEI Zeit-Variablen 
+unsigned long lastMeasureTime = 0; // Für Live-Werte (2 Sek)
+unsigned long lastLogTime = 0;     // Für CSV-Speichern (z.B. 5 Min)
+
+File uploadFile; // Hilfsvariable für den Dateiupload
+
+void setup() {
+  Serial.begin(115200);
+
+  // 1. Hardware Starten
+  dht.begin();
+  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+    Serial.println(F(&quot;OLED Fehler&quot;));
+    for(;;);
+  }
+  display.clearDisplay();
+  display.setTextColor(SSD1306_WHITE);
+  
+  // 2. Access Point starten (Der &quot;Hotspot&quot;)
+  display.setCursor(0,0);
+  display.println(&quot;Starte Hotspot...&quot;);
+  display.display();
+  
+  // WICHTIG: Hier nutzen wir softAP statt begin
+  WiFi.softAP(ssid, password);
+  IPAddress IP = WiFi.softAPIP();
+
+  // Dateisystem starten
+  if(!LittleFS.begin(true)){
+    Serial.println(&quot;LittleFS Fehler!&quot;);
+    return;
+  }
+
+  // 3. Webserver Routen definieren
+  
+  // Hauptseite
+  server.on(&quot;/&quot;, []() {
+    server.send(200, &quot;text/html&quot;, index_html);
+  });
+
+  // Daten-API
+  server.on(&quot;/data&quot;, []() {
+    String json = &quot;{&quot;;
+    json += &quot;\&quot;temperature\&quot;:&quot; + String(t) + &quot;,&quot;;
+    json += &quot;\&quot;humidity\&quot;:&quot; + String(h) + &quot;,&quot;;
+    json += &quot;\&quot;solar\&quot;:&quot; + String(solarV);
+    json += &quot;}&quot;;
+    server.send(200, &quot;application/json&quot;, json);
+  });
+
+  // CSV Download
+  server.on(&quot;/download&quot;, []() {
+    File file = LittleFS.open(&quot;/data.csv&quot;, &quot;r&quot;);
+    if (file) {
+        server.streamFile(file, &quot;text/csv&quot;);
+        file.close();
+    } else {
+        server.send(404, &quot;text/plain&quot;, &quot;Keine Daten&quot;);
+    }
+  });
+
+  // CSV Löschen
+  server.on(&quot;/clear&quot;, []() {
+    LittleFS.remove(&quot;/data.csv&quot;);
+    server.send(200, &quot;text/plain&quot;, &quot;Daten gelöscht&quot;);
+  });
+
+  // --- WARTUNGS-ROUTEN (Upload Tool) ---
+  
+  // Upload Formular
+  server.on(&quot;/upload&quot;, HTTP_GET, []() {
+    String html = &quot;&lt;body&gt;&lt;h1&gt;Datei Upload&lt;/h1&gt;&quot;;
+    html += &quot;&lt;form method=&#x27;POST&#x27; action=&#x27;/upload&#x27; enctype=&#x27;multipart/form-data&#x27;&gt;&quot;;
+    html += &quot;&lt;input type=&#x27;file&#x27; name=&#x27;file&#x27;&gt;&lt;br&gt;&lt;br&gt;&quot;;
+    html += &quot;&lt;input type=&#x27;submit&#x27; value=&#x27;Hochladen&#x27;&gt;&quot;;
+    html += &quot;&lt;/form&gt;&lt;/body&gt;&quot;;
+    server.send(200, &quot;text/html&quot;, html);
+  });
+
+  // Upload Verarbeitung
+  server.on(&quot;/upload&quot;, HTTP_POST, []() {
+    server.send(200, &quot;text/plain&quot;, &quot;Upload erfolgreich! Starte neu...&quot;);
+    delay(1000);
+    ESP.restart(); 
+  }, []() {
+    HTTPUpload&amp; upload = server.upload();
+    if (upload.status == UPLOAD_FILE_START) {
+      String filename = upload.filename;
+      if (!filename.startsWith(&quot;/&quot;)) filename = &quot;/&quot; + filename;
+      Serial.print(&quot;Upload start: &quot;); Serial.println(filename);
+      uploadFile = LittleFS.open(filename, &quot;w&quot;);
+    } 
+    else if (upload.status == UPLOAD_FILE_WRITE) {
+      if (uploadFile) uploadFile.write(upload.buf, upload.currentSize);
+    } 
+    else if (upload.status == UPLOAD_FILE_END) {
+      if (uploadFile) {
+        uploadFile.close();
+        Serial.print(&quot;Upload beendet: &quot;); Serial.println(upload.totalSize);
+      }
+    }
+  });
+
+  // Chart.js lokal ausliefern
+  server.on(&quot;/chart.js&quot;, []() {
+    File file = LittleFS.open(&quot;/chart.js&quot;, &quot;r&quot;);
+    if (file) {
+      server.streamFile(file, &quot;application/javascript&quot;);
+      file.close();
+    } else {
+      server.send(404, &quot;text/plain&quot;, &quot;Chart.js nicht gefunden!&quot;);
+    }
+  });
+
+  // 4. JETZT erst den Server starten
+  server.begin();
+
+  // 5. IP Adresse auf OLED anzeigen
+  display.clearDisplay();
+  display.setCursor(0,0);
+  display.println(&quot;WLAN AP Aktiv!&quot;);
+  display.println(&quot;Name:&quot;);
+  display.println(ssid); 
+  display.println(&quot;IP:&quot;);
+  display.println(IP);   
+  display.display();
+  
+  Serial.print(&quot;AP IP Adresse: &quot;);
+  Serial.println(IP);
+}
+
+
+void loop() {
+  server.handleClient(); // Webserver Anfragen bearbeiten
+  
+  IPAddress IP = WiFi.softAPIP();
+  
+  unsigned long currentMillis = millis();
+
+  // --- TEIL A: LIVE MESSUNG (Alle 2 Sekunden) ---
+  if (currentMillis - lastMeasureTime &gt; 2000) {
+    lastMeasureTime = currentMillis;
+    
+    float newH = dht.readHumidity();
+    float newT = dht.readTemperature();
+    int solarRaw = analogRead(SOLARPIN);
+    
+    // Fehlercheck: Nur aktualisieren, wenn Sensor OK
+    if (!isnan(newH) &amp;&amp; !isnan(newT)) {
+      h = newH;
+      t = newT;
+      solarV = (solarRaw / 4095.0) * 3.3 * 2; // Spannungsteiler Faktor 2
+    
+    }
+
+    // OLED Update (Live-Status)
+    display.clearDisplay();
+    display.setCursor(0, 0);
+    display.println(IP); 
+    display.drawLine(0, 10, 128, 10, SSD1306_WHITE);
+    
+    display.setCursor(0, 20);
+    display.print(&quot;Temp: &quot;); display.print(t, 1); display.println(&quot; C&quot;);
+    display.print(&quot;Feucht: &quot;); display.print(h, 0); display.println(&quot; %&quot;);
+    display.print(&quot;Solar: &quot;); display.print(solarV, 2); display.println(&quot; V&quot;);
+    display.display();
+  
+  Serial.print(&quot;Live Update -&gt; T: &quot;); Serial.println(t);
+
+  
+  }
+
+  // --- TEIL B: LANGZEIT LOGGING (Alle 5 Minuten = 300000 ms) ---
+  // Zum Testen kannst du hier 10000 (10 Sek) nehmen, später 300000
+  if (currentMillis - lastLogTime &gt; 300000) { 
+    lastLogTime = currentMillis;
+
+    // In Datei schreiben (Append Mode &quot;a&quot;)
+    File file = LittleFS.open(&quot;/data.csv&quot;, &quot;a&quot;);
+    if(file){
+      // Format: Zeit,Temp,Feuchte,Solar (Alles in EINER Zeile!)
+      file.print(currentMillis/1000); 
+      file.print(&quot;,&quot;);
+      file.print(t); 
+      file.print(&quot;,&quot;);
+      file.print(h); // Hier war vorher println -&gt; falsch
+      file.print(&quot;,&quot;);
+      file.println(solarV); // Erst am Ende eine neue Zeile
+      file.close();
+      Serial.println(&quot;Daten in CSV gespeichert.&quot;);
+    } else {
+      Serial.println(&quot;Fehler beim Öffnen der CSV!&quot;);
+    }
+  }
+}</code></pre>
+            </div>
+          </div>
+        </details>
       </div>
     </section>
 
