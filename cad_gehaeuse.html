@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modul 3: Konstruktion & 3D-Druck</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  
+  <style>
+    :root {
+      --kit-primary-color: #4CAF50;
+      --kit-secondary-color: #45a049;
+      --header-height: 80px;
+      --progressbar-height: 8px;
+      --correct-color: #28a745;
+      --incorrect-color: #dc3545;
+      --font-main: 'Roboto', sans-serif;
+      --font-title: 'Roboto', sans-serif;
+      --section-radius: 18px;
+      --section-shadow: 0 8px 32px rgba(44, 62, 80, 0.08);
+      --section-bg: #fff;
+      --section-margin: 36px;
+      --section-padding: 48px 24px;
+      --emoji-opacity: 0.08;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+      background: linear-gradient(180deg, #f7faf9 0%, #e8f5e9 100%);
+      color: #222;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .kit-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-height);
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 24px;
+    }
+    .kit-header img {
+      height: 48px; width: 48px;
+      border-radius: 8px;
+      background: #f4f4f4;
+      object-fit: contain;
+    }
+    .kit-header .header-titles {
+      flex: 1;
+      min-width: 0;
+    }
+    .kit-header .header-titles .title {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--kit-primary-color);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .kit-header .header-titles .subtitle {
+      font-size: 1rem;
+      color: #555;
+      font-weight: 400;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .nav-menu {
+      display: flex;
+      gap: 12px;
+      margin-left: auto;
+    }
+    
+    .nav-menu a {
+      text-decoration: none;
+      color: #555;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+    
+    .nav-menu a:hover {
+      background: #f0f0f0;
+      color: #222;
+    }
+    
+    .nav-menu a.active {
+      background: var(--kit-primary-color);
+      color: #fff;
+    }
+
+    /* Content Area */
+    main {
+      margin-top: calc(var(--header-height) + 24px);
+      padding-bottom: 48px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .content-section {
+      background: var(--section-bg);
+      border-radius: var(--section-radius);
+      box-shadow: var(--section-shadow);
+      margin-bottom: var(--section-margin);
+      padding: var(--section-padding);
+      position: relative;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s cubic-bezier(.4, 0, .2, 1), transform 0.7s cubic-bezier(.4, 0, .2, 1);
+      will-change: opacity, transform;
+    }
+    .content-section.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+    .section-emoji {
+      position: absolute;
+      right: 24px;
+      bottom: 18px;
+      font-size: 7rem;
+      opacity: var(--emoji-opacity);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Typo */
+    h1, h2, h3, h4 {
+      font-family: var(--font-title);
+      color: var(--kit-primary-color);
+      margin-top: 0;
+    }
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.5rem; margin-top: 24px; }
+    h3 { font-size: 1.2rem; }
+    p { line-height: 1.6; color: #333; }
+    .lead { font-size: 1.2rem; font-weight: 500; color: #555; }
+
+    /* Buttons */
+    .start-button {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: var(--kit-primary-color);
+      color: white;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .start-button:hover {
+      background: var(--kit-secondary-color);
+      transform: translateY(-2px);
+    }
+    
+    /* Lists */
+    .material-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px 0;
+    }
+    .material-list li {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .material-list li i {
+      color: var(--kit-primary-color);
+      font-size: 1.1em;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Accordion */
+    .intro-accordion details {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+      background: #fbfffb;
+    }
+    .intro-accordion summary {
+      list-style: none;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+      padding: 6px 4px;
+      color: var(--kit-primary-color);
+    }
+    .intro-accordion summary::-webkit-details-marker { display: none; }
+    .intro-accordion summary:before {
+      content: "▸";
+      display: inline-block;
+      margin-right: 8px;
+      transform-origin: 6px 6px;
+      transition: transform 0.18s ease;
+    }
+    .intro-accordion details[open] summary:before {
+      transform: rotate(90deg);
+    }
+
+    /* Infoboxes */
+    .infobox {
+      background: #e8f5e9;
+      padding: 15px 20px;
+      border-left: 4px solid var(--kit-primary-color);
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+    .infobox-accent {
+      background: #e3f2fd;
+      border-left: 4px solid #1976d2;
+    }
+    
+    /* Checklist */
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 12px; }
+    .checklist input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; accent-color: var(--kit-primary-color); }
+
+    /* Galley Cards */
+    .error-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+      background: #fff;
+    }
+    .error-card:hover { transform: translateY(-4px); box-shadow: 0 8px 12px rgba(0,0,0,0.1); }
+    .error-card .icon-area {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+    .error-card .content-area { padding: 15px; }
+    .error-card h3 { margin-bottom: 8px; font-size: 1.1rem; }
+    .error-card p { font-size: 0.9rem; color: #555; margin: 0; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .kit-header { padding: 0 16px; flex-wrap: wrap; height: auto; padding-top: 10px; padding-bottom: 10px; }
+      .nav-menu { width: 100%; margin-top: 10px; justify-content: space-between; gap: 5px; }
+      .nav-menu a { font-size: 0.8rem; padding: 6px 10px; }
+      main { padding: 0 16px; }
+      h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header & Navigation -->
+  <header class="kit-header" role="banner">
+    <a href="index.html">
+      <img src="Media/Images/NWTLOGO.png" alt="NWT Logo" />
+    </a>
+    <div class="header-titles">
+      <div class="title">Modul 3: Konstruktion & 3D-Druck</div>
+      <div class="subtitle">Vom virtuellen Modell zum greifbaren Gehäuse</div>
+    </div>
+    <nav class="nav-menu" aria-label="Modul-Navigation">
+      <a href="index.html" title="Zur Übersicht"><i class="fa-solid fa-house"></i></a>
+      <a href="fotometer.html">Fotometer</a>
+      <a href="wetterstation.html">Wetterstation</a>
+      <a href="cad_gehaeuse.html" class="active">CAD & Druck</a>
+      <a href="solarnachfuehrung.html">Solarnachführung</a>
+    </nav>
+  </header>
+
+  <main>
+    
+    <!-- Hero / Intro -->
+    <section class="content-section" id="intro">
+      <div class="section-emoji">🏗️</div>
+      <h1>Modul 3: Konstruktion & 3D-Druck</h1>
+      <p class="lead">Vom virtuellen Modell zum greifbaren Gehäuse</p>
+      
+      <div class="intro-accordion">
+        <details open>
+          <summary>Lernziele</summary>
+          <ul class="material-list">
+            <li><i class="fa-solid fa-cube"></i> <strong>CAD-Grundlagen:</strong> Konzepte von Skizzen und Extrusionen anwenden.</li>
+            <li><i class="fa-solid fa-layer-group"></i> <strong>Slicing verstehen:</strong> Druckeinstellungen (Infill, Shells, Support) optimieren.</li>
+            <li><i class="fa-solid fa-box"></i> <strong>Gehäusebau:</strong> Eine maßgeschneiderte Schutzhülle für die Wetterstation entwerfen.</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <!-- Theorie: Konstruktions-Guide -->
+    <section class="content-section" id="konstruktion-theorie">
+      <div class="section-emoji">📏</div>
+      <h2>Theorie: Konstruktions-Guide</h2>
+      <p>Um Sensoren, Kabel und Mikrocontroller sicher zu verstauen, reicht ein einfacher Pappkarton oft nicht aus. Ein 3D-gedrucktes Gehäuse bietet perfekten Halt, solange man die Eigenheiten des Fertigungsverfahrens (FFF/FDM) beachtet.</p>
+      
+      <h3>Toleranzen beim 3D-Druck</h3>
+      <div class="infobox">
+        <strong><i class="fa-solid fa-circle-info"></i> Warum 0.3mm Spiel einplanen?</strong><br><br>
+        Beim FDM-Drucker wird geschmolzener Kunststoff schichtweise aufgetragen. Wegen der thermischen Kontraktion beim Abkühlen (Shrinkage) und der Breite der gedruckten Linien (meist 0.4mm) fallen Innendurchmesser (z.B. Löcher für Schrauben oder Sensoren) oft minimal kleiner aus als im CAD-Programm gezeichnet. 
+        <br><br>
+        <strong>Faustregel für Passungen:</strong> Wenn ein 10mm breiter Sensor in eine Öffnung passen soll, modelliere die Öffnung auf <strong>10.3mm</strong>, damit man das Teil beim Zusammenbau nicht mit Gewalt einklemmen muss.
+      </div>
+    </section>
+
+    <!-- Praxis: Bauanleitung & Dateien -->
+    <section class="content-section" id="bauanleitung-praxis">
+      <div class="section-emoji">🛠️</div>
+      <h2>Praxis: Bauanleitung & Referenz-Downloads</h2>
+      <p>Hier geht es ans Eingemachte. Lade die untenstehenden Referenzdateien herunter, um daraus ein eigenes Gehäuse für das ESP32-Board und das Solarpanel zu entwickeln, oder drucke sie direkt als Halterungen aus.</p>
+      
+      <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
+        <a href="#" class="start-button" style="width: auto; padding: 12px 24px; font-size: 1rem;">
+          <i class="fa-solid fa-download"></i> ESP32-Dummy (.stl)
+        </a>
+        <a href="#" class="start-button" style="width: auto; padding: 12px 24px; font-size: 1rem;">
+          <i class="fa-solid fa-download"></i> Solarpanel-Halter (.stl)
+        </a>
+      </div>
+    </section>
+
+    <!-- 3D-Druck-Führerschein -->
+    <section class="content-section" id="fuehrerschein">
+      <div class="section-emoji">✅</div>
+      <h2>Der 3D-Druck-Führerschein</h2>
+      <p>Bist du bereit für deinen ersten Druck? Gehe die Sicherheits- und Vorbereitungs-Checkliste vor jedem Druckvorgang einmal durch, um Frust und fehlerhafte Drucke zu vermeiden:</p>
+      
+      <ul class="checklist" style="margin-top: 24px;">
+        <li><input type="checkbox" id="chk1"> <label for="chk1">Druckbett gereinigt und fettfrei? (Mit Isopropanol abwischen)</label></li>
+        <li><input type="checkbox" id="chk2"> <label for="chk2">Richtiges Filament geladen (Material und Farbe)?</label></li>
+        <li><input type="checkbox" id="chk3"> <label for="chk3">Support-Strukturen (Stützmaterial) im Slicer kontrolliert?</label></li>
+        <li><input type="checkbox" id="chk4"> <label for="chk4">Erste Schicht (First Layer) auf ausreichend Haftung überwacht?</label></li>
+      </ul>
+    </section>
+
+    <!-- Fehlersuche-Galerie -->
+    <section class="content-section" id="fehlersuche">
+      <div class="section-emoji">🔍</div>
+      <h2>Fehlersuche-Galerie</h2>
+      <p>Beim 3D-Druck läuft nicht immer alles nach Plan. Hier sind typische Druckfehler und wie du sie behebst.</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-top: 24px;">
+        
+        <!-- Error Card 1 -->
+        <div class="error-card">
+          <div class="icon-area" style="background:#ffebee; color:#d32f2f;">
+            <i class="fa-solid fa-temperature-arrow-down"></i>
+          </div>
+          <div class="content-area">
+            <h3 style="color:#d32f2f;">Warping</h3>
+            <p>Die Kanten des Objekts lösen sich vom Druckbett und biegen sich nach oben. <br><br><strong>Ursache:</strong> Zu schnelle, ungleichmäßige Abkühlung oder ein unsauberes/kaltes Druckbett.</p>
+          </div>
+        </div>
+
+        <!-- Error Card 2 -->
+        <div class="error-card">
+          <div class="icon-area" style="background:#fff8e1; color:#fbc02d;">
+            <i class="fa-solid fa-bowl-food"></i>
+          </div>
+          <div class="content-area">
+            <h3 style="color:#f57f17;">Spaghetti</h3>
+            <p>Ein chaotischer Haufen Plastikfäden. <br><br><strong>Ursache:</strong> Das Objekt hat sich während des Drucks abgelöst, sodass in die Luft extrudiert wird, oder es fehlen Stützstrukturen für große Überhänge.</p>
+          </div>
+        </div>
+
+        <!-- Error Card 3 -->
+        <div class="error-card">
+          <div class="icon-area" style="background:#e3f2fd; color:#1976d2;">
+            <i class="fa-solid fa-bars-staggered"></i>
+          </div>
+          <div class="content-area">
+            <h3 style="color:#1976d2;">Layer-Shifting</h3>
+            <p>Die Schichten sind plötzlich seitlich verschoben.<br><br><strong>Ursache:</strong> Kollision des Riemens, lose Zahnriemen, oder der Druckkopf blieb am gedruckten Modell hängen (z.B. durch Curling).</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    
+    <!-- Quiz Section -->
+    <section class="content-section" id="quiz">
+      <div class="section-emoji">🧠</div>
+      <h2>Wissens-Check</h2>
+      <p>Teste dein Verständnis über Toleranzen, Vorbereitung und typische Fehler.</p>
+      
+      <div id="quiz-container" style="background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; padding: 24px;">
+        <div id="question-text" style="font-size: 1.15rem; font-weight: 500; margin-bottom: 20px; color:#222;"></div>
+        <div id="answers-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        <div id="quiz-feedback" style="margin-top: 20px; font-weight: 500; padding: 10px; border-radius: 4px; display: none;"></div>
+        
+        <button id="next-btn" class="start-button" style="display: none; width: auto; padding: 10px 24px; margin-top: 20px; background: #222;">
+          Nächste Frage <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Vorschau auf Modul 4 -->
+    <section class="content-section" id="vorschau">
+      <div class="section-emoji">➡️</div>
+      <h2>Ausblick: Bereit für Bewegung?</h2>
+      
+      <div class="infobox infobox-accent">
+        <strong style="color: #1565c0; font-size:1.1rem;"><i class="fa-solid fa-forward-step"></i> Nächste Schritte: Modul 4 (Die Solarnachführung)</strong><br><br>
+        In diesem Modul haben wir ein robustes und vorerst starres Gehäuse gebaut. Im kommenden Modul werden wir Sensordaten nutzen, um die Hardware zum Leben zu erwecken! Wir bereiten dazu die bewegliche Mechanik (Aktorik) für den Servomotor vor: Konstruiere Scharniere und drehbare Achsen, mit denen wir das Solarpanel dynamisch nach der Sonne ausrichten können.
+      </div>
+      
+      <a href="solarnachfuehrung.html" class="start-button" style="margin-top: 20px;">
+        Zu Modul 4: Solarnachführung <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </section>
+
+  </main>
+
+  <footer style="text-align:center; padding: 30px; font-size: 0.9rem; color: #666; border-top: 1px solid #eee; background:#fff;">
+    <div>CC BY Lizenz, Andreas Sexauer, Zentrum für Mediales Lernen am Karlsruher Institut für Technologie (KIT).</div>
+    <div style="margin-top:8px;"><small>Dieses Lernmodul wurde mithilfe von künstlicher Intelligenz (KI) konzipiert und programmiert.</small></div>
+  </footer>
+
+  <script>
+    // Add JS to add visible class
+    document.documentElement.classList.add('js');
+    
+    // Intersection Observer for animations
+    const sections = document.querySelectorAll('.content-section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    sections.forEach(sec => observer.observe(sec));
+    
+    // Quiz Logic
+    const questions = [
+      {
+        question: "Wie viel Toleranz (Spiel) sollte man bei ineinandergreifenden 3D-Druck-Teilen üblicherweise einplanen?",
+        options: ["0.0 mm", "0.2 - 0.3 mm", "1.0 - 2.0 mm", "5.0 mm"],
+        answer: 1
+      },
+      {
+        question: "Was bedeutet 'Warping' beim 3D-Druck?",
+        options: ["Der Druckkopf verstopft.", "Sich ablösende und nach oben biegende Ecken am Objekt.", "Zu viel Filament wird extrudiert.", "Die Schichten verschieben sich seitlich."],
+        answer: 1
+      },
+      {
+        question: "Welcher Schritt ist vor dem Starten eines FDM-Drucks unverzichtbar für eine gute Haftung?",
+        options: ["Das Druckbett einfetten.", "Das Druckbett reinigen (fettfrei machen).", "Die Druckgeschwindigkeit auf Maximum stellen.", "Werkzeug auf das Druckbett platzieren."],
+        answer: 1
+      }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      const q = questions[currentQ];
+      document.getElementById('question-text').innerText = (currentQ + 1) + ". " + q.question;
+      const ansContainer = document.getElementById('answers-container');
+      ansContainer.innerHTML = '';
+      
+      const feedback = document.getElementById('quiz-feedback');
+      feedback.style.display = 'none';
+      feedback.innerText = '';
+      feedback.className = ''; 
+
+      document.getElementById('next-btn').style.display = 'none';
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.innerText = opt;
+        btn.style.padding = "12px 16px";
+        btn.style.border = "1px solid #ddd";
+        btn.style.borderRadius = "6px";
+        btn.style.cursor = "pointer";
+        btn.style.background = "#fff";
+        btn.style.textAlign = "left";
+        btn.style.fontSize = "1rem";
+        btn.style.transition = "background 0.2s";
+        
+        btn.onmouseover = () => { if(!btn.disabled) btn.style.background = "#f9f9f9"; };
+        btn.onmouseout = () => { if(!btn.disabled) btn.style.background = "#fff"; };
+        
+        btn.onclick = () => checkAnswer(idx, btn);
+        ansContainer.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selectedIdx, btnElement) {
+      const q = questions[currentQ];
+      const buttons = document.getElementById('answers-container').children;
+      for(let i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+        buttons[i].style.cursor = "not-allowed";
+      }
+      
+      const feedback = document.getElementById('quiz-feedback');
+      feedback.style.display = 'block';
+      
+      if (selectedIdx === q.answer) {
+        btnElement.style.background = "#d4edda";
+        btnElement.style.borderColor = "#28a745";
+        feedback.innerHTML = '<i class="fa-solid fa-circle-check"></i> Richtig! Sehr gut gemacht.';
+        feedback.style.color = "#155724";
+        feedback.style.backgroundColor = "#d4edda";
+        feedback.style.border = "1px solid #c3e6cb";
+        score++;
+      } else {
+        btnElement.style.background = "#f8d7da";
+        btnElement.style.borderColor = "#dc3545";
+        buttons[q.answer].style.background = "#e2e3e5"; // Highlight correct
+        buttons[q.answer].style.borderColor = "#28a745";
+        buttons[q.answer].style.borderWidth = "2px";
+        
+        feedback.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Falsch. Die richtige Antwort ist markiert.';
+        feedback.style.color = "#721c24";
+        feedback.style.backgroundColor = "#f8d7da";
+        feedback.style.border = "1px solid #f5c6cb";
+      }
+      
+      if (currentQ < questions.length - 1) {
+        document.getElementById('next-btn').style.display = 'inline-block';
+      } else {
+        const resultMsg = document.createElement('div');
+        resultMsg.style.marginTop = "15px";
+        resultMsg.style.fontSize = "1.1rem";
+        if(score === questions.length) {
+          resultMsg.innerHTML = `🎉 Perfekt! Du hast alle ${questions.length} Fragen richtig beantwortet.`;
+        } else {
+          resultMsg.innerHTML = `🏁 Quiz beendet! Du hast ${score} von ${questions.length} Punkten erreicht.`;
+        }
+        feedback.appendChild(resultMsg);
+      }
+    }
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+      currentQ++;
+      loadQuestion();
+    });
+
+    document.addEventListener('DOMContentLoaded', loadQuestion);
+  </script>
+</body>
+</html>

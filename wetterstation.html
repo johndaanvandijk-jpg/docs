@@ -470,16 +470,50 @@
       color: #444;
       font-size: 0.95rem;
     }
+
+    .nav-menu {
+      display: flex;
+      gap: 12px;
+      margin-left: auto;
+    }
+    .nav-menu a {
+      text-decoration: none;
+      color: #555;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-menu a:hover {
+      background: #f0f0f0;
+      color: #222;
+    }
+    .nav-menu a.active {
+      background: var(--kit-primary-color);
+      color: #fff;
+    }
+    @media (max-width: 768px) {
+      .kit-header { padding: 0 16px; flex-wrap: wrap; height: auto; padding-top: 10px; padding-bottom: 10px; }
+      .nav-menu { width: 100%; margin-top: 10px; justify-content: space-between; gap: 5px; }
+      .nav-menu a { font-size: 0.8rem; padding: 6px 10px; }
+    }
   </style>
 </head>
 
 <body>
   <header class="kit-header" role="banner" aria-label="Modultitel und Fortschrittsanzeige">
-    <img src="Media/Images/NWTLOGO.png" alt="NWT Logo" />
+    <a href="index.html"><img src="Media/Images/NWTLOGO.png" alt="NWT Logo" /></a>
     <div class="header-titles">
       <div class="title">Wetterapp-Test 2.0</div>
       <div class="subtitle">Einstieg in das Internet of Things</div>
     </div>
+    <nav class="nav-menu" aria-label="Modul-Navigation">
+      <a href="index.html" title="Zur Übersicht"><i class="fa-solid fa-house"></i></a>
+      <a href="fotometer.html">Fotometer</a>
+      <a href="wetterstation.html" class="active">Wetterstation</a>
+      <a href="cad_gehaeuse.html">CAD & Druck</a>
+      <a href="solarnachfuehrung.html">Solarnachführung</a>
+    </nav>
   </header>
 
   <div class="progress-container">
