@@ -1,0 +1,28 @@
+Lernmodul: Vom LDR zum Fotometer
+Fokus: Vermittelte Lerninhalte und das Nutzererlebnis in den Sektionen
+
+Dieses Lernmodul führt die Benutzenden (z.B. Lehrkräfte oder Schüler) systematisch und handlungsorientiert vom physikalischen Einzelbauteil zum fertigen, kalibrierten Laborinstrument. Der Fokus dieses Dokuments liegt darauf, darzulegen, *welcher konkrete Inhalt* in jeder Sektion auf *welche interaktive Weise* gelehrt wird.
+
+### 1. Einführung & Vorbereitung
+- **Vermittelter Inhalt:** Kennenlernen der benötigten elektronischen Grundbausteine (Arduino, Breadboard, Jumper, LED, LDR) und der essenziellen Software-Werkzeuge (IDE, Treiber).
+- **Nutzererlebnis:** Der Nutzer wird durch kompakte, aufklappbare Listen (Akkordeons) nicht sofort von Text erschlagen, sondern erarbeitet sich seine Materialliste Schritt für Schritt.
+
+### 2. Sektion 1: Technische Grundlagen - LDR am Microcontroller
+- **Vermittelter Inhalt (Funktionsprinzip LDR):** Der inverse Zusammenhang zwischen Licht und elektrischem Widerstand (Viel Licht = kleiner Widerstand, Dunkelheit = großer Widerstand). 
+- **Erlebnis:** Eine SVG-Grafik macht diesen eher abstrakten Zusammenhang visuell in einem einfachen Graphen greifbar.
+  
+- **Vermittelter Inhalt (Der Spannungsteiler):** Ein Mikrocontroller kann keinen Widerstand messen, sondern nur Spannung. Daher muss der wechselnde Widerstand des LDR in ein Spannungssignal übersetzt werden. Gelernt wird die Formel des Spannungsteilers. Zudem wird gelehrt, wie man ein abstraktes Schaltbild in eine reale Steckbrett-Verkabelung (Breadboard) überträgt.
+- **Erlebnis:** Mit interaktiven "Flip-Karten" (Bild-Rückseite-Prinzip) kann der Nutzer beliebig oft zwischen Foto und Schaltbild hin- und herwechseln und sein abstraktes Vorstellungsvermögen trainieren. Ein interaktives Tooltip erklärt per "Hover" die mathematische Herleitung der Spannungsteilerformel.
+
+- **Vermittelter Inhalt (Sensor-Sensitivität & Simulation):** Das Konzept zur Ausreizung der messbaren Spannung (Widerstands-Optimierung). Welcher Festwiderstand $R_1$ eignet sich für eine sehr dunkle Umgebung (wo der LDR hochohmig ist) und welcher für eine sehr helle (wo er niederohmig ist)? 
+- **Erlebnis:** Das Highlight der Sektion: Ein interaktiver Simulator mit Schiebereglern (für Lichtintensität und Festwiderstand $R_1$). Die Schüler manipulieren experimentell Hardware-Parameter, ohne echte Bauteile umstecken zu müssen, und sehen, in welchem Bereich der ADC-Wert (0-1023) ausreizbar ist. Das Wissen wird sofort in einem fallbasierten Quiz (Hell/Dunkel) abgefragt und mit Erklärungen ("Warum war das die richtige Widerstandswahl?") verstärkt.
+
+### 3. Sektion 2: Der Messaufbau
+- **Vermittelter Inhalt:** Das Konzept der optischen Transmissionsmessung (weniger Licht am Sensor = höhere Konzentration im Probenbehälter). Aufbau der Hardware mit einer stationären Lichtquelle (LED) als Ergänzung. Die Notwendigkeit zur Optimierung: Welche Fehlerquellen der echten Welt (Fremdlicht, Lichtstreuung, geometrische Stabilität, Wellenlänge) verfälschen das Ergebnis?
+- **Erlebnis:** Erneutes Nutzen von Flip-Karten zum Aufbau und Bereitstellung erster Programmschnipsel (AnalogRead) mit praktischem "Copy-Button". Der Arduino fungiert ab hier als reiner "Daten-Spion", der den unverarbeiteten Spannungswert zur Beobachtung an den PC sendet.
+
+### 4. Sektion 3: Messwerterfassung & Kalibrierung
+- **Vermittelter Inhalt (Das Problem des Rohwerts):** Ein analoger Wert von "850" des ADC bedeutet in der Realität gar nichts. Er besitzt keine Einheit.
+- **Vermittelter Inhalt (Die 2-Punkt-Kalibrierung):** Wie man dem Mikrocontroller beibringt, was die Laborrealität ist. Gelernt wird das Setzen von Nullpunkt (0% = klares Lösungsmittel/Wasser) und dem Maximalwert (100% = maximal trübe/konzentrierte Lösung).
+- **Vermittelter Inhalt (Auswertungswege & Mapping):** Die zwei didaktischen Wege: a) Daten außerhalb übertragen und auswerten (Excel-Kennlinie für wissenschaftliches Verständnis) oder b) Daten auf dem Controller live übersetzen lassen (Automatisierung). Der C++ Befehl `map()` wird als lineares Umrechnungswerkzeug von Spannung in "%" vermittelt.
+- **Erlebnis:** Der abstrakte Prozess wird in direkten Experimentierfotos als "Vorher / Nachher"-Flows an Bechergläsern mit Waldmeistersirup gezeigt. Darunter befindet sich der entsprechende Screenshot des echten Seriellen Monitors ("Klar vs. Trüb"). Das zeigt dem Anwender exakt, was er auf seinem eigenen Bildschirm sehen sollte und knüpft die Informatik direkt an die Laborchemie/Physik an.

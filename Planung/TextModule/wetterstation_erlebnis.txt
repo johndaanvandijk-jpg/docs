@@ -1,0 +1,23 @@
+Lernmodul: Wetterapp-Test 2.0 (IoT Wetterstation)
+Fokus: Vermittelte Lerninhalte und das Nutzererlebnis in den Sektionen
+
+Dieses Modul schlägt die Brücke von der reinen Sensor-Hardware zur drahtlosen Kommunikation in das "Internet of Things" (IoT). Der Fokus dieses Dokuments liegt darauf, darzulegen, *welcher konkrete Inhalt* in jeder Sektion auf *welche interaktive Weise* gelehrt wird.
+
+### 1. Einführung & Vorbereitung
+- **Vermittelter Inhalt (Einordnung ins "Big Picture"):** Das Konzept einer IoT-Wetterstation: Das Aufzeichnen physikalischer Daten und der Transfer in digitale Netzwerke. Der Nutzer lernt die nötigen Bauteile kennen (ESP32 als Netzwerkknoten, DHT11 für Temperatur/Feuchte, Solarzelle für Einstrahlung).
+- **Nutzererlebnis:** Durch visuelle "Mini-Cards" (Sammelkarten-Design) wird die Sensorik wie in einem Werkzeugkasten griffig und übersichtlich vorgestellt, versehen mit realistischen Produktfotografien der auszuwählenden Hardware. Checklisten klappen per Klick als Akkordeons auf.
+
+### 2. Phase 2.1: Hardware-Basis (ESP32 & Sensoren)
+- **Vermittelter Inhalt (System-Upgrade und Sicherheit):** Der Umstieg vom reinen Arduino auf den ESP32-Microcontroller und der wichtige Unterschied im Logikpegel: Der ESP32 kann bei Eingangsspannungen über 3,3V zerstört werden. Gelernt wird, warum eine 6V-Solarzelle zwingend durch den bereits bekannten Spannungsteiler laufen muss.
+- **Erlebnis:** Eine signalfarbene "Warnbox" zieht die Aufmerksamkeit sofort auf das Zerstörungsrisiko und motiviert die Notwendigkeit des Vorarbeiter-Wissens, inklusive direkter Verlinkung zu einer interaktiven Spannungsteiler-Simulation zur Auffrischung.
+
+- **Vermittelter Inhalt (Platinenaufbau & Bibliothekeneinbindung):** Wie schließe ich digitale Sensoren (DHT11 an GPIO4) und analoge (Solarzelle an GPIO34) physisch an? Und wie lade ich dem Microcontroller per C++ Code das "Wörterbuch" (die passende Software-Bibliothek) herunter, damit er digitale Sensorprotokolle decodieren kann?
+- **Erlebnis:** Der Platinenaufbau wird an einem großen Breadboard-Grafik präsentiert. Doch statt langen Texten gibt es hier "Interaktive Hotspots". Fährt der Benutzer mit der Maus über Bauteile auf der Schaltung (ESP32, Sensor, Widerstände), poppen gezielt Tooltips auf, die Pinbelegungen und Bauteilaufgaben direkt im Kontext erklären. Erste Code-Tests ("Minimal-Sketch") lassen sich sofort über einen Copy-Button in die IDE übertragen, woraufhin Screenshots des Seriellen Monitors dem Nutzer zeigen, ob seine Hardware-Arbeit erfolgreich war.
+
+### 3. Phase 2.2: WLAN-Access Point & Datenausgabe
+- **Vermittelter Inhalt (Das Client-Server-Modell):** Der eigentliche IoT-Charakter. Wie baut der Microcontroller eigenständig ein drahtloses Netzwerk ("SoftAP") auf? Wie funktioniert der Request-Response-Zyklus? Wenn das Browser-Handy anfragt ("Request"), bastelt der ESP32-Code live einen HTML-String zusammen, reichert ihn mit den Sensorvariablen an und schickt die kleine Webseite ("Response") über das WLAN zurück. 
+- **Erlebnis:** Der sehr ungreifbare Netzwerk-Vorgang zwischen Microcontroller, Luft (WLAN) und Smartphone wird visualisiert. Ein dynamisches "Mermaid-Sequenzdiagramm" zerlegt das Server-Client-Modell in verständliche Pfeile von Akteur zu Akteur. Fotos vom Handybildschirm, der die Sensordaten im Browserfenster anzeigt, markieren das konkrete Ziel dieser Sektion und motivieren stark. Zudem gibt es "Troubleshooting-Bereiche", falls etwas nicht lädt (Erneut als platzsparende Akkordeons).
+
+### 4. Ausblick: Die erweiterte Wetterstation (Best Practice)
+- **Vermittelter Inhalt (Datenpersistenz und Dashboarding API):** Hier wird "Professionalisierung" gelehrt. Wie werden flüchtige Messwerte nicht nur live angezeigt, sondern im Zeitverlauf dauerhaft im Dateisystem des ESP32 (`LittleFS`) als CSV gespeichert? Wie trennt man HTML-Frontend von C++ Backend, indem man moderne JSON-APIs (`fetch('/data')`) und die JavaScript Bibliothek `Chart.js` nutzt? Wie binde ich Hardwareanzeigen lokal ein (OLED Display über I2C, `display.print()`)?
+- **Erlebnis:** Das Modul endet mit einem großen motivierenden Aufklapp-Geschenk: Fotos einer professionell zusammengebauten Wetterstation (inkl. OLED Display) und dem zugehörigen grafischen "Chart.js" Liniendiagramm-Dashboard. Das zeigt dem Benutzer, was möglich ist. Der dort geteilte komplexe Quellcode fungiert als "Experten-Kit" für Gruppen, die in Projektarbeiten wirklich in die Tiefe (JSON Parsing, Rolling Time Windows, PROGMEM HTML Files) einsteigen möchten.
