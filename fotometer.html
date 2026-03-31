@@ -469,10 +469,66 @@
       background: var(--kit-primary-color);
       color: #fff;
     }
+    body.schueler-modus .lehrer-modus-only {
+      display: none !important;
+    }
+    
+    body:not(.schueler-modus) .schueler-modus-only {
+      display: none !important;
+    }
+
+    .mode-switch-container {
+      display: flex;
+      align-items: center;
+      margin-left: 12px;
+    }
+
+    .mode-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+
+    .mode-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .mode-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: var(--kit-primary-color);
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .mode-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .mode-slider {
+      background-color: #2196F3;
+    }
+
+    input:checked + .mode-slider:before {
+      transform: translateX(24px);
+    }
     @media (max-width: 768px) {
       .kit-header { padding: 0 16px; flex-wrap: wrap; height: auto; padding-top: 10px; padding-bottom: 10px; }
       .nav-menu { width: 100%; margin-top: 10px; justify-content: space-between; gap: 5px; }
       .nav-menu a { font-size: 0.8rem; padding: 6px 10px; }
+      .mode-switch-container { margin-left: 0; margin-right: auto; }
     }
   </style>
 </head>
@@ -480,6 +536,13 @@
 <body>
   <header class="kit-header" role="banner" aria-label="Modultitel und Fortschrittsanzeige">
     <a href="index.html"><img src="Media/Images/NWTLOGO.png" alt="NWT Logo" /></a>
+    <div class="mode-switch-container">
+      <label class="mode-switch" title="Ansicht wechseln">
+        <input type="checkbox" id="mode-toggle" onchange="toggleMode()">
+        <span class="mode-slider"></span>
+      </label>
+      <span id="mode-label" style="margin-left: 8px; font-weight: 500; font-size: 0.9rem; color: #555;">Lehrermodus</span>
+    </div>
     <div class="header-titles">
       <div class="title">Vom LDR zum Fotometer</div>
       <div class="subtitle">Ein Lernmodul zur Sensorkalibrierung und quantitativen Messdatenauswertung</div>
@@ -503,10 +566,13 @@
       <p class="lead">Ein Lernmodul zur Sensorkalibrierung und quantitativen Messdatenauswertung</p>
       <p><strong>Autor:</strong> John van Dijk</p>
       <p><strong>Lizenzhinweis:</strong> CC BY-SA 4.0</p>
-      <p>
+      <p class="lehrer-modus-only">
         Dieses Modul liefert das technische Fundament für die <a href="..." target="_blank">UE Fotometer</a>: Sie
         lernen, einen optischen Sensor zu bauen, am Microcontroller zu betreiben und die Rohdaten für den Unterricht
         nutzbar zu machen.
+      </p>
+      <p class="schueler-modus-only">
+        In diesem Modul lernst du, einen optischen Sensor zu bauen, ihn am Microcontroller zu betreiben und die Messdaten auszuwerten.
       </p>
 
       <style>
@@ -550,6 +616,26 @@
       </style>
 
       <div class="intro-accordion">
+        <details class="lehrer-modus-only">
+          <summary>Lehrplanbezug: Kompetenzen (NwT 2016)</summary>
+          <div style="padding: 4px 12px 12px 4px; font-size: 0.95rem;">
+            <p style="margin-top: 0;">Dieses Modul deckt folgende Kompetenzen ab:</p>
+            <h4 style="margin-top: 12px; margin-bottom: 6px; font-size: 1rem; color: #2c3e50;">Inhaltsbezogene Kompetenzen</h4>
+            <ul style="margin: 0; padding-left: 20px; line-height: 1.5;">
+              <li style="margin-bottom: 6px;"><strong>Elektronische Schaltungen:</strong> Schaltungen entwickeln, Bauteile dimensionieren und auswählen (Bestimmung des Widerstands R1 für den Spannungsteiler). Schaltpläne analysieren und in einfachen Fällen entwickeln.</li>
+              <li style="margin-bottom: 6px;"><strong>Informationsaufnahme durch Sinne und Sensoren:</strong> Verwendungsmöglichkeiten von Sensoren beschreiben (LDR zur Lichtmessung).</li>
+              <li style="margin-bottom: 6px;"><strong>Gewinnung und Auswertung von Daten:</strong> Bedingungen für zuverlässige Messungen erläutern und Messverfahren optimieren (Einflussgrößen wie Fremdlicht). Messdaten mithilfe von Software auswerten und darstellen (Zweipunkte-Kalibrierung, Excel-Kennlinie).</li>
+              <li style="margin-bottom: 6px;"><strong>Informationsverarbeitung:</strong> Elemente einer Programmiersprache beschreiben (C++ <code>map()</code>-Befehl).</li>
+            </ul>
+            <h4 style="margin-top: 16px; margin-bottom: 6px; font-size: 1rem; color: #2c3e50;">Prozessbezogene Kompetenzen</h4>
+            <ul style="margin: 0; padding-left: 20px; line-height: 1.5;">
+              <li style="margin-bottom: 6px;"><strong>Erkenntnisgewinnung und Forschen:</strong> Computergestützte Simulationen nutzen (Sensitivitäts-Simulation). Messverfahren begründet auswählen und anpassen. Experimente planen, durchführen und auswerten. Messdaten mathematisch auswerten, beschreiben und interpretieren (Umrechnung Rohwert in %).</li>
+              <li style="margin-bottom: 6px;"><strong>Kommunikation und Organisation:</strong> Zeichnerische, symbolische und normorientierte Darstellungen analysieren, nutzen und erstellen (Übertragung Schaltbild auf Steckbrett-Verkabelung). Fachbegriffe nutzen sowie Alltagsbegriffe in Fachsprache übertragen (abstrakter Rohwert vs. kalibrierte Realität).</li>
+              <li style="margin-bottom: 6px;"><strong>Entwicklung und Konstruktion:</strong> Ein Problem analysieren und durch Kombinieren von Teillösungen entwickeln (LED/LDR).</li>
+            </ul>
+          </div>
+        </details>
+
         <details open>
           <summary>Vorbereitung & Werkzeuge</summary>
           <ul class="material-list">
@@ -844,7 +930,10 @@
       <h3 style="margin-top:32px;">1.3. Simulation</h3>
       <div class="ldr-simulator-container-adv">
         <h3>⚡ Interaktive LDR-Schaltung (Spannungsteiler)</h3>
-        <p>Experimentieren Sie mit der Lichtstärke und dem Festwiderstand (R1),
+        <p class="lehrer-modus-only">Experimentieren Sie mit der Lichtstärke und dem Festwiderstand (R1),
+          um zu sehen, wie sich Spannung und ADC-Wert verändern. Optimiere die Sensitivität
+          des Lichtsensors mit verschiedenen R1-Werten.</p>
+        <p class="schueler-modus-only">Experimentiere mit der Lichtstärke und dem Festwiderstand (R1),
           um zu sehen, wie sich Spannung und ADC-Wert verändern. Optimiere die Sensitivität
           des Lichtsensors mit verschiedenen R1-Werten.</p>
 
@@ -967,14 +1056,26 @@
     <section class="content-section" id="quiz-r1">
       <div class="section-emoji">🧠</div>
       <h2>Teste dein Wissen: Der Widerstands-Optimierer</h2>
-      <p>
-        In der Simulation oben haben Sie gesehen, dass sich die Messung unterschiedlich verhält, wenn man R1 anpasst.
-        Ziel ist es immer, den <strong>Messbereich maximal auszunutzen</strong>. Das bedeutet: Wir wollen große Sprünge
-        in den Zahlenwerten sehen, wenn sich das Licht ändert.
-      </p>
-      <p>
-        Versuchen Sie, für die folgenden zwei Szenarien den besten Festwiderstand aus dem Labor-Vorrat zu wählen.
-      </p>
+      <div class="lehrer-modus-only">
+        <p>
+          In der Simulation oben haben Sie gesehen, dass sich die Messung unterschiedlich verhält, wenn man R1 anpasst.
+          Ziel ist es immer, den <strong>Messbereich maximal auszunutzen</strong>. Das bedeutet: Wir wollen große Sprünge
+          in den Zahlenwerten sehen, wenn sich das Licht ändert.
+        </p>
+        <p>
+          Versuchen Sie, für die folgenden zwei Szenarien den besten Festwiderstand aus dem Labor-Vorrat zu wählen.
+        </p>
+      </div>
+      <div class="schueler-modus-only">
+        <p>
+          In der Simulation oben hast du gesehen, dass sich die Messung unterschiedlich verhält, wenn man R1 anpasst.
+          Ziel ist es immer, den <strong>Messbereich maximal auszunutzen</strong>. Das bedeutet: Wir wollen große Sprünge
+          in den Zahlenwerten sehen, wenn sich das Licht ändert.
+        </p>
+        <p>
+          Versuche, für die folgenden zwei Szenarien den besten Festwiderstand aus dem Labor-Vorrat zu wählen.
+        </p>
+      </div>
 
       <style>
         /* Spezifische Styles für das Quiz */
@@ -1070,12 +1171,21 @@
 
         <div class="quiz-scenario" id="scenario-1">
           <h4><i class="fa-solid fa-moon" style="color: #6c757d;"></i> Szenario A: Dunkle Umgebung</h4>
-          <p>
-            Sie bauen ein Fotometer für sehr dicke, dunkle Flüssigkeiten (hohe Trübung). Es kommt nur wenig Licht am
-            Sensor an.
-            Der LDR hat in dieser Dunkelheit einen <strong>sehr hohen Widerstand (ca. 100 kΩ)</strong>.
-          </p>
-          <p><em>Welchen Festwiderstand (R1) wählen Sie, um Änderungen fein messen zu können?</em></p>
+          <div class="lehrer-modus-only">
+            <p>
+              Sie bauen ein Fotometer für sehr dicke, dunkle Flüssigkeiten (hohe Trübung). Es kommt nur wenig Licht am
+              Sensor an.
+              Der LDR hat in dieser Dunkelheit einen <strong>sehr hohen Widerstand (ca. 100 kΩ)</strong>.
+            </p>
+            <p><em>Welchen Festwiderstand (R1) wählen Sie, um Änderungen fein messen zu können?</em></p>
+          </div>
+          <div class="schueler-modus-only">
+            <p>
+              Du baust ein Fotometer für sehr dicke, dunkle Flüssigkeiten (hohe Trübung). Es kommt nur wenig Licht am Sensor an.
+              Der LDR hat in dieser Dunkelheit einen <strong>sehr hohen Widerstand (ca. 100 kΩ)</strong>.
+            </p>
+            <p><em>Welchen Festwiderstand (R1) wählst du, um Änderungen fein messen zu können?</em></p>
+          </div>
 
           <div class="options-grid">
             <div class="quiz-option" onclick="checkQuiz(1, 1000, this)">1 kΩ (Klein)</div>
@@ -1087,11 +1197,20 @@
 
         <div class="quiz-scenario" id="scenario-2">
           <h4><i class="fa-solid fa-sun" style="color: #ffc107;"></i> Szenario B: Helle Umgebung</h4>
-          <p>
-            Sie messen im Freien bei Sonnenlicht (Modul 2 Wetterstation) oder direkt an einer starken LED.
-            Der LDR wird stark beleuchtet und hat einen <strong>sehr kleinen Widerstand (ca. 1 kΩ)</strong>.
-          </p>
-          <p><em>Welchen Festwiderstand (R1) wählen Sie hier für maximale Genauigkeit?</em></p>
+          <div class="lehrer-modus-only">
+            <p>
+              Sie messen im Freien bei Sonnenlicht (Modul 2 Wetterstation) oder direkt an einer starken LED.
+              Der LDR wird stark beleuchtet und hat einen <strong>sehr kleinen Widerstand (ca. 1 kΩ)</strong>.
+            </p>
+            <p><em>Welchen Festwiderstand (R1) wählen Sie hier für maximale Genauigkeit?</em></p>
+          </div>
+          <div class="schueler-modus-only">
+            <p>
+              Du misst im Freien bei Sonnenlicht (Modul 2 Wetterstation) oder direkt an einer starken LED.
+              Der LDR wird stark beleuchtet und hat einen <strong>sehr kleinen Widerstand (ca. 1 kΩ)</strong>.
+            </p>
+            <p><em>Welchen Festwiderstand (R1) wählst du hier für maximale Genauigkeit?</em></p>
+          </div>
 
           <div class="options-grid">
             <div class="quiz-option" onclick="checkQuiz(2, 1000, this)">1 kΩ (Klein)</div>
@@ -1124,14 +1243,14 @@
               isCorrect = true;
               message = "<strong>Richtig!</strong> Da der LDR-Widerstand hoch ist, brauchen wir auch einen hohen Gegenspieler ($R_1$). Wäre $R_1$ zu klein (1 kΩ), würde fast die gesamte Spannung am LDR abfallen und wir würden ständig Werte nahe 1023 messen, ohne kleine Änderungen zu sehen.";
             } else {
-              message = "<strong>Nicht optimal.</strong> Wenn der Widerstand $R_1$ viel kleiner ist als der LDR (der hier ca. 100 kΩ hat), wird das Spannungsteiler-Verhältnis extrem einseitig. Wir brauchen ein 'Gleichgewicht der Kräfte'. Versuchen Sie einen größeren Widerstand.";
+              message = "<strong>Nicht optimal.</strong> Wenn der Widerstand $R_1$ viel kleiner ist als der LDR (der hier ca. 100 kΩ hat), wird das Spannungsteiler-Verhältnis extrem einseitig. Wir brauchen ein 'Gleichgewicht der Kräfte'. <span class='lehrer-modus-only'>Versuchen Sie</span><span class='schueler-modus-only'>Versuche</span> einen größeren Widerstand.";
             }
           } else if (scenarioId === 2) { // Hell (LDR ~ 1k)
             if (value === 1000) {
               isCorrect = true;
               message = "<strong>Exzellent!</strong> Bei starkem Licht sinkt der LDR-Widerstand massiv ab. Damit die Spannung nicht auf fast 0 abfällt, muss auch $R_1$ klein sein. So liegt der Messpunkt wieder in der 'Mitte' des Bereichs und wir können Änderungen gut auflösen.";
             } else {
-              message = "<strong>Nicht ganz.</strong> Der LDR hat hier nur ca. 1 kΩ. Wenn Sie einen viel größeren Widerstand (10k oder 100k) dagegensetzen, 'gewinnt' der Festwiderstand. Die gemessene Spannung am LDR wäre winzig und Änderungen kaum messbar. Wählen Sie einen kleineren Widerstand.";
+              message = "<strong>Nicht ganz.</strong> Der LDR hat hier nur ca. 1 kΩ. Wenn <span class='lehrer-modus-only'>Sie einen viel größeren Widerstand (10k oder 100k) dagegensetzen</span><span class='schueler-modus-only'>du einen viel größeren Widerstand (10k oder 100k) dagegensetzt</span>, 'gewinnt' der Festwiderstand. Die gemessene Spannung am LDR wäre winzig und Änderungen kaum messbar. <span class='lehrer-modus-only'>Wählen Sie</span><span class='schueler-modus-only'>Wähle</span> einen kleineren Widerstand.";
             }
           }
 
@@ -1331,11 +1450,18 @@ void loop() {
       </code></pre>
       </div>
 
-      <p style="margin-top:15px;">
+      <p style="margin-top:15px;" class="lehrer-modus-only">
         <strong>Test-Anleitung:</strong> Kopieren sie diesen Code in Arduino IDE. Passen Sie eventuell die Pin-Belegung
         im code an. Laden Sie diesen Code auf den Arduino (Upload) und öffnen Sie den <em>Seriellen Monitor</em> (Lupe
         oben rechts).
         Halten Sie nun einen Gegenstand oder eine gefüllte Küvette zwischen LED und LDR. Der Zahlenwert muss sich
+        deutlich verändern.
+      </p>
+      <p style="margin-top:15px;" class="schueler-modus-only">
+        <strong>Test-Anleitung:</strong> Kopiere diesen Code in die Arduino IDE. Passe eventuell die Pin-Belegung
+        im Code an. Lade diesen Code auf den Arduino (Upload) und öffne den <em>Seriellen Monitor</em> (Lupe
+        oben rechts).
+        Halte nun einen Gegenstand oder eine gefüllte Küvette zwischen LED und LDR. Der Zahlenwert muss sich
         deutlich verändern.
       </p>
 
@@ -1347,7 +1473,7 @@ void loop() {
         Cola-Test).
       </p>
       <hr>
-      <details style="background: #fdfdfd; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-top: 20px;">
+      <details class="lehrer-modus-only" style="background: #fdfdfd; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-top: 20px;">
         <summary style="font-size: 1.17em; font-weight: bold; cursor: pointer; color: var(--kit-primary-color, #2c3e50);">Ansätze zur späteren Optimierung</summary>
         <ul style="margin-top: 15px; line-height: 1.6;">
           <li><strong>Fremdlicht (Störfaktor):</strong> Schon das Umgebungslicht verfälscht die Messung massiv.<br>
@@ -1419,43 +1545,65 @@ void loop() {
       </article>
 
       <article>
-        <h3>3.3. Zwei Wege der Auswertung</h3>
-        <p>
-          Je nach Unterrichtsziel können Sie nun zwei unterschiedliche didaktische Wege einschlagen.
-        </p>
+        <h3><span class="lehrer-modus-only">3.3. Zwei Wege der Auswertung </span><span class="schueler-modus-only">3.3. Zwei Wege der Auswertung </span></h3>
+        <div class="lehrer-modus-only">
+          <p>Je nach Unterrichtsziel können Sie nun zwei unterschiedliche didaktische Wege einschlagen.</p>
+        </div>
+        <div class="schueler-modus-only">
+          <p>Du kannst nun zwei unterschiedliche Wege zur Auswertung wählen:</p>
+        </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
 
           <div style="border: 1px solid #ccc; padding: 15px; border-radius: 5px;">
-            <h4 style="color: #2c3e50;">Weg A: Der "Wissenschaftler" (Excel)</h4>
+            <h4 class="lehrer-modus-only" style="color: #2c3e50;">Weg A: Der "Wissenschaftler" (Excel)</h4>
+            <h4 class="schueler-modus-only" style="color: #2c3e50;">Weg A: Manuelle Auswertung</h4>
             <p>
               <strong>Ziel:</strong> Datenerfassung und Analyse.
             </p>
-            <p>Der Arduino sendet nur Rohwerte an den PC. Die Schüler erstellen in Excel eine
-              <strong>Kalibrierkurve</strong>.
-            </p>
+            <div class="lehrer-modus-only">
+              <p>Der Arduino sendet nur Rohwerte an den PC. Die Schüler erstellen in Excel eine
+                <strong>Kalibrierkurve</strong>.
+              </p>
+            </div>
+            <div class="schueler-modus-only">
+              <p>Der Arduino sendet nur Rohwerte an den PC. Du erstellst in Excel eine
+                <strong>Kalibrierkurve</strong>.
+              </p>
+            </div>
             <div style="margin: 12px 0;">
               <a href="kalibrierung.html" style="display: inline-block; background: var(--kit-primary-color); color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: background 0.2s;">
                 <i class="fa-solid fa-chart-line"></i> Direkt hier interaktiv kalibrieren
               </a>
             </div>
-            <p><em>Vorteil: Schüler erkennen Messfehler und Nicht-Linearitäten sichtbar.</em></p>
+            <div class="lehrer-modus-only">
+              <p><em>Vorteil: Schüler erkennen Messfehler und Nicht-Linearitäten sichtbar.</em></p>
+            </div>
+            <div class="schueler-modus-only">
+              <p><em>Hierbei kannst du Messfehler und Nicht-Linearitäten gut erkennen.</em></p>
+            </div>
           </div>
 
           <div style="border: 1px solid #ccc; padding: 15px; border-radius: 5px;">
-            <h4 style="color: #2c3e50;">Weg B: Der "Automat" (Map)</h4>
+            <h4 class="lehrer-modus-only" style="color: #2c3e50;">Weg B: Der "Automat" (Map)</h4>
+            <h4 class="schueler-modus-only" style="color: #2c3e50;">Weg B: Automatische Auswertung (Code)</h4>
             <p>
               <strong>Ziel:</strong> Automatisierung.
             </p>
             <p>Der Arduino rechnet selbst. Das Gerät zeigt direkt "%" an.</p>
-            <p><em>Vorteil: Das Gerät arbeitet autonom ohne PC und könnte mit den Ergebnissen potentiell eine Pumpe
-                betreiben (UE Neutralisationsautomat).</em></p>
+            <div class="lehrer-modus-only">
+              <p><em>Vorteil: Das Gerät arbeitet autonom ohne PC und könnte mit den Ergebnissen potentiell eine Pumpe
+                  betreiben (UE Neutralisationsautomat).</em></p>
+            </div>
+            <div class="schueler-modus-only">
+              <p><em>Vorteil: Das Gerät arbeitet autonom ohne PC und könnte später auch Bauteile wie Pumpen ansteuern.</em></p>
+            </div>
           </div>
         </div>
       </article>
 
       <article>
-        <h3>3.4. Umsetzung von Weg B </h3>
+        <h3><span class="lehrer-modus-only">3.4. Umsetzung von Weg B </span><span class="schueler-modus-only">3.4. Automatische Auswertung im Arduino </span></h3>
         <p>
           Für Weg B nutzen wir den Befehl <code>map()</code>. Der map()-Befehl verteilt die gemessenen Rohwerte eines
           Sensors (z.B. \(200\) bis \(380\) proportional auf die angegebene Zielspanne (z.B. \(0\) bis \(100\)).
@@ -1478,7 +1626,7 @@ void loop() {
   // 1. MESSEN (Rohwert erfassen)
   int rohwert = analogRead(sensorPin);
 
-  // 2. KALIBRIEREN (Hier tragen Sie Ihre gemessenen Grenzwerte ein)
+  // 2. KALIBRIEREN (Hier die gemessenen Grenzwerte eintragen)
   // Beispiel: Wasser war hell (niedriger Wert), Sirup war dunkel (hoher Wert)
   int wertHell = 200;   // Kalibrierwert für 0% Konzentration (Wasser)
   int wertDunkel = 300; // Kalibrierwert für 100% Konzentration (Sirup)
@@ -1585,6 +1733,21 @@ void loop() {
         });
       });
     });
+  </script>
+  <script>
+    function toggleMode() {
+      const isSchuelerMode = document.getElementById('mode-toggle').checked;
+      const body = document.body;
+      const label = document.getElementById('mode-label');
+      
+      if(isSchuelerMode) {
+        body.classList.add('schueler-modus');
+        label.textContent = 'Schülermodus';
+      } else {
+        body.classList.remove('schueler-modus');
+        label.textContent = 'Lehrermodus';
+      }
+    }
   </script>
 
 </body>
