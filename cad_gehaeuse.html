@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Modul 3: Konstruktion & 3D-Druck</title>
+  <title>Modul 3: Die Konstruktions-Challenge</title>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <!-- Font Awesome -->
@@ -216,6 +216,60 @@
       transform: rotate(90deg);
     }
 
+    /* Path Accordions */
+    .path-accordion {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .path-accordion details {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+    .path-accordion details[open] {
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      margin-bottom: 8px;
+      border-color: #ccc;
+    }
+    .path-accordion summary {
+      list-style: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      outline: none;
+      padding: 16px 20px;
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.2s;
+    }
+    .path-accordion summary::-webkit-details-marker { display: none; }
+    .path-accordion summary:hover {
+      background: #f0f0f0;
+    }
+    .path-accordion details[open] summary {
+      border-bottom: 1px solid #eee;
+      background: #fff;
+    }
+    .path-content {
+      padding: 24px;
+      animation: fadeIn 0.4s ease;
+      line-height: 1.7;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .path-a summary { border-left: 5px solid var(--kit-primary-color); color: var(--kit-primary-color); }
+    .path-b summary { border-left: 5px solid #1976d2; color: #1976d2; }
+    .path-a summary i, .path-b summary i { font-size: 1.3rem; }
+
     /* Infoboxes */
     .infobox {
       background: #e8f5e9;
@@ -273,8 +327,8 @@
       <img src="Media/Images/NWTLOGO.png" alt="NWT Logo" />
     </a>
     <div class="header-titles">
-      <div class="title">Modul 3: Konstruktion & 3D-Druck</div>
-      <div class="subtitle">Vom virtuellen Modell zum greifbaren Gehäuse</div>
+      <div class="title">Modul 3: Die Konstruktions-Challenge</div>
+      <div class="subtitle">Von der Idee zum perfekten 3D-Druck-Teil</div>
     </div>
     <nav class="nav-menu" aria-label="Modul-Navigation">
       <a href="index.html" title="Zur Übersicht"><i class="fa-solid fa-house"></i></a>
@@ -290,12 +344,12 @@
     <!-- Hero / Intro -->
     <section class="content-section" id="intro">
       <div class="section-emoji">🏗️</div>
-      <h1>Modul 3: Konstruktion & 3D-Druck</h1>
-      <p class="lead">Vom virtuellen Modell zum greifbaren Gehäuse</p>
+      <h1>Modul 3: Die Konstruktions-Challenge</h1>
+      <p class="lead">Konstruiere eine passgenaue Halterung</p>
       <p><strong>Autor:</strong> John van Dijk</p>
       <p><strong>Lizenzhinweis:</strong> CC BY-SA 4.0</p>
       <p>
-        Dieses Modul führt in die Welt der digitalen Fertigung ein: Sie lernen, dreidimensionale Bauteile am Computer zu entwerfen und sie anschließend mithilfe eines 3D-Druckers als fertige Gehäuse herzustellen.
+        <strong>Ziel:</strong> Konstruiere eine Halterung, welche die Solarzelle aus Modul 2 sicher hält und passgenau auf das "Servo-Horn" (den Aufsatz des Motors) gesteckt werden kann.
       </p>
       
       <div class="intro-accordion">
@@ -319,34 +373,64 @@
       </div>
     </section>
 
-    <!-- Theorie: Konstruktions-Guide -->
-    <section class="content-section" id="konstruktion-theorie">
-      <div class="section-emoji">📏</div>
-      <h2>Theorie: Konstruktions-Guide</h2>
-      <p>Um Sensoren, Kabel und Mikrocontroller sicher zu verstauen, reicht ein einfacher Pappkarton oft nicht aus. Ein 3D-gedrucktes Gehäuse bietet perfekten Halt, solange man die Eigenheiten des Fertigungsverfahrens (FFF/FDM) beachtet.</p>
+    <!-- Schritt 1: Software-Wahl -->
+    <section class="content-section" id="software-wahl">
+      <div class="section-emoji">💻</div>
+      <h2>1. Schritt: Software-Wahl & Tutorial</h2>
+      <p>In diesem HTML-Modul bieten wir zwei "Pfade" an. Jedes Tutorial startet mit einem kurzen Video (3-5 Min) oder einer interaktiven Bilderstrecke.</p>
       
-      <h3>Toleranzen beim 3D-Druck</h3>
-      <div class="infobox">
-        <strong><i class="fa-solid fa-circle-info"></i> Warum 0.3mm Spiel einplanen?</strong><br><br>
-        Beim FDM-Drucker wird geschmolzener Kunststoff schichtweise aufgetragen. Wegen der thermischen Kontraktion beim Abkühlen (Shrinkage) und der Breite der gedruckten Linien (meist 0.4mm) fallen Innendurchmesser (z.B. Löcher für Schrauben oder Sensoren) oft minimal kleiner aus als im CAD-Programm gezeichnet. 
-        <br><br>
-        <strong>Faustregel für Passungen:</strong> Wenn ein 10mm breiter Sensor in eine Öffnung passen soll, modelliere die Öffnung auf <strong>10.3mm</strong>, damit man das Teil beim Zusammenbau nicht mit Gewalt einklemmen muss.
+      <div class="path-accordion">
+        
+        <!-- Pfad A -->
+        <details class="path-a">
+          <summary><i class="fa-solid fa-bolt"></i> Pfad A: Tinkercad (Der schnelle Weg)</summary>
+          <div class="path-content">
+            <p><strong>Lerninhalt:</strong> "Gruppieren & Ausschneiden"</p>
+            <p style="margin-top: 10px;"><strong>Video-Fokus:</strong> Wie man eine STL importiert und als "Bohrung" (Hole) nutzt, um passgenaue Aussparungen zu erzeugen.</p>
+            <a href="#" class="start-button" style="margin-top: 20px; width: fit-content; padding: 10px 24px;"><i class="fa-solid fa-play"></i> Tutorial ansehen</a>
+          </div>
+        </details>
+
+        <!-- Pfad B -->
+        <details class="path-b">
+          <summary><i class="fa-solid fa-graduation-cap"></i> Pfad B: Onshape / Fusion 360 (Der Profi-Weg)</summary>
+          <div class="path-content">
+            <p><strong>Lerninhalt:</strong> "Skizzen & Abhängigkeiten"</p>
+            <p style="margin-top: 10px;"><strong>Video-Fokus:</strong> Wie man eine STL referenziert oder Maße eines Bauteils (Servohorn) direkt in eine neue Skizze übernimmt.</p>
+            <a href="#" class="start-button" style="margin-top: 20px; background: #1976d2; width: fit-content; padding: 10px 24px;"><i class="fa-solid fa-play"></i> Tutorial ansehen</a>
+          </div>
+        </details>
+
       </div>
     </section>
 
-    <!-- Praxis: Bauanleitung & Dateien -->
-    <section class="content-section" id="bauanleitung-praxis">
-      <div class="section-emoji">🛠️</div>
-      <h2>Praxis: Bauanleitung & Referenz-Downloads</h2>
-      <p>Hier geht es ans Eingemachte. Lade die untenstehenden Referenzdateien herunter, um daraus ein eigenes Gehäuse für das ESP32-Board und das Solarpanel zu entwickeln, oder drucke sie direkt als Halterungen aus.</p>
+    <!-- Schritt 2: Hybrid-Aufgabe -->
+    <section class="content-section" id="hybrid-aufgabe">
+      <div class="section-emoji">🧩</div>
+      <h2>2. Schritt: Die "Hybrid-Aufgabe" (Die Konstruktion)</h2>
+      <p>Anstatt das ganze Gehäuse zu zeichnen, bekommst du zwei vorgefertigte Bausteine (STLs) von uns:</p>
       
-      <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
-        <a href="#" class="start-button" style="width: auto; padding: 12px 24px; font-size: 1rem;">
-          <i class="fa-solid fa-download"></i> ESP32-Dummy (.stl)
-        </a>
-        <a href="#" class="start-button" style="width: auto; padding: 12px 24px; font-size: 1rem;">
-          <i class="fa-solid fa-download"></i> Solarpanel-Halter (.stl)
-        </a>
+      <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px; margin-bottom: 24px;">
+        <div style="background: #fdfdfd; padding: 15px; border-radius: 8px; border: 1px solid #eee; flex: 1; min-width: 250px;">
+          <h4 style="margin-bottom: 8px;"><i class="fa-solid fa-sun"></i> Die "Basis-Klemme" (.stl)</h4>
+          <p style="font-size: 0.95rem; margin-bottom: 15px;">Ein einfacher Clip, der genau auf die Maße deines Solarpanels optimiert ist.</p>
+          <a href="#" class="start-button" style="width: auto; padding: 8px 16px; font-size: 0.9rem;">
+            <i class="fa-solid fa-download"></i> Klemme herunterladen
+          </a>
+        </div>
+
+        <div style="background: #fdfdfd; padding: 15px; border-radius: 8px; border: 1px solid #eee; flex: 1; min-width: 250px;">
+          <h4 style="margin-bottom: 8px;"><i class="fa-solid fa-gear"></i> Der "Servo-Dummy" (.stl)</h4>
+          <p style="font-size: 0.95rem; margin-bottom: 15px;">Ein Negativ-Abbild des Servohorns (das Kreuz oder der Hebel, der auf den Motor kommt).</p>
+          <a href="#" class="start-button" style="width: auto; padding: 8px 16px; font-size: 0.9rem;">
+            <i class="fa-solid fa-download"></i> Dummy herunterladen
+          </a>
+        </div>
+      </div>
+
+      <div class="infobox" style="border-left-color: var(--kit-primary-color);">
+        <strong><i class="fa-solid fa-bullseye"></i> Die Aufgabe:</strong><br><br>
+        "Verbinde die Solar-Klemme mit dem Servo-Adapter durch ein stabiles Zwischenstück. Achte darauf, dass die Solarzelle einen Neigungswinkel von <strong>45°</strong> hat, um die beste Lichtausbeute zu erzielen."
       </div>
     </section>
 
