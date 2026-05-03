@@ -555,8 +555,8 @@
       <p>Hier siehst du die Baseplate und die Solarpanel-Halterung gemeinsam in einer 3D-Szene geladen. Klicke auf die Buttons, um ein Bauteil ein- oder auszublenden. Du kannst das Modell mit der Maus (oder dem Finger) drehen und hineinzoomen:</p>
 
       <div class="model-buttons" style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-        <button class="toggle-btn active" data-index="0" style="padding: 8px 16px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: var(--kit-primary-color); color: white; font-weight: 500; font-family: var(--font-main);">Baseplate</button>
-        <button class="toggle-btn active" data-index="1" style="padding: 8px 16px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: var(--kit-primary-color); color: white; font-weight: 500; font-family: var(--font-main);">Solarpanel-Halterung</button>
+        <button class="toggle-btn active" data-index="0" style="padding: 8px 16px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: var(--kit-primary-color); color: white; font-weight: 500; font-family: var(--font-main);">Winkel</button>
+        <button class="toggle-btn active" data-index="1" style="padding: 8px 16px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: var(--kit-primary-color); color: white; font-weight: 500; font-family: var(--font-main);">Basisplatte</button>
       </div>
 
       <div id="three-container" style="width: 100%; height: 400px; background-color: #fbfbfb; border-radius: 8px; overflow: hidden; border: 1px solid #eee; position: relative;">
@@ -617,8 +617,8 @@
 
               const loader = new THREE.GLTFLoader();
               const models = [
-                'Media/3dModelle/BaseplateModul4test1.glb',
-                'Media/3dModelle/solarpanelhalterung.glb'
+                'Media/3dModelle/3dpea.com_winkel.glb',
+                'Media/3dModelle/3dpea.com_ModellHalterung.glb'
               ];
 
               let loadedCount = 0;
@@ -629,6 +629,10 @@
                 loader.load(url, 
                   (gltf) => {
                     const model = gltf.scene;
+                    
+                    // Modelle um -90 Grad (oder 90 Grad) um die X-Achse rotieren
+                    model.rotation.x = -Math.PI / 2;
+
                     model.traverse((node) => {
                       if (node.isMesh) {
                         node.castShadow = true;
