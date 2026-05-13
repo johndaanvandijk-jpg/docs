@@ -551,17 +551,23 @@
     <!-- Schritt 2: Die Komponenten -->
     <section class="content-section" id="servohalterung">
       <div class="section-emoji">⚙️</div>
-      <h2>2. Schritt: Baseplate und Halterung in einer Szene</h2>
-      <p>Hier siehst du die Baseplate und die Solarpanel-Halterung gemeinsam in einer 3D-Szene geladen. Klicke auf die Buttons, um ein Bauteil ein- oder auszublenden. Du kannst das Modell mit der Maus (oder dem Finger) drehen und hineinzoomen:</p>
-
+      <h2>Die Solarnachführung</h2>
+      <p>Hier siehst du die fertige Solarnachführung. Es bestehen aus 2 Teilen:</p>
+      <p><strong>1. Winkel:</strong> </p>
+      <p><strong>2. Basisplatte:</strong> </p>
       <div class="model-buttons" style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-        <button class="toggle-btn active" data-index="0" style="padding: 8px 16px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: var(--kit-primary-color); color: white; font-weight: 500; font-family: var(--font-main);">Winkel</button>
-        <button class="toggle-btn active" data-index="1" style="padding: 8px 16px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: var(--kit-primary-color); color: white; font-weight: 500; font-family: var(--font-main);">Basisplatte</button>
+        <button class="toggle-btn active" data-index="0"
+          style="padding: 8px 16px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: var(--kit-primary-color); color: white; font-weight: 500; font-family: var(--font-main);">Winkel</button>
+        <button class="toggle-btn active" data-index="1"
+          style="padding: 8px 16px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: var(--kit-primary-color); color: white; font-weight: 500; font-family: var(--font-main);">Basisplatte</button>
       </div>
 
-      <div id="three-container" style="width: 100%; height: 400px; background-color: #fbfbfb; border-radius: 8px; overflow: hidden; border: 1px solid #eee; position: relative;">
-        <div id="loading-overlay" style="position: absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background: rgba(251,251,251,0.9); z-index: 10; font-weight: 500; color: var(--kit-primary-color); flex-direction: column;">
-          <div><i class="fa-solid fa-spinner fa-spin" style="margin-right: 8px;"></i> Modelle werden zusammengefügt...</div>
+      <div id="three-container"
+        style="width: 100%; height: 400px; background-color: #fbfbfb; border-radius: 8px; overflow: hidden; border: 1px solid #eee; position: relative;">
+        <div id="loading-overlay"
+          style="position: absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background: rgba(251,251,251,0.9); z-index: 10; font-weight: 500; color: var(--kit-primary-color); flex-direction: column;">
+          <div><i class="fa-solid fa-spinner fa-spin" style="margin-right: 8px;"></i> Modelle werden zusammengefügt...
+          </div>
           <div id="error-msg" style="color: #dc3545; margin-top: 10px; font-size: 0.9em; font-weight: bold;"></div>
         </div>
       </div>
@@ -576,7 +582,7 @@
           const container = document.getElementById('three-container');
           const overlay = document.getElementById('loading-overlay');
           const errorMsg = document.getElementById('error-msg');
-          
+
           // Kurzer Delay, damit die externen Scripts sicher parsen können
           setTimeout(() => {
             try {
@@ -589,7 +595,7 @@
               scene.background = new THREE.Color('#fbfbfb');
 
               const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-              
+
               const renderer = new THREE.WebGLRenderer({ antialias: true });
               renderer.setSize(container.clientWidth, container.clientHeight);
               renderer.shadowMap.enabled = true;
@@ -626,10 +632,10 @@
               const loadedScenes = [];
 
               models.forEach((url, index) => {
-                loader.load(url, 
+                loader.load(url,
                   (gltf) => {
                     const model = gltf.scene;
-                    
+
                     // Modelle um -90 Grad (oder 90 Grad) um die X-Achse rotieren
                     model.rotation.x = -Math.PI / 2;
 
@@ -649,7 +655,7 @@
                       const center = bounds.getCenter(new THREE.Vector3());
                       const size = bounds.getSize(new THREE.Vector3());
                       const maxDim = Math.max(size.x, size.y, size.z);
-                      
+
                       camera.position.copy(center);
                       camera.position.x += maxDim * 1.2;
                       camera.position.y += maxDim * 1.0;
@@ -658,7 +664,7 @@
                       controls.target.copy(center);
                     }
                   },
-                  undefined, 
+                  undefined,
                   (error) => {
                     console.error('Three.js Load Error:', error);
                     errorMsg.innerText = 'Datei konnte nicht geladen werden: ' + url.split('/').pop();
@@ -672,7 +678,7 @@
                 btn.addEventListener('click', () => {
                   const index = parseInt(btn.getAttribute('data-index'));
                   const isActive = btn.classList.contains('active');
-                  
+
                   if (isActive) {
                     // Ausschalten
                     btn.classList.remove('active');
@@ -703,8 +709,8 @@
                 camera.updateProjectionMatrix();
                 renderer.setSize(container.clientWidth, container.clientHeight);
               });
-            } catch(e) {
-               errorMsg.innerText = 'Systemfehler: ' + e.message;
+            } catch (e) {
+              errorMsg.innerText = 'Systemfehler: ' + e.message;
             }
           }, 150); // wait 150ms for THREE
         });
