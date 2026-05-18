@@ -453,6 +453,7 @@
       gap: 12px;
       margin-left: auto;
     }
+
     .nav-menu a {
       text-decoration: none;
       color: #555;
@@ -461,18 +462,21 @@
       border-radius: 6px;
       transition: background 0.2s, color 0.2s;
     }
+
     .nav-menu a:hover {
       background: #f0f0f0;
       color: #222;
     }
+
     .nav-menu a.active {
       background: var(--kit-primary-color);
       color: #fff;
     }
+
     body.schueler-modus .lehrer-modus-only {
       display: none !important;
     }
-    
+
     body:not(.schueler-modus) .schueler-modus-only {
       display: none !important;
     }
@@ -499,7 +503,10 @@
     .mode-slider {
       position: absolute;
       cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background-color: var(--kit-primary-color);
       transition: .4s;
       border-radius: 34px;
@@ -517,18 +524,39 @@
       border-radius: 50%;
     }
 
-    input:checked + .mode-slider {
+    input:checked+.mode-slider {
       background-color: #2196F3;
     }
 
-    input:checked + .mode-slider:before {
+    input:checked+.mode-slider:before {
       transform: translateX(24px);
     }
+
     @media (max-width: 768px) {
-      .kit-header { padding: 0 16px; flex-wrap: wrap; height: auto; padding-top: 10px; padding-bottom: 10px; }
-      .nav-menu { width: 100%; margin-top: 10px; justify-content: space-between; gap: 5px; }
-      .nav-menu a { font-size: 0.8rem; padding: 6px 10px; }
-      .mode-switch-container { margin-left: 0; margin-right: auto; }
+      .kit-header {
+        padding: 0 16px;
+        flex-wrap: wrap;
+        height: auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+
+      .nav-menu {
+        width: 100%;
+        margin-top: 10px;
+        justify-content: space-between;
+        gap: 5px;
+      }
+
+      .nav-menu a {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+      }
+
+      .mode-switch-container {
+        margin-left: 0;
+        margin-right: auto;
+      }
     }
   </style>
 </head>
@@ -541,7 +569,8 @@
         <input type="checkbox" id="mode-toggle" onchange="toggleMode()">
         <span class="mode-slider"></span>
       </label>
-      <span id="mode-label" style="margin-left: 8px; font-weight: 500; font-size: 0.9rem; color: #555;">Lehrermodus</span>
+      <span id="mode-label"
+        style="margin-left: 8px; font-weight: 500; font-size: 0.9rem; color: #555;">Lehrermodus</span>
     </div>
     <div class="header-titles">
       <div class="title">Vom LDR zum Fotometer</div>
@@ -572,7 +601,8 @@
         nutzbar zu machen.
       </p>
       <p class="schueler-modus-only">
-        In diesem Modul lernst du, einen optischen Sensor zu bauen, ihn am Microcontroller zu betreiben und die Messdaten auszuwerten.
+        In diesem Modul lernst du, einen optischen Sensor zu bauen, ihn am Microcontroller zu betreiben und die
+        Messdaten auszuwerten.
       </p>
 
       <style>
@@ -620,18 +650,33 @@
           <summary>Lehrplanbezug: Kompetenzen (NwT 2016)</summary>
           <div style="padding: 4px 12px 12px 4px; font-size: 0.95rem;">
             <p style="margin-top: 0;">Dieses Modul deckt folgende Kompetenzen ab:</p>
-            <h4 style="margin-top: 12px; margin-bottom: 6px; font-size: 1rem; color: #2c3e50;">Inhaltsbezogene Kompetenzen</h4>
+            <h4 style="margin-top: 12px; margin-bottom: 6px; font-size: 1rem; color: #2c3e50;">Inhaltsbezogene
+              Kompetenzen</h4>
             <ul style="margin: 0; padding-left: 20px; line-height: 1.5;">
-              <li style="margin-bottom: 6px;"><strong>Elektronische Schaltungen:</strong> Schaltungen entwickeln, Bauteile dimensionieren und auswählen (Bestimmung des Widerstands R1 für den Spannungsteiler). Schaltpläne analysieren und in einfachen Fällen entwickeln.</li>
-              <li style="margin-bottom: 6px;"><strong>Informationsaufnahme durch Sinne und Sensoren:</strong> Verwendungsmöglichkeiten von Sensoren beschreiben (LDR zur Lichtmessung).</li>
-              <li style="margin-bottom: 6px;"><strong>Gewinnung und Auswertung von Daten:</strong> Bedingungen für zuverlässige Messungen erläutern und Messverfahren optimieren (Einflussgrößen wie Fremdlicht). Messdaten mithilfe von Software auswerten und darstellen (Zweipunkte-Kalibrierung, Excel-Kennlinie).</li>
-              <li style="margin-bottom: 6px;"><strong>Informationsverarbeitung:</strong> Elemente einer Programmiersprache beschreiben (C++ <code>map()</code>-Befehl).</li>
+              <li style="margin-bottom: 6px;"><strong>Elektronische Schaltungen:</strong> Schaltungen entwickeln,
+                Bauteile dimensionieren und auswählen (Bestimmung des Widerstands R1 für den Spannungsteiler).
+                Schaltpläne analysieren und in einfachen Fällen entwickeln.</li>
+              <li style="margin-bottom: 6px;"><strong>Informationsaufnahme durch Sinne und Sensoren:</strong>
+                Verwendungsmöglichkeiten von Sensoren beschreiben (LDR zur Lichtmessung).</li>
+              <li style="margin-bottom: 6px;"><strong>Gewinnung und Auswertung von Daten:</strong> Bedingungen für
+                zuverlässige Messungen erläutern und Messverfahren optimieren (Einflussgrößen wie Fremdlicht). Messdaten
+                mithilfe von Software auswerten und darstellen (Zweipunkte-Kalibrierung, Excel-Kennlinie).</li>
+              <li style="margin-bottom: 6px;"><strong>Informationsverarbeitung:</strong> Elemente einer
+                Programmiersprache beschreiben (C++ <code>map()</code>-Befehl).</li>
             </ul>
-            <h4 style="margin-top: 16px; margin-bottom: 6px; font-size: 1rem; color: #2c3e50;">Prozessbezogene Kompetenzen</h4>
+            <h4 style="margin-top: 16px; margin-bottom: 6px; font-size: 1rem; color: #2c3e50;">Prozessbezogene
+              Kompetenzen</h4>
             <ul style="margin: 0; padding-left: 20px; line-height: 1.5;">
-              <li style="margin-bottom: 6px;"><strong>Erkenntnisgewinnung und Forschen:</strong> Computergestützte Simulationen nutzen (Sensitivitäts-Simulation). Messverfahren begründet auswählen und anpassen. Experimente planen, durchführen und auswerten. Messdaten mathematisch auswerten, beschreiben und interpretieren (Umrechnung Rohwert in %).</li>
-              <li style="margin-bottom: 6px;"><strong>Kommunikation und Organisation:</strong> Zeichnerische, symbolische und normorientierte Darstellungen analysieren, nutzen und erstellen (Übertragung Schaltbild auf Steckbrett-Verkabelung). Fachbegriffe nutzen sowie Alltagsbegriffe in Fachsprache übertragen (abstrakter Rohwert vs. kalibrierte Realität).</li>
-              <li style="margin-bottom: 6px;"><strong>Entwicklung und Konstruktion:</strong> Ein Problem analysieren und durch Kombinieren von Teillösungen entwickeln (LED/LDR).</li>
+              <li style="margin-bottom: 6px;"><strong>Erkenntnisgewinnung und Forschen:</strong> Computergestützte
+                Simulationen nutzen (Sensitivitäts-Simulation). Messverfahren begründet auswählen und anpassen.
+                Experimente planen, durchführen und auswerten. Messdaten mathematisch auswerten, beschreiben und
+                interpretieren (Umrechnung Rohwert in %).</li>
+              <li style="margin-bottom: 6px;"><strong>Kommunikation und Organisation:</strong> Zeichnerische,
+                symbolische und normorientierte Darstellungen analysieren, nutzen und erstellen (Übertragung Schaltbild
+                auf Steckbrett-Verkabelung). Fachbegriffe nutzen sowie Alltagsbegriffe in Fachsprache übertragen
+                (abstrakter Rohwert vs. kalibrierte Realität).</li>
+              <li style="margin-bottom: 6px;"><strong>Entwicklung und Konstruktion:</strong> Ein Problem analysieren und
+                durch Kombinieren von Teillösungen entwickeln (LED/LDR).</li>
             </ul>
           </div>
         </details>
@@ -1059,7 +1104,8 @@
       <div class="lehrer-modus-only">
         <p>
           In der Simulation oben haben Sie gesehen, dass sich die Messung unterschiedlich verhält, wenn man R1 anpasst.
-          Ziel ist es immer, den <strong>Messbereich maximal auszunutzen</strong>. Das bedeutet: Wir wollen große Sprünge
+          Ziel ist es immer, den <strong>Messbereich maximal auszunutzen</strong>. Das bedeutet: Wir wollen große
+          Sprünge
           in den Zahlenwerten sehen, wenn sich das Licht ändert.
         </p>
         <p>
@@ -1069,7 +1115,8 @@
       <div class="schueler-modus-only">
         <p>
           In der Simulation oben hast du gesehen, dass sich die Messung unterschiedlich verhält, wenn man R1 anpasst.
-          Ziel ist es immer, den <strong>Messbereich maximal auszunutzen</strong>. Das bedeutet: Wir wollen große Sprünge
+          Ziel ist es immer, den <strong>Messbereich maximal auszunutzen</strong>. Das bedeutet: Wir wollen große
+          Sprünge
           in den Zahlenwerten sehen, wenn sich das Licht ändert.
         </p>
         <p>
@@ -1181,7 +1228,8 @@
           </div>
           <div class="schueler-modus-only">
             <p>
-              Du baust ein Fotometer für sehr dicke, dunkle Flüssigkeiten (hohe Trübung). Es kommt nur wenig Licht am Sensor an.
+              Du baust ein Fotometer für sehr dicke, dunkle Flüssigkeiten (hohe Trübung). Es kommt nur wenig Licht am
+              Sensor an.
               Der LDR hat in dieser Dunkelheit einen <strong>sehr hohen Widerstand (ca. 100 kΩ)</strong>.
             </p>
             <p><em>Welchen Festwiderstand (R1) wählst du, um Änderungen fein messen zu können?</em></p>
@@ -1473,20 +1521,30 @@ void loop() {
         Cola-Test).
       </p>
       <hr>
-      <details class="lehrer-modus-only" style="background: #fdfdfd; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-top: 20px;">
-        <summary style="font-size: 1.17em; font-weight: bold; cursor: pointer; color: var(--kit-primary-color, #2c3e50);">Ansätze zur späteren Optimierung</summary>
+      <details class="lehrer-modus-only"
+        style="background: #fdfdfd; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-top: 20px;">
+        <summary
+          style="font-size: 1.17em; font-weight: bold; cursor: pointer; color: var(--kit-primary-color, #2c3e50);">
+          Ansätze zur späteren Optimierung</summary>
         <ul style="margin-top: 15px; line-height: 1.6;">
           <li><strong>Fremdlicht (Störfaktor):</strong> Schon das Umgebungslicht verfälscht die Messung massiv.<br>
-            <em>Optimierung:</em> Bau eines <strong>lichtdichten Gehäuses</strong> (z.B. aus schwarz lackiertem Holz oder Karton).
+            <em>Optimierung:</em> Bau eines <strong>lichtdichten Gehäuses</strong> (z.B. aus schwarz lackiertem Holz
+            oder Karton).
           </li>
-          <li style="margin-top: 10px;"><strong>Geometrische Stabilität:</strong> Geringfügige Bewegungen von LED oder LDR führen zu Schwankungen im Rohwert.<br>
-            <em>Optimierung:</em> <strong>Feste Montage</strong> der Komponenten und Einhaltung eines konstanten Abstands.
+          <li style="margin-top: 10px;"><strong>Geometrische Stabilität:</strong> Geringfügige Bewegungen von LED oder
+            LDR führen zu Schwankungen im Rohwert.<br>
+            <em>Optimierung:</em> <strong>Feste Montage</strong> der Komponenten und Einhaltung eines konstanten
+            Abstands.
           </li>
-          <li style="margin-top: 10px;"><strong>Lichtbündelung:</strong> Die LED strahlt diffus ab, was die Messgenauigkeit mindert.<br>
-            <em>Optimierung:</em> Einsatz von <strong>Lochblenden</strong> oder lichtdichten Trennwänden, um den Strahl zu fokussieren.
+          <li style="margin-top: 10px;"><strong>Lichtbündelung:</strong> Die LED strahlt diffus ab, was die
+            Messgenauigkeit mindert.<br>
+            <em>Optimierung:</em> Einsatz von <strong>Lochblenden</strong> oder lichtdichten Trennwänden, um den Strahl
+            zu fokussieren.
           </li>
-          <li style="margin-top: 10px;"><strong>Wellenlänge (Farbe):</strong> Die gewählte LED-Farbe muss zur Probe passen.<br>
-            <em>Optimierung:</em> Auswahl der optimalen LED-Farbe für die spezifische Messung (z.B. rote LED für blaue Flüssigkeiten).
+          <li style="margin-top: 10px;"><strong>Wellenlänge (Farbe):</strong> Die gewählte LED-Farbe muss zur Probe
+            passen.<br>
+            <em>Optimierung:</em> Auswahl der optimalen LED-Farbe für die spezifische Messung (z.B. rote LED für blaue
+            Flüssigkeiten).
           </li>
         </ul>
       </details>
@@ -1528,7 +1586,8 @@ void loop() {
           style="display: flex; justify-content: space-around; align-items: center; background: #f4f4f4; padding: 15px; border-radius: 8px;">
           <div style="text-align: center; width: 30%;">
             <strong>Schritt 1: Hell</strong><br>
-            <img src="Media/Images/Konz0.jpg" alt="Klares Wasser" style="width: 100%; max-width: 140px; border-radius: 8px; margin: 12px auto; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <img src="Media/Images/Konz0.jpg" alt="Klares Wasser"
+              style="width: 100%; max-width: 140px; border-radius: 8px; margin: 12px auto; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
             Klares Wasser messen.<br>
             <em>Wert notieren (z.B. 200)</em><br>
             entspricht <strong>0%</strong>
@@ -1536,7 +1595,8 @@ void loop() {
           <div style="font-size: 2em; color: #888;">&rarr;</div>
           <div style="text-align: center; width: 30%;">
             <strong>Schritt 2: Dunkel</strong><br>
-            <img src="Media/Images/Konz100.jpg" alt="Trübe Lösung" style="width: 100%; max-width: 140px; border-radius: 8px; margin: 12px auto; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <img src="Media/Images/Konz100.jpg" alt="Trübe Lösung"
+              style="width: 100%; max-width: 140px; border-radius: 8px; margin: 12px auto; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
             Maximal trübe Lösung messen.<br>
             <em>Wert notieren (z.B. 300)</em><br>
             entspricht <strong>100%</strong>
@@ -1545,7 +1605,8 @@ void loop() {
       </article>
 
       <article>
-        <h3><span class="lehrer-modus-only">3.3. Zwei Wege der Auswertung </span><span class="schueler-modus-only">3.3. Zwei Wege der Auswertung </span></h3>
+        <h3><span class="lehrer-modus-only">3.3. Zwei Wege der Auswertung </span><span class="schueler-modus-only">3.3.
+            Zwei Wege der Auswertung </span></h3>
         <div class="lehrer-modus-only">
           <p>Je nach Unterrichtsziel können Sie nun zwei unterschiedliche didaktische Wege einschlagen.</p>
         </div>
@@ -1572,7 +1633,8 @@ void loop() {
               </p>
             </div>
             <div style="margin: 12px 0;">
-              <a href="kalibrierung.html" style="display: inline-block; background: var(--kit-primary-color); color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: background 0.2s;">
+              <a href="kalibrierung.html"
+                style="display: inline-block; background: var(--kit-primary-color); color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: background 0.2s;">
                 <i class="fa-solid fa-chart-line"></i> Direkt hier interaktiv kalibrieren
               </a>
             </div>
@@ -1596,14 +1658,16 @@ void loop() {
                   betreiben (UE Neutralisationsautomat).</em></p>
             </div>
             <div class="schueler-modus-only">
-              <p><em>Vorteil: Das Gerät arbeitet autonom ohne PC und könnte später auch Bauteile wie Pumpen ansteuern.</em></p>
+              <p><em>Vorteil: Das Gerät arbeitet autonom ohne PC und könnte später auch Bauteile wie Pumpen
+                  ansteuern.</em></p>
             </div>
           </div>
         </div>
       </article>
 
       <article>
-        <h3><span class="lehrer-modus-only">3.4. Umsetzung von Weg B </span><span class="schueler-modus-only">3.4. Automatische Auswertung im Arduino </span></h3>
+        <h3><span class="lehrer-modus-only">3.4. Umsetzung von Weg B </span><span class="schueler-modus-only">3.4.
+            Automatische Auswertung im Arduino </span></h3>
         <p>
           Für Weg B nutzen wir den Befehl <code>map()</code>. Der map()-Befehl verteilt die gemessenen Rohwerte eines
           Sensors (z.B. \(200\) bis \(380\) proportional auf die angegebene Zielspanne (z.B. \(0\) bis \(100\)).
@@ -1688,7 +1752,8 @@ void loop() {
     <!-- ... weitere Sektionen wie Quiz, Code, Troubleshooting, etc. ... -->
   </main>
   <footer>
-    <div>CC BY Lizenz, Andreas Sexauer, Zentrum für Mediales Lernen am Karlsruher Institut für Technologie (KIT).</div>
+    <div>CC BY Lizenz, Andreas Sexauer, John van Dijk, Zentrum für Mediales Lernen am Karlsruher Institut für
+      Technologie (KIT).</div>
     <div><small>Dieses Lernmodul wurde mithilfe von künstlicher Intelligenz (KI) konzipiert und programmiert.</small>
     </div>
   </footer>
@@ -1739,8 +1804,8 @@ void loop() {
       const isSchuelerMode = document.getElementById('mode-toggle').checked;
       const body = document.body;
       const label = document.getElementById('mode-label');
-      
-      if(isSchuelerMode) {
+
+      if (isSchuelerMode) {
         body.classList.add('schueler-modus');
         label.textContent = 'Schülermodus';
       } else {
