@@ -418,6 +418,31 @@
       margin: 0;
     }
 
+    .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--kit-primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.85rem;
+      margin-left: 8px;
+      padding: 3px 10px;
+      border: 1px solid var(--kit-primary-color);
+      border-radius: 6px;
+      background: rgba(76, 175, 80, 0.05);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .download-link:hover {
+      background: var(--kit-primary-color);
+      color: #fff !important;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(76, 175, 80, 0.2);
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .kit-header {
@@ -481,8 +506,7 @@
       <p><strong>Autor:</strong> John van Dijk</p>
       <p><strong>Lizenzhinweis:</strong> CC BY-SA 4.0</p>
       <p>
-        <strong>Ziel:</strong> Konstruiere eine Halterung, welche die Solarzelle aus Modul 2 sicher hält und passgenau
-        auf das "Servo-Horn" (den Aufsatz des Motors) gesteckt werden kann.
+        <strong>Ziel:</strong> Konstruiere das vierte und wichtigste Teil der Solarnachführung selbst: Die Halterung für das Solarpanel. Diese muss passgenau auf die vorgegebene Servohalterung gesteckt werden und schattengebende Trennwände für unsere LDR-Lichtsensoren enthalten.
       </p>
 
       <div class="intro-accordion">
@@ -551,15 +575,18 @@
     <!-- Schritt 2: Die Komponenten -->
     <section class="content-section" id="servohalterung">
       <div class="section-emoji">⚙️</div>
-      <h2>Die Solarnachführung</h2>
-      <p>Hier siehst du die fertige Solarnachführung. Es bestehen aus 2 Teilen:</p>
-      <p><strong>1. Winkel:</strong> </p>
-      <p><strong>2. Basisplatte:</strong> </p>
+      <h2>Die Komponenten der Solarnachführung</h2>
+      <p>Die gesamte Mechanik besteht aus 4 Teilen. Hier im Viewer siehst du die 3 vorgegebenen Basis-Teile:</p>
+      <p><strong>1. Winkel:</strong> Verbindet die Achsen. <a href="Media/3dModelle/stlfuerDownload/WINKEL.stl" download="Winkel.stl" class="download-link" title="Winkel STL herunterladen"><i class="fa-solid fa-download"></i> STL herunterladen</a></p>
+      <p><strong>2. Modellhalterung:</strong> Die Basisplatte, auf der der ESP32, ein kleines Breadboard und ein Servo für die horizontale Ausrichtung platziert sind. <a href="Media/3dModelle/stlfuerDownload/ModellHalterungfinal.stl" download="Modellhalterung.stl" class="download-link" title="Modellhalterung STL herunterladen"><i class="fa-solid fa-download"></i> STL herunterladen</a></p>
+      <p><strong>3. Servohalterung:</strong> Hält den zweiten Servo, an dem die Solarhalterung befestigt wird, und ist für die vertikale Rotation verantwortlich. <a href="Media/3dModelle/stlfuerDownload/Servohalterfinal.stl" download="Servohalterung.stl" class="download-link" title="Servohalterung STL herunterladen"><i class="fa-solid fa-download"></i> STL herunterladen</a></p>
       <div class="model-buttons" style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
         <button class="toggle-btn active" data-index="0"
           style="padding: 8px 16px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: var(--kit-primary-color); color: white; font-weight: 500; font-family: var(--font-main);">Winkel</button>
         <button class="toggle-btn active" data-index="1"
-          style="padding: 8px 16px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: var(--kit-primary-color); color: white; font-weight: 500; font-family: var(--font-main);">Basisplatte</button>
+          style="padding: 8px 16px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: var(--kit-primary-color); color: white; font-weight: 500; font-family: var(--font-main);">Modellhalterung</button>
+        <button class="toggle-btn active" data-index="2"
+          style="padding: 8px 16px; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; background: var(--kit-primary-color); color: white; font-weight: 500; font-family: var(--font-main);">Servohalterung</button>
       </div>
 
       <div id="three-container"
@@ -623,8 +650,9 @@
 
               const loader = new THREE.GLTFLoader();
               const models = [
-                'Media/3dModelle/3dpea.com_winkel.glb',
-                'Media/3dModelle/3dpea.com_ModellHalterung.glb'
+                'Media/3dModelle/ImageToStl.com_WINKEL.glb',
+                'Media/3dModelle/ImageToStl.com_ModellHalterungfinal.glb',
+                'Media/3dModelle/ImageToStl.com_Servohalterfinal.glb'
               ];
 
               let loadedCount = 0;
@@ -636,8 +664,8 @@
                   (gltf) => {
                     const model = gltf.scene;
 
-                    // Modelle um -90 Grad (oder 90 Grad) um die X-Achse rotieren
-                    model.rotation.x = -Math.PI / 2;
+                    // Keine X-Achsen-Rotation benötigt für diese Modelle
+                    model.rotation.x = 0;
 
                     model.traverse((node) => {
                       if (node.isMesh) {
@@ -715,6 +743,30 @@
           }, 150); // wait 150ms for THREE
         });
       </script>
+    </section>
+
+    <!-- Schritt 3: Die Challenge -->
+    <section class="content-section" id="challenge">
+      <div class="section-emoji">🚀</div>
+      <h2>Die Konstruktions-Challenge: Deine Solarhalterung</h2>
+      <p>Jetzt bist du an der Reihe! Konstruiere das vierte und letzte Teil: Die Halterung für das Solarpanel.</p>
+      
+      <div class="infobox">
+        <strong style="color: var(--kit-primary-color); font-size:1.1rem;"><i class="fa-solid fa-ruler-combined"></i> Vorgaben für die Befestigung</strong><br><br>
+        Deine Solarhalterung wird auf die <strong>Servohalterung</strong> (das dritte Teil im Viewer) gesteckt. Dafür muss deine Konstruktion folgende Maße aufweisen:
+        <ul class="material-list" style="margin-top: 15px;">
+          <li><i class="fa-solid fa-arrows-left-right"></i> <strong>Greifarme:</strong> 2 Greifärmchen zur Befestigung.</li>
+          <li><i class="fa-solid fa-ruler"></i> <strong>Abstand:</strong> 25 mm Abstand.</li>
+          <li><i class="fa-solid fa-arrows-left-right-to-line"></i> <strong>Lücke:</strong> 3 mm Abstand zwischen den Greifarmen.</li>
+          <li><i class="fa-solid fa-circle-dot"></i> <strong>Bohrung:</strong> Ein 3 mm Loch für die Achse oder Schraube.</li>
+        </ul>
+      </div>
+
+      <div class="infobox infobox-accent">
+        <strong style="color: #1565c0; font-size:1.1rem;"><i class="fa-solid fa-sun"></i> Schattengeber für die LDRs</strong><br><br>
+        Wie du aus Modul 1 weißt, nutzen wir LDRs (Fotowiderstände), um die hellste Lichtquelle zu finden. Damit das System erkennen kann, aus welcher Richtung das Licht kommt, benötigen die Sensoren einen <strong>Schattengeber</strong>. Je nach Sonnenstand wirft dieser einen Schatten auf bestimmte LDRs, wodurch diese unterschiedliche Helligkeitswerte messen.<br><br>
+        <strong>Deine Aufgabe:</strong> Integriere in dein Design neben dem Platz für das Solarpanel auch eine Aufnahme für die LDRs samt passendem Schattengeber (z.B. in Form eines Kreuzes in der Mitte zwischen den Sensoren).
+      </div>
     </section>
 
     <!-- 3D-Druck-Führerschein -->
