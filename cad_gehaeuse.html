@@ -751,15 +751,85 @@
       <h2>Die Konstruktions-Challenge: Deine Solarhalterung</h2>
       <p>Jetzt bist du an der Reihe! Konstruiere das vierte und letzte Teil: Die Halterung für das Solarpanel.</p>
       
+      <div style="margin-bottom: 24px;">
+        <p><strong>Dein Ziel-Bauteil:</strong> Auf dieses Verbindungsstück der Servohalterung wird deine Solarhalterung aufgesteckt:</p>
+        <model-viewer 
+          src="Media/3dModelle/ImageToStl.com_Servohalterfinal.glb" 
+          camera-controls 
+          auto-rotate 
+          shadow-intensity="1"
+          style="width: 100%; height: 300px; background-color: #fbfbfb; border-radius: 8px; border: 1px solid #eee;">
+        </model-viewer>
+      </div>
+      
       <div class="infobox">
         <strong style="color: var(--kit-primary-color); font-size:1.1rem;"><i class="fa-solid fa-ruler-combined"></i> Vorgaben für die Befestigung</strong><br><br>
-        Deine Solarhalterung wird auf die <strong>Servohalterung</strong> (das dritte Teil im Viewer) gesteckt. Dafür muss deine Konstruktion folgende Maße aufweisen:
-        <ul class="material-list" style="margin-top: 15px;">
-          <li><i class="fa-solid fa-arrows-left-right"></i> <strong>Greifarme:</strong> 2 Greifärmchen zur Befestigung.</li>
-          <li><i class="fa-solid fa-ruler"></i> <strong>Abstand:</strong> 25 mm Abstand.</li>
-          <li><i class="fa-solid fa-arrows-left-right-to-line"></i> <strong>Lücke:</strong> 3 mm Abstand zwischen den Greifarmen.</li>
-          <li><i class="fa-solid fa-circle-dot"></i> <strong>Bohrung:</strong> Ein 3 mm Loch für die Achse oder Schraube.</li>
+        Deine Solarhalterung wird auf die <strong>Servohalterung</strong> (siehe oben) gesteckt. Dafür muss deine Konstruktion folgende Maße aufweisen:
+        <ul class="material-list" style="margin-top: 15px; margin-bottom: 20px;">
+          <li><i class="fa-solid fa-arrows-left-right"></i> <strong>Greifarme:</strong> Deine Halterung hat 2 Greifarme, die auf die Laschen der Servohalterung aufgesteckt werden.</li>
+          <li><i class="fa-solid fa-ruler"></i> <strong>Lochabstand:</strong> 25 mm Abstand von der Mitte der linken Bohrung zur Mitte der rechten Bohrung.</li>
+          <li><i class="fa-solid fa-arrows-left-right-to-line"></i> <strong>Spaltmaß:</strong> Jeder Greifarm besteht aus einem oberen und unteren "Finger". Der Abstand (die Lücke) dazwischen beträgt exakt 3 mm.</li>
+          <li><i class="fa-solid fa-circle-dot"></i> <strong>Bohrung:</strong> Ein 3 mm Loch durch die Finger für die Achse oder Schraube.</li>
         </ul>
+
+        <!-- CSS Schematic -->
+        <div style="background: white; border: 1px solid #ddd; border-radius: 8px; padding: 24px; display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-around; font-family: var(--font-main);">
+          
+          <!-- Draufsicht (25mm) -->
+          <div style="text-align: center; width: 220px;">
+            <div style="color: #444; margin-bottom: 25px; font-weight: bold;">Draufsicht (Lochabstand)</div>
+            <div style="position: relative; width: 160px; height: 60px; margin: 0 auto;">
+              <!-- Left Arm -->
+              <div style="position: absolute; left: 10px; top: 0; width: 24px; height: 50px; background: #e0e0e0; border: 2px solid #999; border-radius: 4px;"></div>
+              <!-- Right Arm -->
+              <div style="position: absolute; right: 10px; top: 0; width: 24px; height: 50px; background: #e0e0e0; border: 2px solid #999; border-radius: 4px;"></div>
+              
+              <!-- Holes -->
+              <div style="position: absolute; left: 15px; top: 18px; width: 14px; height: 14px; background: white; border: 1px solid #666; border-radius: 50%;"></div>
+              <!-- Center of left hole is at left: 22px -->
+              <div style="position: absolute; right: 15px; top: 18px; width: 14px; height: 14px; background: white; border: 1px solid #666; border-radius: 50%;"></div>
+              <!-- Center of right hole is at right: 22px -->
+              
+              <!-- Center dot -->
+              <div style="position: absolute; left: 21px; top: 24px; width: 2px; height: 2px; background: #e74c3c; border-radius: 50%;"></div>
+              <div style="position: absolute; right: 21px; top: 24px; width: 2px; height: 2px; background: #e74c3c; border-radius: 50%;"></div>
+
+              <!-- Center-to-center line -->
+              <div style="position: absolute; left: 22px; top: -10px; width: 116px; border-bottom: 1px dashed #e74c3c;"></div>
+              <!-- Ticks -->
+              <div style="position: absolute; left: 22px; top: -15px; height: 10px; border-left: 1px solid #e74c3c;"></div>
+              <div style="position: absolute; right: 22px; top: -15px; height: 10px; border-right: 1px solid #e74c3c;"></div>
+              
+              <div style="position: absolute; top: -30px; width: 100%; text-align: center; color: #e74c3c; font-weight: bold; font-family: monospace; font-size: 1.05rem;">25 mm</div>
+            </div>
+          </div>
+
+          <!-- Seitenansicht (3mm Lücke) -->
+          <div style="text-align: center; width: 220px;">
+            <div style="color: #444; margin-bottom: 25px; font-weight: bold;">Seitenansicht (Greifarm)</div>
+            <div style="position: relative; width: 120px; height: 80px; margin: 0 auto;">
+              <!-- Main body extending left -->
+              <div style="position: absolute; left: 0; top: 10px; width: 40px; height: 60px; background: #e0e0e0; border: 2px solid #999; border-right: none;"></div>
+              
+              <!-- Upper finger -->
+              <div style="position: absolute; left: 40px; top: 10px; width: 60px; height: 20px; background: #e0e0e0; border: 2px solid #999; border-left: none; border-radius: 0 4px 4px 0;"></div>
+              
+              <!-- Lower finger -->
+              <div style="position: absolute; left: 40px; top: 50px; width: 60px; height: 20px; background: #e0e0e0; border: 2px solid #999; border-left: none; border-radius: 0 4px 4px 0;"></div>
+              
+              <!-- 3mm gap dimension -->
+              <div style="position: absolute; left: 108px; top: 30px; height: 20px; border-left: 1px dashed #e74c3c;"></div>
+              <div style="position: absolute; left: 103px; top: 30px; width: 10px; border-top: 1px solid #e74c3c;"></div>
+              <div style="position: absolute; left: 103px; top: 50px; width: 10px; border-top: 1px solid #e74c3c;"></div>
+              <div style="position: absolute; left: 114px; top: 32px; color: #e74c3c; font-weight: bold; font-family: monospace; font-size: 1.05rem;">3 mm</div>
+              
+              <!-- Hole -->
+              <div style="position: absolute; left: 70px; top: 13px; width: 14px; height: 14px; background: white; border: 1px dashed #666; border-radius: 50%;"></div>
+              <div style="position: absolute; left: 70px; top: 53px; width: 14px; height: 14px; background: white; border: 1px dashed #666; border-radius: 50%;"></div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
       <div class="infobox infobox-accent">
@@ -767,45 +837,24 @@
         Wie du aus Modul 1 weißt, nutzen wir LDRs (Fotowiderstände), um die hellste Lichtquelle zu finden. Damit das System erkennen kann, aus welcher Richtung das Licht kommt, benötigen die Sensoren einen <strong>Schattengeber</strong>. Je nach Sonnenstand wirft dieser einen Schatten auf bestimmte LDRs, wodurch diese unterschiedliche Helligkeitswerte messen.<br><br>
         <strong>Deine Aufgabe:</strong> Integriere in dein Design neben dem Platz für das Solarpanel auch eine Aufnahme für die LDRs samt passendem Schattengeber (z.B. in Form eines Kreuzes in der Mitte zwischen den Sensoren).
       </div>
-    </section>
 
-    <!-- 3D-Druck-Führerschein -->
-    <section class="content-section" id="fuehrerschein">
-      <div class="section-emoji">✅</div>
-      <h2>Der 3D-Druck-Führerschein</h2>
-      <p>Bist du bereit für deinen ersten Druck? Gehe die Sicherheits- und Vorbereitungs-Checkliste vor jedem
-        Druckvorgang einmal durch, um Frust und fehlerhafte Drucke zu vermeiden:</p>
-
-      <ul class="checklist" style="margin-top: 24px;">
-        <li><input type="checkbox" id="chk1"> <label for="chk1">Druckbett gereinigt und fettfrei? (Mit Isopropanol
-            abwischen)</label></li>
-        <li><input type="checkbox" id="chk2"> <label for="chk2">Richtiges Filament geladen (Material und Farbe)?</label>
-        </li>
-        <li><input type="checkbox" id="chk3"> <label for="chk3">Support-Strukturen (Stützmaterial) im Slicer
-            kontrolliert?</label></li>
-        <li><input type="checkbox" id="chk4"> <label for="chk4">Erste Schicht (First Layer) auf ausreichend Haftung
-            überwacht?</label></li>
-      </ul>
-    </section>
-
-    <!-- Quiz Section -->
-    <section class="content-section" id="quiz">
-      <div class="section-emoji">🧠</div>
-      <h2>Wissens-Check</h2>
-      <p>Teste dein Verständnis über Toleranzen, Vorbereitung und typische Fehler.</p>
-
-      <div id="quiz-container" style="background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; padding: 24px;">
-        <div id="question-text" style="font-size: 1.15rem; font-weight: 500; margin-bottom: 20px; color:#222;"></div>
-        <div id="answers-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
-        <div id="quiz-feedback"
-          style="margin-top: 20px; font-weight: 500; padding: 10px; border-radius: 4px; display: none;"></div>
-
-        <button id="next-btn" class="start-button"
-          style="display: none; width: auto; padding: 10px 24px; margin-top: 20px; background: #222;">
-          Nächste Frage <i class="fa-solid fa-arrow-right"></i>
-        </button>
+      <div class="intro-accordion" style="margin-top: 30px;">
+        <details>
+          <summary><i class="fa-solid fa-lightbulb"></i> Musterlösung anzeigen</summary>
+          <div style="padding: 15px; margin-top: 10px;">
+            <p>Hier siehst du einen möglichen Lösungsansatz für die fertige Solarhalterung. So könnte dein konstruiertes Bauteil aussehen:</p>
+            <model-viewer 
+              src="Media/3dModelle/Solarhalter.stl.glb" 
+              camera-controls 
+              auto-rotate 
+              shadow-intensity="1"
+              style="width: 100%; height: 400px; background-color: #fbfbfb; border-radius: 8px; border: 1px solid #eee;">
+            </model-viewer>
+          </div>
+        </details>
       </div>
     </section>
+
 
     <!-- Vorschau auf Modul 4 -->
     <section class="content-section" id="vorschau">
@@ -851,114 +900,7 @@
     }, { threshold: 0.1 });
     sections.forEach(sec => observer.observe(sec));
 
-    // Quiz Logic
-    const questions = [
-      {
-        question: "Wie viel Toleranz (Spiel) sollte man bei ineinandergreifenden 3D-Druck-Teilen üblicherweise einplanen?",
-        options: ["0.0 mm", "0.2 - 0.3 mm", "1.0 - 2.0 mm", "5.0 mm"],
-        answer: 1
-      },
-      {
-        question: "Was bedeutet 'Warping' beim 3D-Druck?",
-        options: ["Der Druckkopf verstopft.", "Sich ablösende und nach oben biegende Ecken am Objekt.", "Zu viel Filament wird extrudiert.", "Die Schichten verschieben sich seitlich."],
-        answer: 1
-      },
-      {
-        question: "Welcher Schritt ist vor dem Starten eines FDM-Drucks unverzichtbar für eine gute Haftung?",
-        options: ["Das Druckbett einfetten.", "Das Druckbett reinigen (fettfrei machen).", "Die Druckgeschwindigkeit auf Maximum stellen.", "Werkzeug auf das Druckbett platzieren."],
-        answer: 1
-      }
-    ];
 
-    let currentQ = 0;
-    let score = 0;
-
-    function loadQuestion() {
-      const q = questions[currentQ];
-      document.getElementById('question-text').innerText = (currentQ + 1) + ". " + q.question;
-      const ansContainer = document.getElementById('answers-container');
-      ansContainer.innerHTML = '';
-
-      const feedback = document.getElementById('quiz-feedback');
-      feedback.style.display = 'none';
-      feedback.innerText = '';
-      feedback.className = '';
-
-      document.getElementById('next-btn').style.display = 'none';
-
-      q.options.forEach((opt, idx) => {
-        const btn = document.createElement('button');
-        btn.innerText = opt;
-        btn.style.padding = "12px 16px";
-        btn.style.border = "1px solid #ddd";
-        btn.style.borderRadius = "6px";
-        btn.style.cursor = "pointer";
-        btn.style.background = "#fff";
-        btn.style.textAlign = "left";
-        btn.style.fontSize = "1rem";
-        btn.style.transition = "background 0.2s";
-
-        btn.onmouseover = () => { if (!btn.disabled) btn.style.background = "#f9f9f9"; };
-        btn.onmouseout = () => { if (!btn.disabled) btn.style.background = "#fff"; };
-
-        btn.onclick = () => checkAnswer(idx, btn);
-        ansContainer.appendChild(btn);
-      });
-    }
-
-    function checkAnswer(selectedIdx, btnElement) {
-      const q = questions[currentQ];
-      const buttons = document.getElementById('answers-container').children;
-      for (let i = 0; i < buttons.length; i++) {
-        buttons[i].disabled = true;
-        buttons[i].style.cursor = "not-allowed";
-      }
-
-      const feedback = document.getElementById('quiz-feedback');
-      feedback.style.display = 'block';
-
-      if (selectedIdx === q.answer) {
-        btnElement.style.background = "#d4edda";
-        btnElement.style.borderColor = "#28a745";
-        feedback.innerHTML = '<i class="fa-solid fa-circle-check"></i> Richtig! Sehr gut gemacht.';
-        feedback.style.color = "#155724";
-        feedback.style.backgroundColor = "#d4edda";
-        feedback.style.border = "1px solid #c3e6cb";
-        score++;
-      } else {
-        btnElement.style.background = "#f8d7da";
-        btnElement.style.borderColor = "#dc3545";
-        buttons[q.answer].style.background = "#e2e3e5"; // Highlight correct
-        buttons[q.answer].style.borderColor = "#28a745";
-        buttons[q.answer].style.borderWidth = "2px";
-
-        feedback.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Falsch. Die richtige Antwort ist markiert.';
-        feedback.style.color = "#721c24";
-        feedback.style.backgroundColor = "#f8d7da";
-        feedback.style.border = "1px solid #f5c6cb";
-      }
-
-      if (currentQ < questions.length - 1) {
-        document.getElementById('next-btn').style.display = 'inline-block';
-      } else {
-        const resultMsg = document.createElement('div');
-        resultMsg.style.marginTop = "15px";
-        resultMsg.style.fontSize = "1.1rem";
-        if (score === questions.length) {
-          resultMsg.innerHTML = `🎉 Perfekt! Du hast alle ${questions.length} Fragen richtig beantwortet.`;
-        } else {
-          resultMsg.innerHTML = `🏁 Quiz beendet! Du hast ${score} von ${questions.length} Punkten erreicht.`;
-        }
-        feedback.appendChild(resultMsg);
-      }
-    }
-
-    document.getElementById('next-btn').addEventListener('click', () => {
-      currentQ++;
-      loadQuestion();
-    });
-
-    document.addEventListener('DOMContentLoaded', loadQuestion);
   </script>
 </body>
 
