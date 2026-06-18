@@ -26,6 +26,8 @@
       mermaid.initialize({ startOnLoad: true, theme: 'default' });
     });
   </script>
+  <!-- Sortable.js for Drag and Drop -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
   <style>
     :root {
@@ -814,6 +816,105 @@
           left: 100%;
           border-color: transparent transparent transparent #2c3e50;
         }
+
+        /* Puzzle Styles */
+        .puzzle-container {
+          background: #fdfdfd;
+          border: 1px solid #e0e0e0;
+          border-radius: 12px;
+          padding: 24px;
+          margin: 20px 0;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .puzzle-instructions {
+          margin-bottom: 16px;
+          font-weight: 500;
+          color: #2c3e50;
+        }
+        .puzzle-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          min-height: 200px;
+        }
+        .puzzle-item {
+          background: #fff;
+          border: 1px solid #d1d5db;
+          border-radius: 8px;
+          padding: 14px 16px;
+          margin-bottom: 10px;
+          cursor: grab;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .puzzle-item:active {
+          cursor: grabbing;
+        }
+        .puzzle-item .drag-handle {
+          color: #9ca3af;
+          cursor: grab;
+        }
+        .puzzle-item.correct {
+          border-color: var(--correct-color);
+          background-color: rgba(40, 167, 69, 0.05);
+        }
+        .puzzle-item.correct i.status-icon {
+          color: var(--correct-color);
+        }
+        .puzzle-item.incorrect {
+          border-color: var(--incorrect-color);
+          background-color: rgba(220, 53, 69, 0.05);
+        }
+        .puzzle-item.incorrect i.status-icon {
+          color: var(--incorrect-color);
+        }
+        .puzzle-item i.status-icon {
+          margin-left: auto;
+          font-size: 1.2rem;
+        }
+        .puzzle-item i.status-icon.fa-circle-check { display: none; }
+        .puzzle-item i.status-icon.fa-circle-xmark { display: none; }
+        .puzzle-item.correct i.status-icon.fa-circle-check { display: inline-block; }
+        .puzzle-item.incorrect i.status-icon.fa-circle-xmark { display: inline-block; }
+        
+        .puzzle-actions {
+          margin-top: 20px;
+          display: flex;
+          gap: 12px;
+          justify-content: flex-end;
+          align-items: center;
+        }
+        .puzzle-feedback-text {
+          margin-right: auto;
+          font-weight: bold;
+        }
+        .puzzle-btn {
+          background: var(--kit-primary-color);
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        .puzzle-btn:hover {
+          background: var(--kit-secondary-color);
+        }
+        .puzzle-btn-reset {
+          background: #6c757d;
+        }
+        .puzzle-btn-reset:hover {
+          background: #5a6268;
+        }
+        .sortable-ghost {
+          opacity: 0.4;
+          background-color: #f3f4f6;
+        }
       </style>
 
       <div class="interactive-circuit">
@@ -970,9 +1071,33 @@ void loop() {
         Smartphones oder Laptops in der Nähe zu senden.</p>
 
       <h3>Das eigene Netzwerk</h3>
-      <div style="min-height: 250px; padding: 20px; display: flex; justify-content: center; align-items: center;">
-        <pre class="mermaid"
-          style="background: transparent; color: inherit; font-size: 1.2rem; margin: 0; white-space: pre-wrap; width: 100%; max-width: 800px;">
+      
+      <div class="puzzle-container" id="network-puzzle">
+        <div class="puzzle-instructions">
+          <i class="fa-solid fa-puzzle-piece" style="color: var(--kit-primary-color); margin-right: 8px;"></i>
+          <strong>Übung:</strong> Bringe die Kommunikationsschritte zwischen ESP32, Sensoren und dem Smartphone per Drag-and-Drop in die richtige zeitliche Reihenfolge.
+        </div>
+        <ul class="puzzle-list" id="puzzle-list">
+          <li class="puzzle-item" data-id="3"><i class="fa-solid fa-grip-vertical drag-handle"></i> Smartphone verbindet sich mit dem ESP32-WLAN <i class="fa-solid fa-circle-check status-icon"></i><i class="fa-solid fa-circle-xmark status-icon"></i></li>
+          <li class="puzzle-item" data-id="1"><i class="fa-solid fa-grip-vertical drag-handle"></i> ESP32 spannt eigenes WLAN auf und startet Webserver <i class="fa-solid fa-circle-check status-icon"></i><i class="fa-solid fa-circle-xmark status-icon"></i></li>
+          <li class="puzzle-item" data-id="6"><i class="fa-solid fa-grip-vertical drag-handle"></i> ESP32 sendet fertige Webseite an das Smartphone <i class="fa-solid fa-circle-check status-icon"></i><i class="fa-solid fa-circle-xmark status-icon"></i></li>
+          <li class="puzzle-item" data-id="4"><i class="fa-solid fa-grip-vertical drag-handle"></i> Smartphone ruft die IP-Adresse im Browser auf (Request) <i class="fa-solid fa-circle-check status-icon"></i><i class="fa-solid fa-circle-xmark status-icon"></i></li>
+          <li class="puzzle-item" data-id="2"><i class="fa-solid fa-grip-vertical drag-handle"></i> Sensoren messen und senden Daten an den ESP32 <i class="fa-solid fa-circle-check status-icon"></i><i class="fa-solid fa-circle-xmark status-icon"></i></li>
+          <li class="puzzle-item" data-id="5"><i class="fa-solid fa-grip-vertical drag-handle"></i> ESP32 baut HTML-Webseite mit aktuellen Werten zusammen <i class="fa-solid fa-circle-check status-icon"></i><i class="fa-solid fa-circle-xmark status-icon"></i></li>
+        </ul>
+        <div class="puzzle-actions">
+          <span class="puzzle-feedback-text" id="puzzle-feedback"></span>
+          <button class="puzzle-btn puzzle-btn-reset" onclick="resetPuzzle()">Neu starten</button>
+          <button class="puzzle-btn" onclick="checkPuzzle()">Reihenfolge prüfen</button>
+        </div>
+      </div>
+
+      <div class="intro-accordion" style="margin: 24px 0;">
+        <details>
+          <summary>Musterlösung als Sequenzdiagramm anzeigen</summary>
+          <div style="min-height: 250px; padding: 20px; display: flex; justify-content: center; align-items: center; background: white; border-radius: 8px;">
+            <pre class="mermaid"
+              style="background: transparent; color: inherit; font-size: 1.2rem; margin: 0; white-space: pre-wrap; width: 100%; max-width: 800px;">
 sequenceDiagram
     participant Sensoren as 🌡️ Sensoren (DHT11 &amp; Solar)
     participant ESP32 as ⚙️ ESP32 (Webserver)
@@ -992,7 +1117,9 @@ sequenceDiagram
     ESP32-&gt;&gt;ESP32: Baut HTML-Seite mit aktuellen Messwerten zusammen
     ESP32--&gt;&gt;Handy: Sendet fertige Webseite (Antwort / Response)
     Note over Handy: Browser zeigt Webseite &lt;br&gt;mit Messwerten an!
-        </pre>
+            </pre>
+          </div>
+        </details>
       </div>
 
       <h3>Code</h3>
@@ -1585,6 +1712,69 @@ void loop() {
         body.classList.remove('schueler-modus');
         label.textContent = 'Lehrermodus';
       }
+    }
+  </script>
+
+  <script>
+    // Puzzle Logic
+    let sortablePuzzle;
+    document.addEventListener("DOMContentLoaded", function () {
+      const puzzleList = document.getElementById('puzzle-list');
+      if (puzzleList && typeof Sortable !== 'undefined') {
+        sortablePuzzle = new Sortable(puzzleList, {
+          animation: 150,
+          ghostClass: 'sortable-ghost',
+          handle: '.puzzle-item' // whole item is draggable
+        });
+      }
+    });
+
+    function checkPuzzle() {
+      const items = document.querySelectorAll('#puzzle-list .puzzle-item');
+      let isCorrect = true;
+      let correctCount = 0;
+
+      items.forEach((item, index) => {
+        const id = parseInt(item.getAttribute('data-id'));
+        // Clear previous classes
+        item.classList.remove('correct', 'incorrect');
+        
+        if (id === index + 1) {
+          item.classList.add('correct');
+          correctCount++;
+        } else {
+          item.classList.add('incorrect');
+          isCorrect = false;
+        }
+      });
+
+      const feedback = document.getElementById('puzzle-feedback');
+      if (isCorrect) {
+        feedback.style.color = 'var(--correct-color)';
+        feedback.innerHTML = '<i class="fa-solid fa-check"></i> Perfekt! Die Reihenfolge stimmt.';
+      } else {
+        feedback.style.color = 'var(--incorrect-color)';
+        feedback.innerHTML = `Das ist noch nicht ganz richtig. ${correctCount} von 6 Positionen stimmen.`;
+      }
+    }
+
+    function resetPuzzle() {
+      const list = document.getElementById('puzzle-list');
+      const items = Array.from(list.children);
+      const feedback = document.getElementById('puzzle-feedback');
+      
+      // Remove classes
+      items.forEach(item => item.classList.remove('correct', 'incorrect'));
+      feedback.innerHTML = '';
+
+      // Shuffle logic
+      for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
+      }
+      
+      // Re-append to DOM
+      items.forEach(item => list.appendChild(item));
     }
   </script>
 
