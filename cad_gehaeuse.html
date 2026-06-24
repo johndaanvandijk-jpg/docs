@@ -473,6 +473,23 @@
         font-size: 1.8rem;
       }
     }
+  
+    .progress-container {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      right: 0;
+      height: var(--progressbar-height, 4px);
+      background: #e0e0e0;
+      z-index: 101;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--kit-primary-color, #009682);
+      transition: width 0.2s;
+    }
   </style>
 </head>
 
@@ -484,7 +501,7 @@
       <img src="Media/Images/NWTLOGO.png" alt="NWT Logo" />
     </a>
     <div class="header-titles">
-      <div class="title">Modul 3: Die Konstruktions-Challenge</div>
+      <div class="title">Die Konstruktions-Challenge</div>
       <div class="subtitle">Von der Idee zum perfekten 3D-Druck-Teil</div>
     </div>
     <nav class="nav-menu" aria-label="Modul-Navigation">
@@ -495,13 +512,16 @@
       <a href="solarnachfuehrung.html">Solarnachführung</a>
     </nav>
   </header>
+  <div class="progress-container">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
 
   <main>
 
     <!-- Hero / Intro -->
     <section class="content-section" id="intro">
-      <div class="section-emoji">🏗️</div>
-      <h1>Modul 3: Die Konstruktions-Challenge</h1>
+      <div class="section-emoji">📐</div>
+      <h1>Die Konstruktions-Challenge</h1>
       <p class="lead">Konstruiere eine passgenaue Halterung</p>
       <p><strong>Autor:</strong> John van Dijk</p>
       <p><strong>Lizenzhinweis:</strong> CC BY-SA 4.0</p>
@@ -537,7 +557,7 @@
 
     <!-- Schritt 1: Software-Wahl -->
     <section class="content-section" id="software-wahl">
-      <div class="section-emoji">💻</div>
+      <div class="section-emoji">📐</div>
       <h2>1. Schritt: Software-Wahl & Tutorial</h2>
       <p>In diesem HTML-Modul bieten wir zwei "Pfade" an. Jedes Tutorial startet mit einem kurzen Video (3-5 Min) oder
         einer interaktiven Bilderstrecke.</p>
@@ -574,7 +594,7 @@
 
     <!-- Schritt 2: Die Komponenten -->
     <section class="content-section" id="servohalterung">
-      <div class="section-emoji">⚙️</div>
+      <div class="section-emoji">📐</div>
       <h2>Die Komponenten der Solarnachführung</h2>
       <p>Die gesamte Mechanik besteht aus 4 Teilen. Hier im Viewer siehst du die 3 vorgegebenen Basis-Teile:</p>
       <p><strong>1. Winkel:</strong> Verbindet die Achsen. <a href="Media/3dModelle/stlfuerDownload/WINKEL.stl" download="Winkel.stl" class="download-link" title="Winkel STL herunterladen"><i class="fa-solid fa-download"></i> STL herunterladen</a></p>
@@ -605,6 +625,8 @@
       <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
       <script>
+    
+
         document.addEventListener('DOMContentLoaded', () => {
           const container = document.getElementById('three-container');
           const overlay = document.getElementById('loading-overlay');
@@ -747,7 +769,7 @@
 
     <!-- Schritt 3: Die Challenge -->
     <section class="content-section" id="challenge">
-      <div class="section-emoji">🚀</div>
+      <div class="section-emoji">📐</div>
       <h2>Die Konstruktions-Challenge: Deine Solarhalterung</h2>
       <p>Jetzt bist du an der Reihe! Konstruiere das vierte und letzte Teil: Die Halterung für das Solarpanel.</p>
       
@@ -858,7 +880,7 @@
 
     <!-- Vorschau auf Modul 4 -->
     <section class="content-section" id="vorschau">
-      <div class="section-emoji">➡️</div>
+      <div class="section-emoji">📐</div>
       <h2>Ausblick: Bereit für Bewegung?</h2>
 
       <div class="infobox infobox-accent">
@@ -886,6 +908,19 @@
   </footer>
 
   <script>
+    
+
+    
+
+    
+    // Progressbar
+    const progressBar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      if (progressBar) progressBar.style.width = progress + '%';
+    });
     // Add JS to add visible class
     document.documentElement.classList.add('js');
 

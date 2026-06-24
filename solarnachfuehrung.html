@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modul 4: Solarnachführung</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Model Viewer -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+  <style>
+    :root {
+      --kit-primary-color: #4CAF50;
+      --kit-secondary-color: #45a049;
+      --header-height: 80px;
+      --progressbar-height: 8px;
+      --correct-color: #28a745;
+      --incorrect-color: #dc3545;
+      --font-main: 'Roboto', sans-serif;
+      --font-title: 'Roboto', sans-serif;
+      --section-radius: 18px;
+      --section-shadow: 0 8px 32px rgba(44, 62, 80, 0.08);
+      --section-bg: #fff;
+      --section-margin: 36px;
+      --section-padding: 48px 24px;
+      --emoji-opacity: 0.08;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+      background: linear-gradient(180deg, #f7faf9 0%, #e8f5e9 100%);
+      color: #222;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .kit-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 24px;
+    }
+
+    .kit-header img {
+      height: 48px;
+      width: 48px;
+      border-radius: 8px;
+      background: #f4f4f4;
+      object-fit: contain;
+    }
+
+    .kit-header .header-titles {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .kit-header .header-titles .title {
+      font-family: var(--font-title);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--kit-primary-color);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .kit-header .header-titles .subtitle {
+      font-size: 1rem;
+      color: #555;
+      font-weight: 400;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 12px;
+      margin-left: auto;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: #555;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-menu a:hover {
+      background: #f0f0f0;
+      color: #222;
+    }
+
+    .nav-menu a.active {
+      background: var(--kit-primary-color);
+      color: #fff;
+    }
+
+    /* Content Area */
+    main {
+      margin-top: calc(var(--header-height) + 24px);
+      padding-bottom: 48px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .content-section {
+      background: var(--section-bg);
+      border-radius: var(--section-radius);
+      box-shadow: var(--section-shadow);
+      margin-bottom: var(--section-margin);
+      padding: var(--section-padding);
+      position: relative;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s cubic-bezier(.4, 0, .2, 1), transform 0.7s cubic-bezier(.4, 0, .2, 1);
+      will-change: opacity, transform;
+    }
+
+    .content-section.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .section-emoji {
+      position: absolute;
+      right: 24px;
+      bottom: 18px;
+      font-size: 7rem;
+      opacity: var(--emoji-opacity);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Typo */
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: var(--font-title);
+      color: var(--kit-primary-color);
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 24px;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+    }
+
+    p {
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .lead {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #555;
+    }
+
+    /* Buttons */
+    .start-button {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: var(--kit-primary-color);
+      color: white;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .start-button:hover {
+      background: var(--kit-secondary-color);
+      transform: translateY(-2px);
+    }
+
+    /* Lists */
+    .material-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px 0;
+    }
+
+    .material-list li {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .material-list li i {
+      color: var(--kit-primary-color);
+      font-size: 1.1em;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* Accordion */
+    .intro-accordion details {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+      background: #fbfffb;
+    }
+
+    .intro-accordion summary {
+      list-style: none;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+      padding: 6px 4px;
+      color: var(--kit-primary-color);
+    }
+
+    .intro-accordion summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .intro-accordion summary:before {
+      content: "▸";
+      display: inline-block;
+      margin-right: 8px;
+      transform-origin: 6px 6px;
+      transition: transform 0.18s ease;
+    }
+
+    .intro-accordion details[open] summary:before {
+      transform: rotate(90deg);
+    }
+
+    /* Path Accordions */
+    .path-accordion {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .path-accordion details {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .path-accordion details[open] {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      margin-bottom: 8px;
+      border-color: #ccc;
+    }
+
+    .path-accordion summary {
+      list-style: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      outline: none;
+      padding: 16px 20px;
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.2s;
+    }
+
+    .path-accordion summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .path-accordion summary:hover {
+      background: #f0f0f0;
+    }
+
+    .path-accordion details[open] summary {
+      border-bottom: 1px solid #eee;
+      background: #fff;
+    }
+
+    .path-content {
+      padding: 24px;
+      animation: fadeIn 0.4s ease;
+      line-height: 1.7;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .path-a summary {
+      border-left: 5px solid var(--kit-primary-color);
+      color: var(--kit-primary-color);
+    }
+
+    .path-b summary {
+      border-left: 5px solid #1976d2;
+      color: #1976d2;
+    }
+
+    .path-a summary i,
+    .path-b summary i {
+      font-size: 1.3rem;
+    }
+
+    /* Infoboxes */
+    .infobox {
+      background: #e8f5e9;
+      padding: 15px 20px;
+      border-left: 4px solid var(--kit-primary-color);
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+
+    .infobox-accent {
+      background: #e3f2fd;
+      border-left: 4px solid #1976d2;
+    }
+
+    /* Checklist */
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+
+    .checklist li {
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .checklist input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      accent-color: var(--kit-primary-color);
+    }
+
+    /* Galley Cards */
+    .error-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s;
+      background: #fff;
+    }
+
+    .error-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .error-card .icon-area {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+
+    .error-card .content-area {
+      padding: 15px;
+    }
+
+    .error-card h3 {
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .error-card p {
+      font-size: 0.9rem;
+      color: #555;
+      margin: 0;
+    }
+
+    .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--kit-primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.85rem;
+      margin-left: 8px;
+      padding: 3px 10px;
+      border: 1px solid var(--kit-primary-color);
+      border-radius: 6px;
+      background: rgba(76, 175, 80, 0.05);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .download-link:hover {
+      background: var(--kit-primary-color);
+      color: #fff !important;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(76, 175, 80, 0.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .kit-header {
+        padding: 0 16px;
+        flex-wrap: wrap;
+        height: auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+
+      .nav-menu {
+        width: 100%;
+        margin-top: 10px;
+        justify-content: space-between;
+        gap: 5px;
+      }
+
+      .nav-menu a {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+      }
+
+      main {
+        padding: 0 16px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+  
+    .progress-container {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      right: 0;
+      height: var(--progressbar-height, 4px);
+      background: #e0e0e0;
+      z-index: 101;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--kit-primary-color, #009682);
+      transition: width 0.2s;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header & Navigation -->
+  <header class="kit-header" role="banner">
+    <a href="index.html">
+      <img src="Media/Images/NWTLOGO.png" alt="NWT Logo" />
+    </a>
+    <div class="header-titles">
+      <div class="title">Die intelligente Solarnachführung</div>
+      <div class="subtitle">Zwei Achsen, vier Augen, volle Energie</div>
+    </div>
+    <nav class="nav-menu" aria-label="Modul-Navigation">
+      <a href="index.html" title="Zur Übersicht"><i class="fa-solid fa-house"></i></a>
+      <a href="fotometer.html">Fotometer</a>
+      <a href="wetterstation.html">Wetterstation</a>
+      <a href="cad_gehaeuse.html">CAD & Druck</a>
+      <a href="solarnachfuehrung.html" class="active">Solarnachführung</a>
+    </nav>
+  </header>
+  <div class="progress-container">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+    <main>
+
+    <!-- Hero / Intro -->
+    <section class="content-section" id="intro">
+      <div class="section-emoji">☀️</div>
+      <h1>Die intelligente Solarnachführung</h1>
+
+      <p class="lead">Zwei Achsen, vier Augen, volle Energie</p>
+      <p><strong>Autor:</strong> John van Dijk</p>
+      <p><strong>Lizenzhinweis:</strong> CC BY-SA 4.0</p>
+      <p>
+        <strong>Ziel:</strong> In diesem Modul fügen wir alles zusammen. Die Sensortechnik aus Modul 1 und der Mikrocontroller aus Modul 2 treffen auf die Mechanik aus Modul 3. Das Ziel ist eine Solarnachführung, die sich automatisch mit zwei Servomotoren über vier LDR-Sensoren zur hellsten Lichtquelle (Sonne) ausrichtet.
+      </p>
+
+      <div class="intro-accordion">
+        <details open>
+          <summary>Lernziele</summary>
+          <ul class="material-list">
+            <li><i class="fa-solid fa-code-branch"></i> <strong>Steuerungslogik:</strong> If/Else-Bedingungen nutzen, um Entscheidungen zu treffen.</li>
+            <li><i class="fa-solid fa-bolt"></i> <strong>Regelungstechnik:</strong> Hysterese und Schwellenwerte verstehen, damit die Motoren nicht "zittern".</li>
+            <li><i class="fa-solid fa-microchip"></i> <strong>Systemintegration:</strong> Sensoren und Aktoren an einem Mikrocontroller (ESP32) kombinieren.</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <!-- Section 1: Hardware -->
+    <section class="content-section" id="hardware">
+      <h2>1. Die Hardware: Augen und Muskeln</h2>
+      <p>Wir verwenden für unsere Nachführung vier LDRs (als "Augen") und zwei Servomotoren (als "Muskeln"), um die horizontale (Ost-West) und vertikale (Hoch-Runter) Achse zu steuern.</p>
+      
+      <!-- Platzhalter Bild 1 -->
+      <div style="background: #e9ecef; border: 2px dashed #adb5bd; border-radius: 12px; padding: 40px; text-align: center; margin: 20px 0;">
+        <i class="fa-solid fa-camera fa-3x" style="color: #6c757d; margin-bottom: 15px;"></i>
+        <h3 style="color: #495057; margin: 0;">Platzhalter Foto 1: Die 4 LDRs</h3>
+        <p style="color: #6c757d; margin-top: 10px;">Bitte ein Foto der 4 LDRs in ihrer Anordnung auf der Halterung einfügen.</p>
+      </div>
+
+      <!-- Platzhalter Bild 2 -->
+      <div style="background: #e9ecef; border: 2px dashed #adb5bd; border-radius: 12px; padding: 40px; text-align: center; margin: 20px 0;">
+        <i class="fa-solid fa-camera fa-3x" style="color: #6c757d; margin-bottom: 15px;"></i>
+        <h3 style="color: #495057; margin: 0;">Platzhalter Foto 2: Mechanische Konstruktion</h3>
+        <p style="color: #6c757d; margin-top: 10px;">Bitte ein Foto der gesamten Mechanik mit beiden Servos (Pan/Tilt Achsen) einfügen.</p>
+      </div>
+
+      <div class="warn-box" role="note" aria-label="Wichtiger Hinweis zur Stromversorgung">
+        <h4>Stromversorgung der Servos</h4>
+        <p>Servomotoren benötigen beim Anlaufen oft viel Strom. Wir schließen beide Servos an den <strong>VIN-Pin</strong> (5V) des ESP32 an. Die Steuersignale kommen von zwei digitalen GPIO-Pins.</p>
+        <p><em>Hinweis: Sollte der ESP32 bei der Bewegung beider Servos abstürzen oder neustarten, reicht der Strom des USB-Anschlusses eventuell nicht aus.</em></p>
+      </div>
+
+      <!-- Platzhalter Bild 3 -->
+      <div style="background: #e9ecef; border: 2px dashed #adb5bd; border-radius: 12px; padding: 40px; text-align: center; margin: 20px 0;">
+        <i class="fa-solid fa-camera fa-3x" style="color: #6c757d; margin-bottom: 15px;"></i>
+        <h3 style="color: #495057; margin: 0;">Platzhalter Bild 3: Fritzing-Schaltplan</h3>
+        <p style="color: #6c757d; margin-top: 10px;">Bitte den Schaltplan (ESP32 + 4 LDRs + 2 Servos) hier einfügen.</p>
+      </div>
+
+    </section>
+
+    <!-- Section 2: Logik -->
+    <section class="content-section" id="logik">
+      <h2>2. Die Logik: Folge dem Licht</h2>
+      <p>Damit der ESP32 weiß, wohin er die Solarzelle drehen muss, vergleicht er die Helligkeitswerte der gegenüberliegenden Sensoren. Ist es zum Beispiel links heller als rechts, muss der horizontale Servo nach links drehen.</p>
+      <p>Probier es selbst aus: Ziehe die Sonne auf dem Halbkreis und beobachte, wie die LDR-Werte reagieren!</p>
+
+      <style>
+        #ldr-sim-wrapper {
+          background: #1a1a2e;
+          border-radius: 16px;
+          padding: 24px;
+          margin: 24px 0;
+          font-family: 'Roboto', sans-serif;
+          color: #eee;
+          user-select: none;
+        }
+        #ldr-canvas {
+          display: block;
+          width: 100%;
+          max-width: 600px;
+          margin: 0 auto;
+          cursor: grab;
+          border-radius: 12px;
+          touch-action: none;
+        }
+        #ldr-canvas:active { cursor: grabbing; }
+
+        .sim-controls {
+          max-width: 600px;
+          margin: 16px auto 0;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+        .sim-row {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+        .sim-label {
+          font-size: 0.85rem;
+          color: #aaa;
+          min-width: 160px;
+        }
+        .sim-slider {
+          flex: 1;
+          min-width: 120px;
+          accent-color: #4CAF50;
+        }
+        .sim-value {
+          font-size: 0.85rem;
+          font-weight: bold;
+          color: #4CAF50;
+          min-width: 40px;
+          text-align: right;
+        }
+
+        .ldr-bars {
+          max-width: 600px;
+          margin: 16px auto 0;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+        }
+        .ldr-bar-wrap {
+          background: #16213e;
+          border-radius: 10px;
+          padding: 12px 14px;
+        }
+        .ldr-bar-label {
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.8rem;
+          margin-bottom: 6px;
+          color: #aaa;
+        }
+        .ldr-bar-label span:last-child {
+          font-weight: bold;
+          font-size: 0.95rem;
+          color: #fff;
+        }
+        .ldr-bar-bg {
+          height: 14px;
+          background: #0f3460;
+          border-radius: 7px;
+          overflow: hidden;
+        }
+        .ldr-bar-fill {
+          height: 100%;
+          border-radius: 7px;
+          transition: width 0.08s linear, background 0.15s;
+        }
+
+        .sim-decision {
+          max-width: 600px;
+          margin: 14px auto 0;
+          background: #16213e;
+          border-radius: 10px;
+          padding: 14px 18px;
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          font-size: 0.9rem;
+        }
+        .sim-decision .decision-icon {
+          font-size: 1.8rem;
+          min-width: 36px;
+          text-align: center;
+        }
+        .decision-text strong {
+          display: block;
+          font-size: 1rem;
+          margin-bottom: 2px;
+        }
+        .decision-text .diff-info {
+          font-size: 0.78rem;
+          color: #aaa;
+        }
+
+        .noise-toggle {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          cursor: pointer;
+          font-size: 0.85rem;
+          color: #aaa;
+        }
+        .noise-toggle input { accent-color: #4CAF50; }
+      
+    .progress-container {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      right: 0;
+      height: var(--progressbar-height, 4px);
+      background: #e0e0e0;
+      z-index: 101;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--kit-primary-color, #009682);
+      transition: width 0.2s;
+    }
+  </style>
+
+      <!-- Simulation Container -->
+      <div id="ldr-sim-wrapper">
+        <canvas id="ldr-canvas" width="600" height="320"></canvas>
+
+        <div class="ldr-bars">
+          <div class="ldr-bar-wrap">
+            <div class="ldr-bar-label">
+              <span>LDR Links</span>
+              <span id="val-left">512</span>
+            </div>
+            <div class="ldr-bar-bg">
+              <div class="ldr-bar-fill" id="bar-left" style="width:50%; background:#f1c40f;"></div>
+            </div>
+          </div>
+          <div class="ldr-bar-wrap">
+            <div class="ldr-bar-label">
+              <span>LDR Rechts</span>
+              <span id="val-right">512</span>
+            </div>
+            <div class="ldr-bar-bg">
+              <div class="ldr-bar-fill" id="bar-right" style="width:50%; background:#f1c40f;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sim-controls">
+          <div class="sim-row">
+            <span class="sim-label">⚡ Rauschen (Noise)</span>
+            <label class="noise-toggle">
+              <input type="checkbox" id="noise-toggle" checked>
+              Messfehler aktiv
+            </label>
+          </div>
+          <div class="sim-row">
+            <span class="sim-label">🎚️ Schwellenwert (Threshold)</span>
+            <input type="range" class="sim-slider" id="threshold-slider" min="0" max="200" value="50">
+            <span class="sim-value" id="threshold-val">50</span>
+          </div>
+        </div>
+
+        <div class="sim-decision" id="sim-decision">
+          <div class="decision-icon" id="decision-icon">⏸️</div>
+          <div class="decision-text">
+            <strong id="decision-text">Servo hält Position</strong>
+            <div class="diff-info" id="diff-info">Differenz: 0 | Threshold: 50</div>
+          </div>
+        </div>
+      </div>
+
+
+      <script>
+    
+
+      (function() {
+        const canvas = document.getElementById('ldr-canvas');
+        const ctx = canvas.getContext('2d');
+        const W = 600, H = 320;
+
+        // Sun angle: 0 = left horizon, PI = right horizon, PI/2 = top center
+        let sunAngle = Math.PI / 2;
+        let isDragging = false;
+        let noiseOn = true;
+        let threshold = 50;
+        let noiseL = 0, noiseR = 0;
+        let noiseTimer = 0;
+
+        // Scene layout
+        const cx = W / 2;           // center x
+        const groundY = H - 50;     // ground line y
+        const wallH = 70;           // wall height above ground
+        const wallW = 10;
+        const ldrSize = 18;
+        const ldrGap = 70;          // half-distance between LDRs (center to LDR)
+        const semicircleR = 130;    // sun track radius
+
+        // Sun position from angle
+        function sunPos(angle) {
+          return {
+            x: cx - semicircleR * Math.cos(angle),
+            y: groundY - semicircleR * Math.sin(angle) - 10
+          };
+        }
+
+        // Hit-test: is mouse near sun?
+        function nearSun(mx, my) {
+          const s = sunPos(sunAngle);
+          const scaleX = canvas.clientWidth / W;
+          const scaleY = canvas.clientHeight / H;
+          const dx = mx / scaleX - s.x;
+          const dy = my / scaleY - s.y;
+          return Math.sqrt(dx*dx + dy*dy) < 28;
+        }
+
+        function getAngleFromMouse(mx, my) {
+          const scaleX = canvas.clientWidth / W;
+          const scaleY = canvas.clientHeight / H;
+          const rx = mx / scaleX - cx;
+          const ry = groundY - 10 - my / scaleY;
+          let a = Math.atan2(ry, -rx);
+          if (a < 0.05) a = 0.05;
+          if (a > Math.PI - 0.05) a = Math.PI - 0.05;
+          return a;
+        }
+
+        // Shadow calculation
+        // Wall is at cx, from groundY down to groundY - wallH
+        // Sun ray from sun, through top of wall, hits ground
+        // Returns shadow point x on ground relative to wall top
+        function shadowEdge() {
+          const s = sunPos(sunAngle);
+          const wallTopX = cx;
+          const wallTopY = groundY - wallH;
+
+          // Degenerate case: sun is at or below wall-top height (canvas y increases downward).
+          // The shadow extends to the full opposite edge of the scene.
+          if (s.y >= wallTopY) {
+            return s.x < cx ? W : 0;  // sun left → shadow right; sun right → shadow left
+          }
+
+          // Normal case: cast ray from sun THROUGH wall top, find where it hits groundY.
+          // dy is negative (going upward in canvas), so t > 1 (we pass the wall top).
+          const dx = wallTopX - s.x;
+          const dy = wallTopY - s.y; // negative in canvas coords when sun is above wall top
+          const t = (groundY - s.y) / dy;
+          const shadowX = s.x + t * dx;
+          return Math.max(0, Math.min(W, shadowX));
+        }
+
+        // Compute raw LDR values (0-1023)
+        function computeLDR() {
+          const s = sunPos(sunAngle);
+          const shadow = shadowEdge();
+
+          // LDR centers
+          const ldrLX = cx - ldrGap;
+          const ldrRX = cx + ldrGap;
+
+          // Shadow is cast to one side of the wall
+          // If sun is left of center: shadow goes right
+          // Wall top is at cx, sun is at s.x
+          // Shadow edge = shadow (x on ground)
+          // Light fraction: how much of the LDR is lit
+          // LDR is a point sensor; it's in shadow if shadow extends over it
+
+          let litL, litR;
+
+          // Sun angle: PI/2 = straight up (no shadow on either LDR ideally)
+          // Shadow falls to the OPPOSITE side of the sun
+          // If sun is LEFT (angle > PI/2): shadow goes RIGHT of wall
+          // If sun is RIGHT (angle < PI/2): shadow goes LEFT of wall
+
+          const sunX = s.x;
+
+          if (sunX < cx) {
+            // Sun on left side -> shadow cast to the right
+            // shadowX is to the right of cx
+            const shX = shadow; // should be > cx
+            litL = 1.0; // left LDR fully lit
+            if (ldrRX > shX) {
+              litR = 1.0; // right LDR also lit (shadow doesn't reach)
+            } else {
+              litR = 0.15; // right LDR in shadow
+            }
+          } else if (sunX > cx) {
+            // Sun on right side -> shadow cast to the left
+            const shX = shadow; // should be < cx
+            litR = 1.0;
+            if (ldrLX < shX) {
+              litL = 1.0;
+            } else {
+              litL = 0.15;
+            }
+          } else {
+            litL = 1.0;
+            litR = 1.0;
+          }
+
+          // Factor in sun elevation (higher = brighter overall)
+          const elevation = Math.sin(sunAngle); // 0 at horizon, 1 at zenith
+          const brightness = 0.3 + 0.7 * elevation;
+
+          let rawL = Math.round(litL * brightness * 1023);
+          let rawR = Math.round(litR * brightness * 1023);
+
+          // Add noise
+          if (noiseOn) {
+            rawL = Math.max(0, Math.min(1023, rawL + Math.round(noiseL * 60)));
+            rawR = Math.max(0, Math.min(1023, rawR + Math.round(noiseR * 60)));
+          }
+
+          return { l: rawL, r: rawR };
+        }
+
+        // Determine shadow polygon for drawing
+        function getShadowPoly() {
+          const wallTopX = cx;
+          const wallTopY = groundY - wallH;
+          const shadowGroundX = shadowEdge(); // Re-use the fixed logic!
+
+          return { wallTopX, wallTopY, wallBaseX: cx, wallBaseY: groundY, shadowGroundX };
+        }
+
+        function draw() {
+          ctx.clearRect(0, 0, W, H);
+
+          // Sky gradient
+          const skyGrad = ctx.createLinearGradient(0, 0, 0, groundY);
+          skyGrad.addColorStop(0, '#0d1b2a');
+          skyGrad.addColorStop(1, '#1b3a5c');
+          ctx.fillStyle = skyGrad;
+          ctx.fillRect(0, 0, W, groundY);
+
+          // Ground
+          const gndGrad = ctx.createLinearGradient(0, groundY, 0, H);
+          gndGrad.addColorStop(0, '#4a3728');
+          gndGrad.addColorStop(1, '#2d2016');
+          ctx.fillStyle = gndGrad;
+          ctx.fillRect(0, groundY, W, H - groundY);
+
+          // Sun track (semicircle)
+          ctx.beginPath();
+          ctx.arc(cx, groundY - 10, semicircleR, Math.PI, 0, false);
+          ctx.strokeStyle = 'rgba(255,255,150,0.15)';
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([6, 6]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Sun rays / glow
+          const s = sunPos(sunAngle);
+          const elevation = Math.sin(sunAngle);
+          const glowRadius = 40 + elevation * 20;
+          const sunGlow = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, glowRadius);
+          sunGlow.addColorStop(0, 'rgba(255,230,50,0.9)');
+          sunGlow.addColorStop(0.3, 'rgba(255,180,20,0.5)');
+          sunGlow.addColorStop(1, 'rgba(255,150,0,0)');
+          ctx.fillStyle = sunGlow;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, glowRadius, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Sun circle
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, 16, 0, Math.PI * 2);
+          ctx.fillStyle = '#FFE040';
+          ctx.fill();
+          ctx.strokeStyle = '#FFF';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw shadow polygon: proper ground-level triangle
+          // wall-top -> shadow edge on ground -> wall base on ground
+          const sp = getShadowPoly();
+          ctx.beginPath();
+          ctx.moveTo(sp.wallTopX, sp.wallTopY);      // top of wall
+          ctx.lineTo(sp.shadowGroundX, groundY);     // shadow tip on ground
+          ctx.lineTo(cx, groundY);                    // wall base on ground
+          ctx.closePath();
+          ctx.fillStyle = 'rgba(0,0,0,0.60)';
+          ctx.fill();
+
+          // Light beams from sun to LDRs (only if LDR is lit)
+          const vals = computeLDR();
+          const ldrLX = cx - ldrGap;
+          const ldrRX = cx + ldrGap;
+          const ldrY = groundY;
+
+          // Beam left
+          if (vals.l > 200) {
+            ctx.beginPath();
+            ctx.moveTo(s.x, s.y);
+            ctx.lineTo(ldrLX, ldrY);
+            ctx.strokeStyle = `rgba(255,230,50,${0.08 + 0.1 * (vals.l/1023)})`;
+            ctx.lineWidth = 8;
+            ctx.stroke();
+          }
+          // Beam right
+          if (vals.r > 200) {
+            ctx.beginPath();
+            ctx.moveTo(s.x, s.y);
+            ctx.lineTo(ldrRX, ldrY);
+            ctx.strokeStyle = `rgba(255,230,50,${0.08 + 0.1 * (vals.r/1023)})`;
+            ctx.lineWidth = 8;
+            ctx.stroke();
+          }
+
+          // Wall (shadow divider)
+          ctx.fillStyle = '#8B7355';
+          ctx.fillRect(cx - wallW/2, groundY - wallH, wallW, wallH);
+          // Wall highlight
+          ctx.fillStyle = 'rgba(255,255,255,0.15)';
+          ctx.fillRect(cx - wallW/2, groundY - wallH, 3, wallH);
+
+          // Wall label
+          ctx.fillStyle = '#ccc';
+          ctx.font = '11px Roboto, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('Wand', cx, groundY - wallH - 6);
+
+          // LDR Left
+          const lL = vals.l / 1023;
+          const ldrColorL = `hsl(${40 + lL*20}, 100%, ${20 + lL * 55}%)`;
+          ctx.beginPath();
+          ctx.arc(ldrLX, ldrY, ldrSize, 0, Math.PI * 2);
+          ctx.fillStyle = ldrColorL;
+          ctx.fill();
+          ctx.strokeStyle = noiseOn ? '#4CAF50' : '#666';
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+
+          // LDR Left label
+          ctx.fillStyle = '#fff';
+          ctx.font = 'bold 11px Roboto, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('LDR L', ldrLX, ldrY - ldrSize - 6);
+          ctx.font = '10px Roboto, sans-serif';
+          ctx.fillStyle = '#FFD700';
+          ctx.fillText(vals.l, ldrLX, ldrY + 4);
+
+          // LDR Right
+          const lR = vals.r / 1023;
+          const ldrColorR = `hsl(${40 + lR*20}, 100%, ${20 + lR * 55}%)`;
+          ctx.beginPath();
+          ctx.arc(ldrRX, ldrY, ldrSize, 0, Math.PI * 2);
+          ctx.fillStyle = ldrColorR;
+          ctx.fill();
+          ctx.strokeStyle = noiseOn ? '#4CAF50' : '#666';
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+
+          ctx.fillStyle = '#fff';
+          ctx.font = 'bold 11px Roboto, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('LDR R', ldrRX, ldrY - ldrSize - 6);
+          ctx.font = '10px Roboto, sans-serif';
+          ctx.fillStyle = '#FFD700';
+          ctx.fillText(vals.r, ldrRX, ldrY + 4);
+
+          // Angle label
+          const deg = Math.round((sunAngle / Math.PI) * 180);
+          ctx.fillStyle = 'rgba(255,255,255,0.5)';
+          ctx.font = '11px monospace';
+          ctx.textAlign = 'left';
+          ctx.fillText('Sonnenwinkel: ' + (180 - deg) + '°', 14, 20);
+
+          // Update bars and decision
+          updateUI(vals);
+        }
+
+        function updateUI(vals) {
+          const l = vals.l, r = vals.r;
+          const diff = l - r;
+          const absDiff = Math.abs(diff);
+
+          // Bars
+          document.getElementById('val-left').textContent = l;
+          document.getElementById('val-right').textContent = r;
+          document.getElementById('bar-left').style.width = (l / 1023 * 100) + '%';
+          document.getElementById('bar-right').style.width = (r / 1023 * 100) + '%';
+
+          const colL = l > 500 ? '#f1c40f' : '#e67e22';
+          const colR = r > 500 ? '#f1c40f' : '#e67e22';
+          document.getElementById('bar-left').style.background = colL;
+          document.getElementById('bar-right').style.background = colR;
+
+          // Decision
+          const icon = document.getElementById('decision-icon');
+          const text = document.getElementById('decision-text');
+          const diffInfo = document.getElementById('diff-info');
+
+          diffInfo.textContent = 'Differenz: ' + absDiff + ' | Threshold: ' + threshold;
+
+          if (absDiff <= threshold) {
+            icon.textContent = '⏸️';
+            text.textContent = 'Servo hält Position';
+            text.style.color = '#aaa';
+          } else if (diff > 0) {
+            icon.textContent = '◀️';
+            text.textContent = 'Servo dreht nach links (LDR L ist heller)';
+            text.style.color = '#4CAF50';
+          } else {
+            icon.textContent = '▶️';
+            text.textContent = 'Servo dreht nach rechts (LDR R ist heller)';
+            text.style.color = '#4CAF50';
+          }
+        }
+
+        // Noise update
+        function updateNoise() {
+          noiseTimer++;
+          if (noiseTimer % 40 === 0 && noiseOn) {
+            noiseL = (Math.random() * 2 - 1);
+            noiseR = (Math.random() * 2 - 1);
+          }
+        }
+
+        // Animation loop
+        function loop() {
+          updateNoise();
+          draw();
+          requestAnimationFrame(loop);
+        }
+        loop();
+
+        // Mouse events
+        canvas.addEventListener('mousedown', (e) => {
+          if (nearSun(e.offsetX, e.offsetY)) isDragging = true;
+        });
+        canvas.addEventListener('mousemove', (e) => {
+          if (isDragging) {
+            sunAngle = getAngleFromMouse(e.offsetX, e.offsetY);
+          }
+          canvas.style.cursor = nearSun(e.offsetX, e.offsetY) ? 'grab' : 'default';
+        });
+        canvas.addEventListener('mouseup', () => isDragging = false);
+        canvas.addEventListener('mouseleave', () => isDragging = false);
+
+        // Touch events
+        canvas.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          const t = e.touches[0];
+          const rect = canvas.getBoundingClientRect();
+          if (nearSun(t.clientX - rect.left, t.clientY - rect.top)) isDragging = true;
+        }, {passive: false});
+        canvas.addEventListener('touchmove', (e) => {
+          e.preventDefault();
+          if (isDragging) {
+            const t = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            sunAngle = getAngleFromMouse(t.clientX - rect.left, t.clientY - rect.top);
+          }
+        }, {passive: false});
+        canvas.addEventListener('touchend', () => isDragging = false);
+
+        // Controls
+        document.getElementById('noise-toggle').addEventListener('change', (e) => {
+          noiseOn = e.target.checked;
+          if (!noiseOn) { noiseL = 0; noiseR = 0; }
+        });
+        document.getElementById('threshold-slider').addEventListener('input', (e) => {
+          threshold = parseInt(e.target.value);
+          document.getElementById('threshold-val').textContent = threshold;
+        });
+      })();
+      </script>
+
+      <h3>Das Problem: Zittern</h3>
+      <p>Wenn du das Rauschen aktivierst und die Sonne fast <strong>genau in der Mitte</strong> positionierst, siehst du, wie die Werte springen. Der Servo würde ununterbrochen zittern. Erhöhe den <strong>Schwellenwert (Threshold)</strong>: Der Servo bewegt sich erst, wenn der Helligkeitsunterschied groß genug ist.</p>
+
+      <div class="code-comparison" style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
+        <div style="flex: 1; min-width: 300px; background: #282c34; border-radius: 8px; padding: 15px; color: #abb2bf; font-family: monospace; font-size: 0.85rem;">
+          <h4 style="color: #e06c75; margin-top: 0; margin-bottom: 10px;">❌ Ohne Threshold (Zittern)</h4>
+          <pre style="margin: 0; white-space: pre-wrap;"><code>int diff = ldrL - ldrR;
+
+if (diff > 0) {
+  servo.write(pos + 1); // Nach links
+} else if (diff < 0) {
+  servo.write(pos - 1); // Nach rechts
+}</code></pre>
+        </div>
+        <div style="flex: 1; min-width: 300px; background: #282c34; border-radius: 8px; padding: 15px; color: #abb2bf; font-family: monospace; font-size: 0.85rem;">
+          <h4 style="color: #98c379; margin-top: 0; margin-bottom: 10px;">✅ Mit Threshold (Ruhig)</h4>
+          <pre style="margin: 0; white-space: pre-wrap;"><code>int diff = ldrL - ldrR;
+int threshold = 50;
+
+if (abs(diff) > threshold) {
+  if (diff > 0) {
+    servo.write(pos + 1);
+  } else {
+    servo.write(pos - 1);
+  }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Code -->
+    <section class="content-section" id="code">
+      <h2>3. Der Programmcode</h2>
+      <p>Hier fügen wir bald den Code ein. Lade dir vorab schon einmal die <code>ESP32Servo</code> Bibliothek über den Bibliotheksverwalter in der Arduino IDE herunter!</p>
+
+      <!-- Platzhalter Code -->
+      <div style="background: #282c34; border-radius: 8px; padding: 20px; color: #abb2bf; font-family: monospace; margin: 20px 0; white-space: pre-wrap;">
+// Code-Platzhalter für die Solarnachführung
+// ... include ESP32Servo.h ...
+// ... setup() ...
+// ... loop() mit analogRead(LDRs) und servo.write() ...
+      </div>
+    </section>
+
+  </main>
+
+  <footer
+    style="text-align:center; padding: 30px; font-size: 0.9rem; color: #666; border-top: 1px solid #eee; background:#fff;">
+    <div>CC BY Lizenz, Andreas Sexauer, John van Dijk, Zentrum für Mediales Lernen am Karlsruher Institut für
+      Technologie (KIT).</div>
+    <div style="margin-top:8px;"><small>Dieses Lernmodul wurde mithilfe von künstlicher Intelligenz (KI) konzipiert und
+        programmiert.</small></div>
+  </footer>
+
+  <script>
+    
+
+    
+
+    
+    // Progressbar
+    const progressBar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      if (progressBar) progressBar.style.width = progress + '%';
+    });
+    // Add JS to add visible class
+    document.documentElement.classList.add('js');
+
+    // Intersection Observer for animations
+    const sections = document.querySelectorAll('.content-section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    sections.forEach(sec => observer.observe(sec));
+
+
+  </script>
+</body>
+
+</html>
