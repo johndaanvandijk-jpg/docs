@@ -1,0 +1,95 @@
+#include <Arduino.h>
+#include <ESP32Servo.h>
+
+// Servo Pins
+const int pinServoHoriz = 12;
+const int pinServoVert = 13;
+
+// LDR Pins (ADC1)
+const int ldrTopLeft = 32;
+const int ldrTopRight = 33;
+const int ldrBotLeft = 34;
+const int ldrBotRight = 35;
+
+Servo servoHoriz;
+Servo servoVert;
+
+// Startposition der Servos (Mitte)
+int posHoriz = 90;
+int posVert = 90;
+
+// Konfiguration der Nachführung
+const int toleranz = 100;   // Deadband: Verhindert ständiges Zittern
+const int schrittweite = 1; // Gradzahl der Bewegung pro Durchlauf
+const int messPause = 50;   // Umbenannt zur Vermeidung des Namenskonflikts
+
+void setup() {
+  Serial.begin(115200);
+
+  // ESP32 Timer für Servos allozieren
+  ESP32PWM::allocateTimer(0);
+  ESP32PWM::allocateTimer(1);
+  ESP32PWM::allocateTimer(2);
+  ESP32PWM::allocateTimer(3);
+
+  // Servos anbinden
+  servoHoriz.setPeriodHertz(50);
+  servoVert.setPeriodHertz(50);
+  servoHoriz.attach(pinServoHoriz, 500, 2400); 
+  servoVert.attach(pinServoVert, 500, 2400);
+
+  // Auf Startposition fahren
+  servoHoriz.write(posHoriz);
+  servoVert.write(posVert);
+}
+
+void loop() {
+  // 1. Werte der LDRs einlesen
+  int valTL = analogRead(ldrTopLeft);
+  int valTR = analogRead(ldrTopRight);
+  int valBL = analogRead(ldrBotLeft);
+  int valBR = analogRead(ldrBotRight);
+
+  // 2. Durchschnittswerte der Achsen berechnen
+  int avgTop = (valTL + valTR) / 2;
+  int avgBot = (valBL + valBR) / 2;
+  int avgLeft = (valTL + valBL) / 2;
+  int avgRight = (valTR + valBR) / 2;
+
+  // 3. Differenzen berechnen
+  int diffVert = avgTop - avgBot;
+  int diffHoriz = avgLeft - avgRight;
+
+  // 4. Vertikale Ausrichtung anpassen (Logik: Kleinerer Wert = heller)
+  if (abs(diffVert) > toleranz) {
+    if (avgTop < avgBot) {
+      posVert += schrittweite; // Oben ist heller, kippe nach oben
+    } else {
+      posVert -= schrittweite; // Unten ist heller, kippe nach unten
+    }
+  }
+
+  // 5. Horizontale Ausrichtung anpassen (Logik: Kleinerer Wert = heller)
+  if (abs(diffHoriz) > toleranz) {
+    if (avgLeft < avgRight) {
+      posHoriz -= schrittweite; // Links ist heller, drehe nach links
+    } else {
+      posHoriz += schrittweite; // Rechts ist heller, drehe nach rechts
+    }
+  }
+
+  // 6. Mechanische Grenzen einhalten
+  posVert = constrain(posVert, 0, 180);
+  posHoriz = constrain(posHoriz, 0, 180);
+
+  // 7. Servos bewegen
+  servoVert.write(posVert);
+  servoHoriz.write(posHoriz);
+
+  // 8. Debug-Ausgabe für den Serial Monitor
+  Serial.printf("LDR Werte -> Oben-Links: %d | Oben-Rechts: %d | Unten-Links: %d | Unten-Rechts: %d\n", valTL, valTR, valBL, valBR);
+  Serial.printf("Servo Pos -> Vertikal: %d | Horizontal: %d\n", posVert, posHoriz);
+  Serial.println("--------------------------------------------------");
+
+  delay(messPause);
+}
