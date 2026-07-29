@@ -7,11 +7,18 @@
   <title>Modul 4: Solarnachführung</title>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <!-- highlight.js (atom-one-dark) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <!-- highlight.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
   <!-- Model Viewer -->
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     :root {
@@ -490,6 +497,66 @@
       background: var(--kit-primary-color, #009682);
       transition: width 0.2s;
     }
+
+    /* Code-Blöcke (identisch zu wetterstation.html) */
+    .custom-code-block {
+      background: #e8f5e9;
+      color: #222;
+      border: 1.5px solid var(--kit-primary-color);
+      border-radius: 8px;
+      padding: 18px 18px 12px 18px;
+      margin: 18px 0;
+      position: relative;
+      font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+      overflow-x: auto;
+    }
+
+    .custom-code-block pre {
+      margin: 0;
+      background: transparent;
+      color: inherit;
+      font-size: 1em;
+      overflow-x: auto;
+    }
+
+    .custom-code-block .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: var(--kit-primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background .2s;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .custom-code-block .copy-btn:hover,
+    .custom-code-block .copy-btn:focus {
+      background: var(--kit-secondary-color);
+      color: #fff;
+    }
+
+    .custom-code-block .copy-btn.copied {
+      background: #388e3c;
+      color: #fff;
+    }
+
+    /* Warnbox */
+    .warn-box {
+      background: #fff8e1;
+      border-left: 5px solid #ff9800;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+      color: #4a3b00;
+    }
   </style>
 </head>
 
@@ -502,7 +569,6 @@
     </a>
     <div class="header-titles">
       <div class="title">Die intelligente Solarnachführung</div>
-      <div class="subtitle">Zwei Achsen, vier Augen, volle Energie</div>
     </div>
     <nav class="nav-menu" aria-label="Modul-Navigation">
       <a href="index.html" title="Zur Übersicht"><i class="fa-solid fa-house"></i></a>
@@ -523,7 +589,6 @@
       <div class="section-emoji">☀️</div>
       <h1>Die intelligente Solarnachführung</h1>
 
-      <p class="lead">Zwei Achsen, vier Augen, volle Energie</p>
       <p><strong>Autor:</strong> John van Dijk</p>
       <p><strong>Lizenzhinweis:</strong> CC BY-SA 4.0</p>
       <p>
@@ -531,6 +596,18 @@
       </p>
 
       <div class="intro-accordion">
+        <details>
+          <summary>Lehrplanbezug: Kompetenzen (NwT 2016)</summary>
+          <div style="padding: 4px 12px 12px 4px; font-size: 0.95rem;">
+            <p style="margin-top: 0;">Dieses Modul deckt folgende Kernkompetenzen ab:</p>
+            <ul style="margin: 0; padding-left: 20px; line-height: 1.5;">
+              <li style="margin-bottom: 6px;"><strong>Sensorgesteuerte Algorithmen (3.2.4.3):</strong> Die Schülerinnen und Schüler können „Algorithmen für zeit- und sensorgesteuerte Prozesse entwickeln, beschreiben und darstellen“ (Auswertung von 4 LDR-Sensoren und Ansteuerung von 2 Servomotoren).</li>
+              <li style="margin-bottom: 6px;"><strong>Steuerungs- und Regelungstechnik (3.2.4.3):</strong> Sie können „das Prinzip der Regelung auch unter Verwendung der Begriffe Sollwert, Istwert, Regelgröße und Störgröße darstellen und an Beispielen [...] erklären“ (Vermeidung von Motorzittern durch Hysterese/Schwellenwerte).</li>
+              <li style="margin-bottom: 6px;"><strong>Elektronische Schaltungen (3.2.4.4):</strong> Sie können „Schaltungen entwickeln, Bauteile dimensionieren und auswählen (Schaltplan, Datenblatt, Vorwiderstand, Spannungsteiler)“ (Spannungsteiler für analoge LDR-Signale an ADC-Eingängen).</li>
+              <li style="margin-bottom: 6px;"><strong>Systemintegration & Konstruktion (PB 2.2):</strong> Sie können „die Lösung eines technischen Problems durch Auswählen, Anpassen, Dimensionieren und Kombinieren von Teillösungen entwickeln, darstellen und bewerten“ (Kombination von Sensoren, Aktoren, ESP32-Programmierung und 3D-Druck-Mechanik).</li>
+            </ul>
+          </div>
+        </details>
         <details open>
           <summary>Lernziele</summary>
           <ul class="material-list">
@@ -993,18 +1070,21 @@ delay(50); // Kleine Pause zur Beruhigung</code></pre>
         <p><em>Hinweis: Sollte der ESP32 bei der Bewegung beider Servos abstürzen oder neustarten, reicht der Strom des USB-Anschlusses eventuell nicht aus.</em></p>
       </div>
 
-      <!-- Platzhalter Bild 3 -->
-      <div style="background: #e9ecef; border: 2px dashed #adb5bd; border-radius: 12px; padding: 40px; text-align: center; margin: 20px 0;">
-        <i class="fa-solid fa-camera fa-3x" style="color: #6c757d; margin-bottom: 15px;"></i>
-        <h3 style="color: #495057; margin: 0;">Platzhalter Bild 3: Fritzing-Schaltplan</h3>
-        <p style="color: #6c757d; margin-top: 10px;">Bitte den Schaltplan (ESP32 + 4 LDRs + 2 Servos) hier einfügen.</p>
-      </div>
+      <!-- Fritzing-Schaltplan Steckplan -->
+      <figure style="margin: 24px 0; border: 1px solid #ddd; padding: 12px; background: #fafafa; border-radius: 12px; text-align: center;">
+        <img src="Media/Images/fritzingmodul4.png" alt="Fritzing-Schaltplan der Solarnachführung mit ESP32, 4 LDRs und 2 Servomotoren"
+          loading="lazy"
+          style="display: block; margin: 0 auto; max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #eee; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+        <figcaption style="text-align: center; font-size: 0.9rem; color: #555; margin-top: 10px;">
+          <strong>Steckplan Solarnachführung:</strong> Vollständige Verdrahtung des ESP32 mit den 4 LDR-Spannungsteilern und den 2 Servomotoren.
+        </figcaption>
+      </figure>
 
     </section>
 
     <!-- Section 2: Logik -->
     <section class="content-section" id="logik">
-      <h2>2. Die Logik: Folge dem Licht</h2>
+      <h2>2. Die Steuerungslogik: Helligkeitsvergleich und Hysterese</h2>
       <p>Damit der ESP32 weiß, wohin er die Solarzelle drehen muss, vergleicht er die Helligkeitswerte der gegenüberliegenden Sensoren. Ist es zum Beispiel links heller als rechts, muss der horizontale Servo nach links drehen.</p>
       <p>Probier es selbst aus: Ziehe die Sonne auf dem Halbkreis und beobachte, wie die LDR-Werte reagieren!</p>
 
@@ -1635,14 +1715,321 @@ if (abs(diff) > threshold) {
     <!-- Section 3: Code -->
     <section class="content-section" id="code">
       <h2>3. Der Programmcode</h2>
-      <p>Hier fügen wir bald den Code ein. Lade dir vorab schon einmal die <code>ESP32Servo</code> Bibliothek über den Bibliotheksverwalter in der Arduino IDE herunter!</p>
+      <p>Mit diesem fertigen Sketch steuert der ESP32 beide Achsen der Solarnachführung vollautomatisch an. Über den <strong>Seriellen Monitor</strong> kannst du die aktuellen Sensorwerte und die Servopositionen in Echtzeit mitverfolgen.</p>
 
-      <!-- Platzhalter Code -->
-      <div style="background: #282c34; border-radius: 8px; padding: 20px; color: #abb2bf; font-family: monospace; margin: 20px 0; white-space: pre-wrap;">
-// Code-Platzhalter für die Solarnachführung
-// ... include ESP32Servo.h ...
-// ... setup() ...
-// ... loop() mit analogRead(LDRs) und servo.write() ...
+      <div class="infobox">
+        <h4><i class="fa-solid fa-download"></i> Vorbereitung in der Arduino IDE / PlatformIO</h4>
+        <ol style="margin: 8px 0; padding-left: 20px; line-height: 1.6;">
+          <li>Öffne in der Arduino IDE den <strong>Bibliotheksverwalter</strong> (Strg + Umschalt + I / Cmd + Umschalt + I).</li>
+          <li>Suche nach <strong>ESP32Servo</strong> (von Kevin Harrington / John K. Bennett) und installiere die neueste Version.</li>
+          <li>Wähle als Board dein ESP32-Board aus (z. B. <em>Adafruit ESP32 Feather</em> oder <em>ESP32 Dev Module</em>) und stelle die Baudrate im Seriellen Monitor auf <strong>115200 Baud</strong>.</li>
+        </ol>
+        <p style="margin: 8px 0 0 0; font-size: 0.9rem; color: #555;">
+          <em>Hinweis für PlatformIO-Nutzer:</em> Die Konfiguration für deine <code>platformio.ini</code> lautet:
+        </p>
+        <div class="custom-code-block" style="margin: 8px 0 0 0; padding: 10px 14px;">
+          <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
+          <pre><code class="language-ini">[env:featheresp32]
+platform = espressif32
+board = featheresp32
+framework = arduino
+monitor_speed = 115200
+lib_deps = 
+	madhephaestus/ESP32Servo @ ^3.0.5</code></pre>
+        </div>
+      </div>
+
+      <h3>Gesamter Arduino Sketch</h3>
+      <div class="custom-code-block">
+        <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
+        <pre><code class="language-cpp">#include &lt;Arduino.h&gt;
+#include &lt;ESP32Servo.h&gt;
+
+// Servo Pins
+const int pinServoHoriz = 12;
+const int pinServoVert = 13;
+
+// LDR Pins (ADC1)
+const int ldrTopLeft = 32;
+const int ldrTopRight = 33;
+const int ldrBotLeft = 34;
+const int ldrBotRight = 35;
+
+Servo servoHoriz;
+Servo servoVert;
+
+// Startposition der Servos (Mitte)
+int posHoriz = 90;
+int posVert = 90;
+
+// Konfiguration der Nachführung
+const int toleranz = 100;   // Deadband: Verhindert ständiges Zittern
+const int schrittweite = 1; // Gradzahl der Bewegung pro Durchlauf
+const int messPause = 50;   // Umbenannt zur Vermeidung des Namenskonflikts
+
+void setup() {
+  Serial.begin(115200);
+
+  // ESP32 Timer für Servos allozieren
+  ESP32PWM::allocateTimer(0);
+  ESP32PWM::allocateTimer(1);
+  ESP32PWM::allocateTimer(2);
+  ESP32PWM::allocateTimer(3);
+
+  // Servos anbinden
+  servoHoriz.setPeriodHertz(50);
+  servoVert.setPeriodHertz(50);
+  servoHoriz.attach(pinServoHoriz, 500, 2400); 
+  servoVert.attach(pinServoVert, 500, 2400);
+
+  // Auf Startposition fahren
+  servoHoriz.write(posHoriz);
+  servoVert.write(posVert);
+}
+
+void loop() {
+  // 1. Werte der LDRs einlesen
+  int valTL = analogRead(ldrTopLeft);
+  int valTR = analogRead(ldrTopRight);
+  int valBL = analogRead(ldrBotLeft);
+  int valBR = analogRead(ldrBotRight);
+
+  // 2. Durchschnittswerte der Achsen berechnen
+  int avgTop = (valTL + valTR) / 2;
+  int avgBot = (valBL + valBR) / 2;
+  int avgLeft = (valTL + valBL) / 2;
+  int avgRight = (valTR + valBR) / 2;
+
+  // 3. Differenzen berechnen
+  int diffVert = avgTop - avgBot;
+  int diffHoriz = avgLeft - avgRight;
+
+  // 4. Vertikale Ausrichtung anpassen (Logik: Kleinerer Wert = heller)
+  if (abs(diffVert) > toleranz) {
+    if (avgTop < avgBot) {
+      posVert += schrittweite; // Oben ist heller, kippe nach oben
+    } else {
+      posVert -= schrittweite; // Unten ist heller, kippe nach unten
+    }
+  }
+
+  // 5. Horizontale Ausrichtung anpassen (Logik: Kleinerer Wert = heller)
+  if (abs(diffHoriz) > toleranz) {
+    if (avgLeft < avgRight) {
+      posHoriz -= schrittweite; // Links ist heller, drehe nach links
+    } else {
+      posHoriz += schrittweite; // Rechts ist heller, drehe nach rechts
+    }
+  }
+
+  // 6. Mechanische Grenzen einhalten
+  posVert = constrain(posVert, 0, 180);
+  posHoriz = constrain(posHoriz, 0, 180);
+
+  // 7. Servos bewegen
+  servoVert.write(posVert);
+  servoHoriz.write(posHoriz);
+
+  // 8. Debug-Ausgabe für den Serial Monitor
+  Serial.printf("LDR Werte -> Oben-Links: %d | Oben-Rechts: %d | Unten-Links: %d | Unten-Rechts: %d\n", valTL, valTR, valBL, valBR);
+  Serial.printf("Servo Pos -> Vertikal: %d | Horizontal: %d\n", posVert, posHoriz);
+  Serial.println("--------------------------------------------------");
+
+  delay(messPause);
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- Section 4: Auswertungstool: Statisch vs. Nachgeführt -->
+    <section class="content-section" id="auswertung">
+      <h2>4. Auswertungstool: Statisch vs. Nachgeführt</h2>
+      <p>Mit diesem Auswertungstool können Schülerinnen, Schüler und Lehrkräfte den Tagesverlauf und den Energieertrag einer <strong>statischen Solarzelle</strong> direkt mit einer <strong>zweiachsig nachgeführten Solarzelle</strong> vergleichen. Überprüft die Machbarkeit und findet heraus, ob der Mehrertrag den Eigenverbrauch der Motoren rechtfertigt!</p>
+
+      <!-- 4.1 Messaufbau & Leistungsmessung Infobox -->
+      <div style="background: #fbfffb; border: 1px solid #c8e6c9; border-radius: 12px; padding: 24px; margin-bottom: 28px;">
+        <h3 style="margin-top: 0; color: var(--kit-primary-color); display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-microchip"></i> Messaufbau: Spannung, Strom & Leistung der Solarzelle messen
+        </h3>
+        
+        <p style="font-size: 0.95rem; line-height: 1.6; color: #333;">
+          Um die elektrische Leistung (<em>P = U &middot; I</em>) einer Solarzelle zu bestimmen, kann man die Spannung nicht einfach im Leerlauf abgreifen, da ohne Verbraucher kein Strom fließt (<em>I = 0 A &rArr; P = 0 W</em>).
+        </p>
+
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center; margin: 18px 0;">
+          <!-- Infotext Formel -->
+          <div style="flex: 1; min-width: 280px; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px;">
+            <h4 style="margin-top: 0; color: #2e7d32; font-size: 1rem;"><i class="fa-solid fa-calculator"></i> Das Messprinzip (Ohm'sches Gesetz)</h4>
+            <ol style="margin: 8px 0; padding-left: 20px; font-size: 0.9rem; line-height: 1.6; color: #444;">
+              <li>Die Solarzelle wird über einen <strong>Lastwiderstand</strong> (R<sub>L</sub>, z. B. 47 &Omega; bis 100 &Omega;) geschlossen.</li>
+              <li>Der ESP32/Arduino misst die abfallende <strong>Spannung U</strong> parallel zum Lastwiderstand an einem analogen ADC-Eingang.</li>
+              <li>Der <strong>Strom I</strong> berechnet sich automatisch über das Ohm'sche Gesetz: <em>I = U / R<sub>L</sub></em>.</li>
+              <li>Die <strong>Leistung P</strong> ergibt sich direkt zu: 
+                <div style="background: #e8f5e9; padding: 8px 12px; border-radius: 6px; text-align: center; font-weight: bold; margin-top: 6px; color: #1b5e20; font-size: 1.05rem;">
+                  P = U<sup>2</sup> / R<sub>L</sub>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Platzhalter Fritzing Diagramm -->
+          <div style="flex: 1; min-width: 280px;">
+            <div style="background: #e9ecef; border: 2px dashed #94d3a2; border-radius: 12px; padding: 24px 16px; text-align: center;">
+              <i class="fa-solid fa-project-diagram fa-3x" style="color: var(--kit-primary-color); margin-bottom: 12px;"></i>
+              <h4 style="color: #2e7d32; margin: 0 0 6px 0;">Platzhalter: Fritzing-Schaltplan Messaufbau</h4>
+              <p style="color: #555; font-size: 0.85rem; margin: 0 0 10px 0;">
+                Schaltbild: Solarzelle &bull; Lastwiderstand R<sub>L</sub> (50 &Omega;) &bull; Messabgriff an ADC Pin (ESP32)
+              </p>
+              <span style="display: inline-block; font-size: 0.75rem; background: #fff; color: #555; border: 1px solid #ccc; border-radius: 4px; padding: 4px 8px;">
+                Grafik <code>Fritzing_Messaufbau_Solarzelle.png</code> hier einfügen
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs / Modus-Wahl -->
+      <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+        <button id="tab-btn-sim" class="start-button" style="flex: 1; min-width: 160px; background: var(--kit-primary-color); border: 2px solid var(--kit-primary-color);" onclick="switchEvaluationMode('sim')">
+          <i class="fa-solid fa-cloud-sun"></i> Live-Simulation (Sonnengang)
+        </button>
+        <button id="tab-btn-manual" class="start-button" style="flex: 1; min-width: 160px; background: #fff; color: #555; border: 2px solid #ccc;" onclick="switchEvaluationMode('manual')">
+          <i class="fa-solid fa-table"></i> Eigene Messdaten (Praktikum / CSV)
+        </button>
+      </div>
+
+      <!-- Controls Bereich -->
+      <div id="sim-controls-panel" style="background: #f8faf9; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+        <h3 style="margin-top: 0; font-size: 1.1rem; color: var(--kit-primary-color);"><i class="fa-solid fa-sliders"></i> Simulations-Parameter anpassen</h3>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+          <div>
+            <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Wetterbedingungen:</label>
+            <select id="eval-weather" onchange="updateEvaluationChart()" style="width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem;">
+              <option value="sunny">☀️ Sonnig & Klar (Idealfall)</option>
+              <option value="cloudy">⛅ Wechselhaft / Leicht bewölkt</option>
+              <option value="overcast">☁️ Dauerhaft bewölkt (Diffuslicht)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Ausrichtung Statische Zelle:</label>
+            <select id="eval-orientation" onchange="updateEvaluationChart()" style="width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem;">
+              <option value="south30">Süden 30° Neigung (Optimal)</option>
+              <option value="flat">Horizontale Montage (0° Flach)</option>
+              <option value="eastwest">Ost-West Abweichung (45° Gen Osten)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Max. Modulleistung (P<sub>max</sub>): <span id="val-pmax" style="color: var(--kit-primary-color);">1000 mW</span></label>
+            <input type="range" id="eval-pmax" min="100" max="5000" step="100" value="1000" oninput="document.getElementById('val-pmax').textContent = this.value + ' mW'; updateEvaluationChart();" style="width: 100%; accent-color: var(--kit-primary-color);">
+          </div>
+
+          <div>
+            <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Eigenverbrauch Servos/ESP32: <span id="val-peigen" style="color: #e67e22;">150 mW</span></label>
+            <input type="range" id="eval-peigen" min="0" max="500" step="10" value="150" oninput="document.getElementById('val-peigen').textContent = this.value + ' mW'; updateEvaluationChart();" style="width: 100%; accent-color: #e67e22;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Manuelle Eingabe & CSV Panel (standardmäßig versteckt) -->
+      <div id="manual-controls-panel" style="display: none; background: #f8faf9; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+        <h3 style="margin-top: 0; font-size: 1.1rem; color: var(--kit-primary-color);"><i class="fa-solid fa-file-csv"></i> Messwerte importieren oder manuell erfassen</h3>
+        <p style="font-size: 0.9rem; color: #555;">Trage hier deine im Praktikum gemessenen Leistungswerte (in mW) ein oder lade eine CSV-Datei hoch (Format: Uhrzeit, P_Statisch, P_Nachgeführt, Eigenverbrauch).</p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
+          <label class="download-link" style="cursor: pointer; padding: 8px 14px; font-size: 0.9rem; background: var(--kit-primary-color); color: #fff;">
+            <i class="fa-solid fa-upload"></i> CSV-Datei hochladen
+            <input type="file" id="csv-file-input" accept=".csv, .txt" onchange="handleCSVUpload(event)" style="display: none;">
+          </label>
+          <button onclick="exportCSVData()" class="download-link" style="cursor: pointer; padding: 8px 14px; font-size: 0.9rem; background: #fff;">
+            <i class="fa-solid fa-download"></i> Daten als CSV exportieren
+          </button>
+          <button onclick="addTableRow()" class="download-link" style="cursor: pointer; padding: 8px 14px; font-size: 0.9rem; background: #e3f2fd; color: #1976d2; border-color: #1976d2;">
+            <i class="fa-solid fa-plus"></i> Zeile hinzufügen
+          </button>
+          <button onclick="resetTableToDefault()" class="download-link" style="cursor: pointer; padding: 8px 14px; font-size: 0.9rem; background: #fff3e0; color: #e67e22; border-color: #e67e22;">
+            <i class="fa-solid fa-rotate-left"></i> Zurücksetzen
+          </button>
+        </div>
+
+        <div style="overflow-x: auto; max-height: 280px;">
+          <table id="measurements-table" style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.9rem;">
+            <thead>
+              <tr style="background: #e8f5e9; color: #2e7d32;">
+                <th style="padding: 8px; border: 1px solid #ccc;">Uhrzeit</th>
+                <th style="padding: 8px; border: 1px solid #ccc;">P Statisch (mW)</th>
+                <th style="padding: 8px; border: 1px solid #ccc;">P Nachgeführt Brutto (mW)</th>
+                <th style="padding: 8px; border: 1px solid #ccc;">Eigenverbrauch (mW)</th>
+                <th style="padding: 8px; border: 1px solid #ccc;">Aktion</th>
+              </tr>
+            </thead>
+            <tbody id="measurements-table-body">
+              <!-- Dynamische Tabellenzeilen -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Live Diagramm -->
+      <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 24px;">
+        <h3 style="margin-top: 0; text-align: center; color: #333; font-size: 1.1rem;">Tagesverlauf der Leistung P(t) [06:00 - 18:00 Uhr]</h3>
+        <div style="position: relative; height: 320px; width: 100%;">
+          <canvas id="evalChart"></canvas>
+        </div>
+      </div>
+
+      <!-- KPI Ertrags-Karten -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+        <div style="background: #fff8e1; border: 1px solid #ffe082; border-radius: 10px; padding: 16px; text-align: center;">
+          <div style="font-size: 0.85rem; color: #7f6000; font-weight: 600;">Statisch (Fixiert)</div>
+          <div id="kpi-statisch" style="font-size: 1.6rem; font-weight: 700; color: #d35400; margin: 6px 0;">0.00 mWh</div>
+          <div style="font-size: 0.78rem; color: #888;">Gesamtertrag Tagesverlauf</div>
+        </div>
+
+        <div style="background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 10px; padding: 16px; text-align: center;">
+          <div style="font-size: 0.85rem; color: #1b5e20; font-weight: 600;">Nachgeführt (Brutto)</div>
+          <div id="kpi-brutto" style="font-size: 1.6rem; font-weight: 700; color: #2e7d32; margin: 6px 0;">0.00 mWh</div>
+          <div id="kpi-brutto-gain" style="font-size: 0.85rem; font-weight: 600; color: #2e7d32;">+0.0% Brutto-Mehrertrag</div>
+        </div>
+
+        <div style="background: #e3f2fd; border: 1px solid #90caf9; border-radius: 10px; padding: 16px; text-align: center;">
+          <div style="font-size: 0.85rem; color: #0d47a1; font-weight: 600;">Nachgeführt (Netto)</div>
+          <div id="kpi-netto" style="font-size: 1.6rem; font-weight: 700; color: #1565c0; margin: 6px 0;">0.00 mWh</div>
+          <div id="kpi-netto-gain" style="font-size: 0.85rem; font-weight: 600; color: #1565c0;">+0.0% Netto-Mehrertrag</div>
+        </div>
+      </div>
+
+      <!-- Amortisations- & Machbarkeitsbewertung -->
+      <div id="feasibility-badge" style="background: #f4f6f7; border-left: 5px solid #7f8c8d; padding: 16px 20px; border-radius: 8px; margin-bottom: 24px;">
+        <h4 id="feasibility-title" style="margin: 0 0 6px 0; color: #333;">Ergebnis-Analyse & Machbarkeit</h4>
+        <p id="feasibility-text" style="margin: 0; font-size: 0.95rem; line-height: 1.5; color: #555;">Werte werden berechnet...</p>
+      </div>
+
+      <!-- Reflexionsaufgaben für den Unterricht -->
+      <div class="intro-accordion">
+        <details>
+          <summary>Auswertung & Reflexionsfragen für den Unterricht</summary>
+          <div style="padding: 12px; font-size: 0.95rem; line-height: 1.6;">
+            <p><strong>Aufgabe 1: Kurvenverlauf vergleichen</strong><br>
+            Begründe, warum die Leistungskurve der statischen Solarzelle eine Glockenkurve (Sinus-/Cosinus-Form) aufweist, während die nachgeführte Zelle über fast den gesamten Tagesverlauf eine nahezu konstante Helligkeit sieht.</p>
+            
+            <p><strong>Aufgabe 2: Eigenverbrauch & Skalierungseffekt</strong><br>
+            Vergleiche ein kleines Schulmodell (z. B. 1 Watt Solarzelle, Servos verbrauchen 0,15 Watt) mit einem industriellen Solarpark (z. B. 1 MegaWatt Modulfeld, Motoren verbrauchen 500 Watt). Warum ist die Solarnachführung beim Schulmodell oft netto negativ, bei Großanlagen jedoch wirtschaftlich sinnvoll?</p>
+            
+            <p><strong>Aufgabe 3: Mechanische & Wirtschaftliche Kriterien</strong><br>
+            Nenne mindestens zwei Gründe, warum in der Praxis für Hausdächer und Balkonkraftwerke fast ausschließlich statische PV-Anlagen verbaut werden, obwohl nachgeführte Anlagen mehr Brutto-Energie liefern.</p>
+
+            <div class="infobox" style="margin-top: 16px;">
+              <h4 style="margin-top: 0; color: var(--kit-primary-color);"><i class="fa-solid fa-lightbulb"></i> Musterlösung / Lehrkräfte-Hinweis</h4>
+              <ul style="margin: 0; padding-left: 20px;">
+                <li><strong>Zu 1:</strong> Die statische Zelle sieht nur mittags einen senkrechten Lichteinfall (&cos;(0&deg;) = 1). Morgens und abends trifft das Licht in flachem Winkel auf. Die nachgeführte Zelle dreht sich stets rechtwinklig zur Sonne.</li>
+                <li><strong>Zu 2:</strong> Der Eigenverbrauch der Elektronik und Motoren skaliert nicht linear mit der Modulgröße. Bei Miniatur-Anlagen macht der Motorverbrauch einen großen Prozentsatz aus. Bei Großanlagen machen die Nachführ-Motoren nur einen Bruchteil des Gesamtertrags aus.</li>
+                <li><strong>Zu 3:</strong> Mechanischer Verschleiß, Windanfälligkeit/Sturmschäden, hohe Anschaffungskosten für Mechanik/Motoren und regelmäßige Wartungskosten.</li>
+              </ul>
+            </div>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -1684,7 +2071,370 @@ if (abs(diff) > threshold) {
     }, { threshold: 0.1 });
     sections.forEach(sec => observer.observe(sec));
 
+    // highlight.js initialisieren
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.custom-code-block pre code').forEach(function (block) {
+        hljs.highlightElement(block);
+      });
+    });
 
+    // Copy-Button-Funktionalität
+    document.querySelectorAll('.custom-code-block .copy-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const code = btn.closest('.custom-code-block').querySelector('code');
+        navigator.clipboard.writeText(code.innerText).then(function () {
+          btn.classList.add('copied');
+          btn.innerHTML = '<i class="fa fa-check"></i>';
+          setTimeout(function () {
+            btn.classList.remove('copied');
+            btn.innerHTML = '<i class="fa fa-copy"></i>';
+          }, 1800);
+        });
+      });
+    });
+
+    // ==========================================
+    // Sektion 4: Auswertungstool JavaScript Logik
+    // ==========================================
+    let evalChartInstance = null;
+    let currentEvalMode = 'sim';
+
+    let manualDataPoints = [
+      { time: '06:00', pStat: 50,  pNach: 350, pEigen: 150 },
+      { time: '07:00', pStat: 180, pNach: 600, pEigen: 150 },
+      { time: '08:00', pStat: 350, pNach: 850, pEigen: 150 },
+      { time: '09:00', pStat: 550, pNach: 950, pEigen: 150 },
+      { time: '10:00', pStat: 750, pNach: 980, pEigen: 150 },
+      { time: '11:00', pStat: 900, pNach: 1000, pEigen: 150 },
+      { time: '12:00', pStat: 950, pNach: 1000, pEigen: 150 },
+      { time: '13:00', pStat: 900, pNach: 1000, pEigen: 150 },
+      { time: '14:00', pStat: 750, pNach: 980, pEigen: 150 },
+      { time: '15:00', pStat: 550, pNach: 950, pEigen: 150 },
+      { time: '16:00', pStat: 350, pNach: 850, pEigen: 150 },
+      { time: '17:00', pStat: 180, pNach: 600, pEigen: 150 },
+      { time: '18:00', pStat: 50,  pNach: 350, pEigen: 150 }
+    ];
+
+    window.switchEvaluationMode = function(mode) {
+      currentEvalMode = mode;
+      const btnSim = document.getElementById('tab-btn-sim');
+      const btnManual = document.getElementById('tab-btn-manual');
+      const panelSim = document.getElementById('sim-controls-panel');
+      const panelManual = document.getElementById('manual-controls-panel');
+
+      if (mode === 'sim') {
+        btnSim.style.background = 'var(--kit-primary-color)';
+        btnSim.style.color = '#fff';
+        btnSim.style.borderColor = 'var(--kit-primary-color)';
+
+        btnManual.style.background = '#fff';
+        btnManual.style.color = '#555';
+        btnManual.style.borderColor = '#ccc';
+
+        panelSim.style.display = 'block';
+        panelManual.style.display = 'none';
+      } else {
+        btnManual.style.background = 'var(--kit-primary-color)';
+        btnManual.style.color = '#fff';
+        btnManual.style.borderColor = 'var(--kit-primary-color)';
+
+        btnSim.style.background = '#fff';
+        btnSim.style.color = '#555';
+        btnSim.style.borderColor = '#ccc';
+
+        panelSim.style.display = 'none';
+        panelManual.style.display = 'block';
+
+        renderManualTable();
+      }
+      updateEvaluationChart();
+    };
+
+    function generateSimulationData() {
+      const weather = document.getElementById('eval-weather').value;
+      const orientation = document.getElementById('eval-orientation').value;
+      const pMax = parseFloat(document.getElementById('eval-pmax').value);
+      const pEigen = parseFloat(document.getElementById('eval-peigen').value);
+
+      const times = ['06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
+      const dataStat = [];
+      const dataNachBrutto = [];
+      const dataNachNetto = [];
+
+      times.forEach((t, i) => {
+        const hourAngle = ((i - 6) / 6) * (Math.PI / 2);
+        const sunElevation = Math.max(0, Math.cos(hourAngle));
+
+        let weatherFactor = 1.0;
+        if (weather === 'cloudy') {
+          weatherFactor = 0.6 + 0.35 * Math.sin(i * 1.5);
+        } else if (weather === 'overcast') {
+          weatherFactor = 0.3;
+        }
+
+        let staticAngleFactor = sunElevation;
+        if (orientation === 'flat') {
+          staticAngleFactor = Math.pow(sunElevation, 1.2);
+        } else if (orientation === 'eastwest') {
+          const shiftedAngle = ((i - 4) / 6) * (Math.PI / 2);
+          staticAngleFactor = Math.max(0, Math.cos(shiftedAngle));
+        }
+
+        let pStat = Math.round(pMax * staticAngleFactor * weatherFactor);
+        
+        let trackedFactor = (sunElevation > 0.05) ? 0.95 : 0;
+        if (weather === 'overcast') trackedFactor = 0.35;
+
+        let pNachB = Math.round(pMax * trackedFactor * weatherFactor);
+        let pNachN = Math.max(0, pNachB - pEigen);
+
+        dataStat.push(pStat);
+        dataNachBrutto.push(pNachB);
+        dataNachNetto.push(pNachN);
+      });
+
+      return { times, dataStat, dataNachBrutto, dataNachNetto, pEigen };
+    }
+
+    window.updateEvaluationChart = function() {
+      let labels = [];
+      let statValues = [];
+      let bruttoValues = [];
+      let nettoValues = [];
+
+      if (currentEvalMode === 'sim') {
+        const simResult = generateSimulationData();
+        labels = simResult.times;
+        statValues = simResult.dataStat;
+        bruttoValues = simResult.dataNachBrutto;
+        nettoValues = simResult.dataNachNetto;
+      } else {
+        labels = manualDataPoints.map(d => d.time);
+        statValues = manualDataPoints.map(d => d.pStat);
+        bruttoValues = manualDataPoints.map(d => d.pNach);
+        nettoValues = manualDataPoints.map(d => Math.max(0, d.pNach - d.pEigen));
+      }
+
+      let eStat = 0, eBrutto = 0, eNetto = 0;
+      for (let i = 0; i < labels.length - 1; i++) {
+        eStat += (statValues[i] + statValues[i+1]) / 2;
+        eBrutto += (bruttoValues[i] + bruttoValues[i+1]) / 2;
+        eNetto += (nettoValues[i] + nettoValues[i+1]) / 2;
+      }
+
+      document.getElementById('kpi-statisch').textContent = (eStat / 1000).toFixed(2) + ' Wh';
+      document.getElementById('kpi-brutto').textContent = (eBrutto / 1000).toFixed(2) + ' Wh';
+      document.getElementById('kpi-netto').textContent = (eNetto / 1000).toFixed(2) + ' Wh';
+
+      const bruttoGain = eStat > 0 ? (((eBrutto - eStat) / eStat) * 100) : 0;
+      const nettoGain = eStat > 0 ? (((eNetto - eStat) / eStat) * 100) : 0;
+
+      document.getElementById('kpi-brutto-gain').textContent = (bruttoGain >= 0 ? '+' : '') + bruttoGain.toFixed(1) + '% Brutto-Mehrertrag';
+      document.getElementById('kpi-netto-gain').textContent = (nettoGain >= 0 ? '+' : '') + nettoGain.toFixed(1) + '% Netto-Mehrertrag';
+
+      const badge = document.getElementById('feasibility-badge');
+      const title = document.getElementById('feasibility-title');
+      const text = document.getElementById('feasibility-text');
+
+      if (nettoGain > 15) {
+        badge.style.borderLeftColor = '#27ae60';
+        badge.style.background = '#e8f8f5';
+        title.textContent = '🟢 Machbarkeit: Sehr empfehlenswert (+ ' + nettoGain.toFixed(1) + '% Netto)';
+        text.textContent = 'Der Netto-Energiegewinn übersteigt den Eigenverbrauch der Servos und des Mikrocontrollers deutlich. Die Nachführung lohnt sich unter diesen Bedingungen energetisch hervorragend!';
+      } else if (nettoGain > 0) {
+        badge.style.borderLeftColor = '#f39c12';
+        badge.style.background = '#fef9e7';
+        title.textContent = '🟡 Machbarkeit: Bedacht / Grenzwertig (+ ' + nettoGain.toFixed(1) + '% Netto)';
+        text.textContent = 'Der Netto-Mehrertrag ist positiv, aber gering. Der Eigenverbrauch des Nachführsystems frisst einen Großteil des zusätzlichen Solarertrags auf.';
+      } else {
+        badge.style.borderLeftColor = '#e74c3c';
+        badge.style.background = '#fdedec';
+        title.textContent = '🔴 Machbarkeit: Unrentabel (' + nettoGain.toFixed(1) + '% Netto)';
+        text.textContent = 'Der Eigenverbrauch der Motoren & Elektronik ist höher als der zusätzliche Energieertrag der Nachführung. Eine statische Ausrichtung ist in dieser Konfiguration energetisch sinnvoller!';
+      }
+
+      const canvasElem = document.getElementById('evalChart');
+      if (!canvasElem) return;
+      const ctx = canvasElem.getContext('2d');
+      if (evalChartInstance) {
+        evalChartInstance.destroy();
+      }
+
+      evalChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Statisch (Fixiert) [mW]',
+              data: statValues,
+              borderColor: '#e67e22',
+              backgroundColor: 'rgba(230, 126, 34, 0.15)',
+              fill: true,
+              tension: 0.3,
+              borderWidth: 2.5
+            },
+            {
+              label: 'Nachgeführt Brutto [mW]',
+              data: bruttoValues,
+              borderColor: '#27ae60',
+              backgroundColor: 'rgba(39, 174, 96, 0.15)',
+              fill: true,
+              tension: 0.3,
+              borderWidth: 2.5
+            },
+            {
+              label: 'Nachgeführt Netto (abzügl. Eigenverbrauch) [mW]',
+              data: nettoValues,
+              borderColor: '#2980b9',
+              borderDash: [5, 5],
+              backgroundColor: 'transparent',
+              fill: false,
+              tension: 0.3,
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Leistung (mW)',
+                color: '#555',
+                font: { weight: 'bold' }
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Uhrzeit (Tagesgang)',
+                color: '#555',
+                font: { weight: 'bold' }
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'top'
+            }
+          }
+        }
+      });
+    };
+
+    function renderManualTable() {
+      const tbody = document.getElementById('measurements-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      manualDataPoints.forEach((pt, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="padding: 4px;"><input type="text" value="${pt.time}" onchange="updateDataPoint(${index}, 'time', this.value)" style="width: 60px; text-align: center;"></td>
+          <td style="padding: 4px;"><input type="number" value="${pt.pStat}" onchange="updateDataPoint(${index}, 'pStat', this.value)" style="width: 75px; text-align: center;"></td>
+          <td style="padding: 4px;"><input type="number" value="${pt.pNach}" onchange="updateDataPoint(${index}, 'pNach', this.value)" style="width: 75px; text-align: center;"></td>
+          <td style="padding: 4px;"><input type="number" value="${pt.pEigen}" onchange="updateDataPoint(${index}, 'pEigen', this.value)" style="width: 75px; text-align: center;"></td>
+          <td style="padding: 4px;"><button onclick="deleteDataPoint(${index})" style="background:#e74c3c; color:#fff; border:none; border-radius:4px; padding:2px 8px; cursor:pointer;">&times;</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.updateDataPoint = function(index, field, value) {
+      if (field === 'time') manualDataPoints[index].time = value;
+      else manualDataPoints[index][field] = parseFloat(value) || 0;
+      updateEvaluationChart();
+    };
+
+    window.deleteDataPoint = function(index) {
+      manualDataPoints.splice(index, 1);
+      renderManualTable();
+      updateEvaluationChart();
+    };
+
+    window.addTableRow = function() {
+      const lastTime = manualDataPoints.length > 0 ? manualDataPoints[manualDataPoints.length - 1].time : '12:00';
+      manualDataPoints.push({ time: lastTime, pStat: 0, pNach: 0, pEigen: 150 });
+      renderManualTable();
+      updateEvaluationChart();
+    };
+
+    window.resetTableToDefault = function() {
+      manualDataPoints = [
+        { time: '06:00', pStat: 50,  pNach: 350, pEigen: 150 },
+        { time: '07:00', pStat: 180, pNach: 600, pEigen: 150 },
+        { time: '08:00', pStat: 350, pNach: 850, pEigen: 150 },
+        { time: '09:00', pStat: 550, pNach: 950, pEigen: 150 },
+        { time: '10:00', pStat: 750, pNach: 980, pEigen: 150 },
+        { time: '11:00', pStat: 900, pNach: 1000, pEigen: 150 },
+        { time: '12:00', pStat: 950, pNach: 1000, pEigen: 150 },
+        { time: '13:00', pStat: 900, pNach: 1000, pEigen: 150 },
+        { time: '14:00', pStat: 750, pNach: 980, pEigen: 150 },
+        { time: '15:00', pStat: 550, pNach: 950, pEigen: 150 },
+        { time: '16:00', pStat: 350, pNach: 850, pEigen: 150 },
+        { time: '17:00', pStat: 180, pNach: 600, pEigen: 150 },
+        { time: '18:00', pStat: 50,  pNach: 350, pEigen: 150 }
+      ];
+      renderManualTable();
+      updateEvaluationChart();
+    };
+
+    window.exportCSVData = function() {
+      let csv = 'Uhrzeit;P_Statisch_mW;P_Nachgefuehrt_Brutto_mW;P_Eigenverbrauch_mW\n';
+      manualDataPoints.forEach(pt => {
+        csv += `${pt.time};${pt.pStat};${pt.pNach};${pt.pEigen}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'solarnachfuehrung_messdaten.csv';
+      link.click();
+    };
+
+    window.handleCSVUpload = function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const text = e.target.result;
+        const lines = text.split(/\r\n|\n/);
+        const newPoints = [];
+        lines.forEach((line, idx) => {
+          if (idx === 0 || !line.trim()) return;
+          const parts = line.split(/[,;\t]/);
+          if (parts.length >= 3) {
+            newPoints.push({
+              time: parts[0].trim(),
+              pStat: parseFloat(parts[1]) || 0,
+              pNach: parseFloat(parts[2]) || 0,
+              pEigen: parts[3] ? (parseFloat(parts[3]) || 0) : 150
+            });
+          }
+        });
+        if (newPoints.length > 0) {
+          manualDataPoints = newPoints;
+          renderManualTable();
+          updateEvaluationChart();
+        }
+      };
+      reader.readAsText(file);
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        if (typeof updateEvaluationChart === 'function') {
+          updateEvaluationChart();
+        }
+      }, 300);
+    });
   </script>
 </body>
 
