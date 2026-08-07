@@ -1,0 +1,253 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage[margin=1.8cm]{geometry}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{amssymb}
+\usepackage{wasysym}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+
+\definecolor{primary}{RGB}{44, 62, 80}
+\definecolor{accent}{RGB}{76, 175, 80}
+\definecolor{lightgray}{RGB}{245, 247, 248}
+
+\pagestyle{empty}
+
+\newcommand{\radio}{\textsf{\Large$\bigcirc$}}
+\newcommand{\checkbox}{\textsf{\Large$\square$}}
+\newcommand{\linefill}{\rule{\linewidth}{0.4pt}\vspace{1.2ex}}
+
+\begin{document}
+
+% Header
+{\Large \bfseries \color{primary} Evaluationsfragebogen – NWT Lernmodule}\\[2pt]
+{\large \bfseries \color{accent} Fotometer \& Wetterstation-App | Piloterprobung}\\[8pt]
+
+\begin{tcolorbox}[colback=lightgray,colframe=accent,arc=2mm,boxrule=1pt,top=6pt,bottom=6pt,left=8pt,right=8pt]
+\textbf{Hinweis für Teilnehmende:} Dieser Fragebogen ist anonym. Deine ehrliche Rückmeldung hilft dabei, die Lernmodule zu verbessern. Es gibt keine richtigen oder falschen Antworten.\\[2pt]
+\textbf{Zeitaufwand:} ca. 15–20 Minuten
+\end{tcolorbox}
+
+\vspace{4pt}
+
+% Teil A
+{\large \bfseries \color{primary} Teil A – Allgemeines \& Vorwissen}\\[-4pt]
+\color{accent}\rule{\linewidth}{1.5pt}\color{black}\vspace{4pt}
+
+\textbf{A1.} Welches Modul hast du heute bearbeitet? \textit{(Mehrfachauswahl möglich)}\\[4pt]
+\checkbox~Fotometer (LDR \& Sensorkalibrierung) \quad 
+\checkbox~Wetterstation (ESP32 \& IoT) \quad 
+\checkbox~Beide
+
+\vspace{8pt}
+
+\textbf{A2.} Wie schätzt du dein Vorwissen in folgenden Bereichen \textbf{vor} der heutigen Sitzung ein?\\[4pt]
+\begin{tabularx}{\linewidth}{X c c c c}
+\toprule
+\textbf{Bereich} & \textbf{Kein Vorwissen} & \textbf{Wenig} & \textbf{Einiges} & \textbf{Viel} \\
+\midrule
+Elektronik / Schaltkreise & \radio & \radio & \radio & \radio \\
+Arduino / Microcontroller programmieren & \radio & \radio & \radio & \radio \\
+Sensoren \& Messdaten & \radio & \radio & \radio & \radio \\
+WLAN / Internet of Things & \radio & \radio & \radio & \radio \\
+Datenauswertung (z. B. Excel, Tabellen) & \radio & \radio & \radio & \radio \\
+\bottomrule
+\end{tabularx}
+
+\vspace{10pt}
+
+% Teil B
+{\large \bfseries \color{primary} Teil B – Verständlichkeit und Inhalt}\\[-4pt]
+\color{accent}\rule{\linewidth}{1.5pt}\color{black}\vspace{2pt}
+{\small\itshape Skala: 1 = trifft gar nicht zu $\cdot$ 5 = trifft voll zu}\\[4pt]
+
+\textbf{B1.} Die Lernziele des Moduls waren für mich klar erkennbar.\\
+\radio~1 \quad \radio~2 \quad \radio~3 \quad \radio~4 \quad \radio~5
+
+\vspace{5pt}
+\textbf{B2.} Die Erklärungen und Texte waren verständlich geschrieben.\\
+\radio~1 \quad \radio~2 \quad \radio~3 \quad \radio~4 \quad \radio~5
+
+\vspace{5pt}
+\textbf{B3.} Die Fachbegriffe (z. B. LDR, Spannungsteiler, DHT11, IoT) wurden ausreichend erklärt.\\
+\radio~1 \quad \radio~2 \quad \radio~3 \quad \radio~4 \quad \radio~5
+
+\vspace{5pt}
+\textbf{B4.} Der Schwierigkeitsgrad des Moduls war angemessen für mich.\\
+\radio~1 (viel zu leicht) \quad \radio~2 \quad \radio~3 (genau richtig) \quad \radio~4 \quad \radio~5 (viel zu schwer)
+
+\vspace{5pt}
+\textbf{B5.} Die Schrittfolge (Abschnitte / Aufgaben) war logisch und nachvollziehbar aufgebaut.\\
+\radio~1 \quad \radio~2 \quad \radio~3 \quad \radio~4 \quad \radio~5
+
+\vspace{5pt}
+\textbf{B6.} \textit{(Nur für Fotometer-Teilnehmende)} Das Konzept der Kalibrierung (Rohwert $\rightarrow$ Prozentwert) habe ich nach diesem Modul verstanden.\\
+\radio~1 \quad \radio~2 \quad \radio~3 \quad \radio~4 \quad \radio~5 \quad \radio~Nicht zutreffend
+
+\vspace{5pt}
+\textbf{B7.} \textit{(Nur für Wetterstation-Teilnehmende)} Den Datenfluss vom Sensor über den ESP32 bis zur App (EVA-Prinzip / IoT-Kette) habe ich nach diesem Modul verstanden.\\
+\radio~1 \quad \radio~2 \quad \radio~3 \quad \radio~4 \quad \radio~5 \quad \radio~Nicht zutreffend
+
+\vspace{5pt}
+\textbf{B8.} Welcher Teil des Moduls war für dich \textbf{am schwierigsten zu verstehen?} \textit{(offene Antwort)}\\
+\linefill
+\linefill
+
+\newpage
+
+% Teil C
+{\large \bfseries \color{primary} Teil C – Digitale Elemente \& Interaktivität}\\[-4pt]
+\color{accent}\rule{\linewidth}{1.5pt}\color{black}\vspace{2pt}
+{\small\itshape Skala: 1 = überhaupt nicht hilfreich $\cdot$ 5 = sehr hilfreich}\\[4pt]
+
+\textbf{C1.} Wie hilfreich waren folgende Elemente für dein Verständnis?\\[4pt]
+\begin{tabularx}{\linewidth}{X c c c c c c}
+\toprule
+\textbf{Element} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{Nicht genutzt} \\
+\midrule
+Interaktive Simulationen / Schieberegler & \radio & \radio & \radio & \radio & \radio & \radio \\
+Code-Beispiele mit Kopier-Button & \radio & \radio & \radio & \radio & \radio & \radio \\
+Tooltip-Erklärungen (Hover-Infos) & \radio & \radio & \radio & \radio & \radio & \radio \\
+Flip-Karten (Klick zum Umdrehen) & \radio & \radio & \radio & \radio & \radio & \radio \\
+Diagramme / Kennlinien-Grafiken & \radio & \radio & \radio & \radio & \radio & \radio \\
+Schaltplan / Fritzing-Abbildungen & \radio & \radio & \radio & \radio & \radio & \radio \\
+Drag-and-Drop Reihenfolge-Übung (Modul 2) & \radio & \radio & \radio & \radio & \radio & \radio \\
+Lernstandsquiz / Wissensfragen & \radio & \radio & \radio & \radio & \radio & \radio \\
+Fortschrittsbalken oben & \radio & \radio & \radio & \radio & \radio & \radio \\
+\bottomrule
+\end{tabularx}
+
+\vspace{8pt}
+
+\textbf{C2.} Welches dieser Elemente hat dir am \textbf{meisten} geholfen? Warum?\\
+\linefill
+\linefill
+
+\vspace{4pt}
+\textbf{C3.} Gab es digitale Elemente, die dich \textbf{verwirrt oder gestört} haben?\\
+\linefill
+\linefill
+
+\vspace{8pt}
+
+% Teil D
+{\large \bfseries \color{primary} Teil D – Praktische Durchführung}\\[-4pt]
+\color{accent}\rule{\linewidth}{1.5pt}\color{black}\vspace{4pt}
+
+\textbf{D1.} Der Aufbau der Hardware (Breadboard, Verkabelung) hat gut funktioniert.\\
+\radio~1 (gar nicht) \quad \radio~2 \quad \radio~3 \quad \radio~4 \quad \radio~5 (sehr gut) \quad \radio~Hatte technische Probleme
+
+\vspace{5pt}
+\textbf{D2.} Die Anleitungen im Modul haben mir geholfen, die Hardware korrekt aufzubauen.\\
+\radio~1 \quad \radio~2 \quad \radio~3 \quad \radio~4 \quad \radio~5
+
+\vspace{5pt}
+\textbf{D3.} Das Hochladen des Codes auf den Microcontroller hat geklappt.\\
+\radio~Ja, ohne Probleme \quad \radio~Ja, mit Hilfe \quad \radio~Nein, trotz Hilfe nicht \quad \radio~Nicht versucht
+
+\vspace{5pt}
+\textbf{D4.} Was wäre hilfreich gewesen, um technische Probleme schneller zu lösen?\\
+\linefill
+\linefill
+
+\vspace{5pt}
+\textbf{D5.} Wie lange hast du (ungefähr) für das Modul gebraucht?\\
+\radio~$< 30$ Min \quad \radio~$30$--$60$ Min \quad \radio~$60$--$90$ Min \quad \radio~$> 90$ Min
+
+\vspace{8pt}
+
+% Teil E
+{\large \bfseries \color{primary} Teil E – Lernertrag \& Motivation}\\[-4pt]
+\color{accent}\rule{\linewidth}{1.5pt}\color{black}\vspace{4pt}
+
+\textbf{E1.} Ich habe heute etwas gelernt, das ich vorher nicht wusste oder konnte.\\
+\radio~1 (gar nicht) \quad \radio~2 \quad \radio~3 \quad \radio~4 \quad \radio~5 (sehr viel gelernt)
+
+\vspace{5pt}
+\textbf{E2.} Das Thema des Moduls ist für mich relevant und interessant.\\
+\radio~1 \quad \radio~2 \quad \radio~3 \quad \radio~4 \quad \radio~5
+
+\vspace{5pt}
+\textbf{E3.} Ich sehe eine hohe Relevanz und Wichtigkeit dieser Inhalte für meinen zukünftigen Lehrerberuf (z. B. für den späteren NwT-Unterricht).\\
+\radio~1 \quad \radio~2 \quad \radio~3 \quad \radio~4 \quad \radio~5
+
+\vspace{5pt}
+\textbf{E4.} Das Modul hat mein Interesse für Elektronik / Programmierung / IoT geweckt oder gesteigert.\\
+\radio~1 \quad \radio~2 \quad \radio~3 \quad \radio~4 \quad \radio~5
+
+\vspace{5pt}
+\textbf{E5.} Ich könnte die Grundprinzipien aus diesem Modul jemandem erklären, der es nicht kennt.\\
+\radio~Ja, ich bin sicher \quad \radio~Wahrscheinlich schon \quad \radio~Nur teilweise \quad \radio~Eher nicht
+
+\vspace{5pt}
+\textbf{E6.} Was nimmst du als \textbf{wichtigste Erkenntnis} aus dem heutigen Tag mit?\\
+\linefill
+\linefill
+\linefill
+
+\vspace{8pt}
+
+% Teil F
+{\large \bfseries \color{primary} Teil F – Gestaltung \& Nutzererfahrung}\\[-4pt]
+\color{accent}\rule{\linewidth}{1.5pt}\color{black}\vspace{4pt}
+
+\textbf{F1.} Das Layout und Design der Webseite war übersichtlich und angenehm zu benutzen.\\
+\radio~1 \quad \radio~2 \quad \radio~3 \quad \radio~4 \quad \radio~5
+
+\vspace{5pt}
+\textbf{F2.} Die Webseite hat auf meinem Gerät / Browser einwandfrei funktioniert.\\
+\radio~Ja \quad \radio~Teilweise (mit Problemen) \quad \radio~Nein \quad \textit{Gerät/Browser:} \rule{4cm}{0.4pt}
+
+\vspace{5pt}
+\textbf{F3.} Was würdest du am Design oder der Benutzerführung \textbf{verbessern}?\\
+\linefill
+\linefill
+
+\vspace{8pt}
+
+% Teil G
+{\large \bfseries \color{primary} Teil G – Gesamtbewertung \& offene Rückmeldung}\\[-4pt]
+\color{accent}\rule{\linewidth}{1.5pt}\color{black}\vspace{4pt}
+
+\textbf{G1.} Gesamtbewertung des Lernmoduls:\\
+\radio~1 (sehr schlecht) \quad \radio~2 \quad \radio~3 \quad \radio~4 \quad \radio~5 (ausgezeichnet)
+
+\vspace{5pt}
+\textbf{G2.} Würdest du dieses Modul einem Kommilitonen / einer Kommilitonin weiterempfehlen?\\
+\radio~Ja, auf jeden Fall \quad \radio~Ja, eher schon \quad \radio~Unentschieden \quad \radio~Eher nicht \quad \radio~Nein
+
+\vspace{5pt}
+\textbf{G3.} Was hat dich am Modul am \textbf{meisten überzeugt}?\\
+\linefill
+\linefill
+
+\vspace{5pt}
+\textbf{G4.} Was sollte deiner Meinung nach \textbf{unbedingt verbessert oder ergänzt} werden?\\
+\linefill
+\linefill
+\linefill
+
+\vspace{5pt}
+\textbf{G5.} Hast du weitere Anmerkungen, Ideen oder Wünsche?\\
+\linefill
+\linefill
+
+\vspace{10pt}
+\centering{\textbf{Vielen Dank für deine Zeit und dein Feedback!}}
+
+\vspace{12pt}
+\begin{tcolorbox}[colback=lightgray,colframe=gray,arc=1mm,boxrule=0.5pt,top=4pt,bottom=4pt,left=6pt,right=6pt]
+\small \textbf{Für den Auswertenden (intern):}\\
+$\bullet$ Teil B: Verständlichkeit $\rightarrow$ Mittelwert bilden, Freitexte qualitativ kodieren\\
+$\bullet$ Teil C: Matrix $\rightarrow$ Identifikation besonders wirksamer / störender Elemente\\
+$\bullet$ Teil D: Hardware-Hürden $\rightarrow$ Direkt als Verbesserungsmaßnahmen verwertbar\\
+$\bullet$ Teil E: Lernertrag $\rightarrow$ B4 + E1 + E3 + E5 kombiniert für Lernertrag-Relevanz-Matrix\\
+$\bullet$ Teil G: Freitexte $\rightarrow$ Inhaltsanalyse nach Kategorien (Inhalt / Design / Technik / Motivation)
+\end{tcolorbox}
+
+\end{document}
