@@ -892,15 +892,89 @@
           }
         });
       </script>
-      </div>
-      </div>
 
       <figure style="border: 1px solid #ccc; padding: 10px; text-align: center; background: #f9f9f9;">
         <figcaption>
-          <em>Bei dieser Schaltung, steigt die Ausgangsspannung wenn es dunkler wird. Wenn der LDR mit dem Widerstand
-            vertauscht werden würde, wäre es umgekehrt</em>
+          <em>Bei dieser Schaltung steigt die Ausgangsspannung, wenn es dunkler wird. Wenn der LDR mit dem Festwiderstand vertauscht werden würde, wäre es umgekehrt.</em>
         </figcaption>
       </figure>
+
+      <h4 style="margin-top:28px; color: var(--kit-primary-color);"><i class="fa-solid fa-code"></i> First Step: Simple-Testcode (Auslesen an Pin A3)</h4>
+      <p>
+        Um die Schaltung zu testen, schalten wir noch kein weiteres Zubehör ein, sondern werten schlicht den Spannungsteiler am analogen Pin <strong>A3</strong> des Arduino Nano aus. Der folgende Code liest die analoge Spannung ein und sendet den Rohwert (0 bis 1023) an den Seriellen Monitor.
+      </p>
+
+      <div class="custom-code-block">
+        <button class="copy-btn" title="Code kopieren"><i class="fa fa-copy"></i></button>
+        <pre><code class="language-cpp">
+/*
+  Einfacher LDR-Test (Teil 1.2)
+  Liest die Spannung am Spannungsteiler (Pin A3) aus 
+  und zeigt den Rohwert (0 - 1023) im Seriellen Monitor an.
+*/
+
+const int ldrPin = A3; // Spannungsteiler-Abgriff an Analogeingang A3
+
+void setup() {
+  // Serielle Kommunikation mit 9600 Baud starten
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Rohwert lesen (0 = 0 Volt, 1023 = 5 Volt)
+  int ldrWert = analogRead(ldrPin);
+
+  // Ausgabe im Seriellen Monitor
+  Serial.print("LDR Rohwert (A3): ");
+  Serial.println(ldrWert);
+
+  // Alle 500 ms einen neuen Wert ausgeben
+  delay(500);
+}
+        </code></pre>
+      </div>
+
+      <div class="intro-accordion" style="margin-top: 20px;">
+        <details>
+          <summary><i class="fa-solid fa-cloud-arrow-up"></i> Tipps zum erstmaligen Hochladen des Codes</summary>
+          <div style="padding: 10px 12px; font-size: 0.95rem; line-height: 1.6;">
+            <ol style="margin: 0; padding-left: 20px;">
+              <li style="margin-bottom: 8px;">
+                <strong>Board auswählen:</strong> In der Arduino IDE unter <em>Werkzeuge &rarr; Board &rarr; Arduino AVR Boards &rarr; Arduino Nano</em> auswählen.
+              </li>
+              <li style="margin-bottom: 8px;">
+                <strong>Prozessor festlegen (Wichtig bei Nanos/Klonen):</strong> Wenn beim Hochladen ein Fehler erscheint, unter <em>Werkzeuge &rarr; Prozessor</em> auf <strong>„ATmega328P (Old Bootloader)“</strong> umstellen.
+              </li>
+              <li style="margin-bottom: 8px;">
+                <strong>Port auswählen:</strong> Unter <em>Werkzeuge &rarr; Port</em> den zugewiesenen COM-Port (Windows) bzw. <code>/dev/cu.usbserial...</code> (macOS/Linux) wählen.
+              </li>
+              <li style="margin-bottom: 8px;">
+                <strong>Upload starten:</strong> Oben links auf den Pfeil nach rechts (<i class="fa-solid fa-arrow-right"></i> <strong>Hochladen</strong>) klicken.
+              </li>
+              <li>
+                <strong>Seriellen Monitor öffnen & Baudrate prüfen:</strong> Die Lupe oben rechts (<i class="fa-solid fa-magnifying-glass"></i>) anklicken und unten rechts im Monitor-Fenster unbedingt <strong>9600 Baud</strong> auswählen, damit die Textausgabe lesbar erscheint.
+              </li>
+            </ol>
+          </div>
+        </details>
+
+        <details>
+          <summary><i class="fa-solid fa-circle-info"></i> Zusatz-Infos zum Messwert</summary>
+          <div style="padding: 10px 12px; font-size: 0.95rem; line-height: 1.6;">
+            <ul style="margin: 0; padding-left: 20px;">
+              <li style="margin-bottom: 8px;">
+                <strong>Was bedeutet der Rohwert?</strong> Der Analog-Digital-Wandler (ADC) des Nano übersetzt Spannungen von 0 V bis 5 V in Zahlen von <strong>0 bis 1023</strong>.
+              </li>
+              <li style="margin-bottom: 8px;">
+                <strong>Verhalten der Schaltung:</strong> Da der LDR gegen Masse (GND) liegt, bewirkt Abdunkeln einen höheren Widerstand am LDR und somit einen <em>höheren</em> Spannungswert am Pin A3. Helles Licht lässt den Rohwert sinken.
+              </li>
+              <li>
+                <strong>Leichte Schwankungen:</strong> Abweichungen um wenige Ziffern (&plusmn;2–5) sind durch Umgebungslicht und Rauschen völlig normal.
+              </li>
+            </ul>
+          </div>
+        </details>
+      </div>
 
       <h3 style="margin-top:32px;">1.3. Simulation</h3>
       <div class="ldr-simulator-container-adv">
@@ -1374,7 +1448,7 @@
 */
 
 // Pins definieren
-const int sensorPin = A3; // Der LDR (Spannungsteiler) hängt an A0
+const int sensorPin = A3; // Der LDR (Spannungsteiler) hängt an A3
 const int ledPin = 3;     // Die LED (mit Vorwiderstand) hängt an Pin 3
 
 void setup() {
