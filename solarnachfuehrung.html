@@ -557,6 +557,58 @@
       margin: 16px 0;
       color: #4a3b00;
     }
+
+    /* Auswertungstool Pill Buttons & Scaffolding Controls */
+    .eval-pill-group {
+      display: flex;
+      gap: 6px;
+      background: #f1f5f3;
+      padding: 4px;
+      border-radius: 8px;
+    }
+
+    .eval-pill-btn {
+      flex: 1;
+      padding: 7px 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      background: transparent;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+
+    .eval-pill-btn:hover {
+      background: rgba(76, 175, 80, 0.1);
+      color: #2e7d32;
+    }
+
+    .eval-pill-btn.active {
+      background: #fff;
+      color: var(--kit-primary-color);
+      font-weight: 700;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+      border-color: #d0e7d2;
+    }
+
+    .reality-check-card {
+      background: linear-gradient(135deg, #f0f7ff 0%, #e8f4fd 100%);
+      border: 2px solid #b8daff;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .reality-check-card.is-active {
+      border-color: #0d6efd;
+      box-shadow: 0 4px 14px rgba(13, 110, 253, 0.12);
+    }
   </style>
 </head>
 
@@ -1842,175 +1894,243 @@ void loop() {
 
     <!-- Section 4: Auswertungstool: Statisch vs. Nachgeführt -->
     <section class="content-section" id="auswertung">
+      <div class="section-emoji">📊</div>
       <h2>4. Auswertungstool: Statisch vs. Nachgeführt</h2>
-      <p>Mit diesem Auswertungstool können Schülerinnen, Schüler und Lehrkräfte den Tagesverlauf und den Energieertrag einer <strong>statischen Solarzelle</strong> direkt mit einer <strong>zweiachsig nachgeführten Solarzelle</strong> vergleichen. Überprüft die Machbarkeit und findet heraus, ob der Mehrertrag den Eigenverbrauch der Motoren rechtfertigt!</p>
+      <p class="lead" style="font-size: 1.05rem; margin-bottom: 20px; color: #444;">
+        Lohnt sich eine Solarnachführung wirklich? Vergleiche den Tagesverlauf einer fest ausgerichteten Solarzelle mit einer zweiachsig nachgeführten Zelle – und erforsche, ab wann der Eigenverbrauch der Motoren ins Gewicht fällt.
+      </p>
 
-      <!-- 4.1 Messaufbau & Leistungsmessung Infobox -->
-      <div style="background: #fbfffb; border: 1px solid #c8e6c9; border-radius: 12px; padding: 24px; margin-bottom: 28px;">
-        <h3 style="margin-top: 0; color: var(--kit-primary-color); display: flex; align-items: center; gap: 10px;">
-          <i class="fa-solid fa-microchip"></i> Messaufbau: Spannung, Strom & Leistung der Solarzelle messen
-        </h3>
-        
-        <p style="font-size: 0.95rem; line-height: 1.6; color: #333;">
-          Um die elektrische Leistung (<em>P = U &middot; I</em>) einer Solarzelle zu bestimmen, kann man die Spannung nicht einfach im Leerlauf abgreifen, da ohne Verbraucher kein Strom fließt (<em>I = 0 A &rArr; P = 0 W</em>).
-        </p>
-
-        <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center; margin: 18px 0;">
-          <!-- Infotext Formel -->
-          <div style="flex: 1; min-width: 280px; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px;">
-            <h4 style="margin-top: 0; color: #2e7d32; font-size: 1rem;"><i class="fa-solid fa-calculator"></i> Das Messprinzip (Ohm'sches Gesetz)</h4>
-            <ol style="margin: 8px 0; padding-left: 20px; font-size: 0.9rem; line-height: 1.6; color: #444;">
-              <li>Die Solarzelle wird über einen <strong>Lastwiderstand</strong> (R<sub>L</sub>, z. B. 47 &Omega; bis 100 &Omega;) geschlossen.</li>
-              <li>Der ESP32/Arduino misst die abfallende <strong>Spannung U</strong> parallel zum Lastwiderstand an einem analogen ADC-Eingang.</li>
-              <li>Der <strong>Strom I</strong> berechnet sich automatisch über das Ohm'sche Gesetz: <em>I = U / R<sub>L</sub></em>.</li>
-              <li>Die <strong>Leistung P</strong> ergibt sich direkt zu: 
-                <div style="background: #e8f5e9; padding: 8px 12px; border-radius: 6px; text-align: center; font-weight: bold; margin-top: 6px; color: #1b5e20; font-size: 1.05rem;">
-                  P = U<sup>2</sup> / R<sub>L</sub>
-                </div>
-              </li>
-            </ol>
-          </div>
-
-          <!-- Platzhalter Fritzing Diagramm -->
-          <div style="flex: 1; min-width: 280px;">
-            <div style="background: #e9ecef; border: 2px dashed #94d3a2; border-radius: 12px; padding: 24px 16px; text-align: center;">
-              <i class="fa-solid fa-project-diagram fa-3x" style="color: var(--kit-primary-color); margin-bottom: 12px;"></i>
-              <h4 style="color: #2e7d32; margin: 0 0 6px 0;">Platzhalter: Fritzing-Schaltplan Messaufbau</h4>
-              <p style="color: #555; font-size: 0.85rem; margin: 0 0 10px 0;">
-                Schaltbild: Solarzelle &bull; Lastwiderstand R<sub>L</sub> (50 &Omega;) &bull; Messabgriff an ADC Pin (ESP32)
-              </p>
-              <span style="display: inline-block; font-size: 0.75rem; background: #fff; color: #555; border: 1px solid #ccc; border-radius: 4px; padding: 4px 8px;">
-                Grafik <code>Fritzing_Messaufbau_Solarzelle.png</code> hier einfügen
-              </span>
-            </div>
-          </div>
+      <!-- STUFE 1: Schnellauswahl Wetter -->
+      <div style="background: #fff; border: 1px solid #e1e8ed; border-radius: 12px; padding: 14px 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+        <div style="font-weight: 600; font-size: 0.95rem; color: #444; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-cloud-sun" style="color: var(--kit-primary-color); font-size: 1.15rem;"></i> Wetterbedingung simulieren:
         </div>
-      </div>
-
-      <!-- Tabs / Modus-Wahl -->
-      <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
-        <button id="tab-btn-sim" class="start-button" style="flex: 1; min-width: 160px; background: var(--kit-primary-color); border: 2px solid var(--kit-primary-color);" onclick="switchEvaluationMode('sim')">
-          <i class="fa-solid fa-cloud-sun"></i> Live-Simulation (Sonnengang)
-        </button>
-        <button id="tab-btn-manual" class="start-button" style="flex: 1; min-width: 160px; background: #fff; color: #555; border: 2px solid #ccc;" onclick="switchEvaluationMode('manual')">
-          <i class="fa-solid fa-table"></i> Eigene Messdaten (Praktikum / CSV)
-        </button>
-      </div>
-
-      <!-- Controls Bereich -->
-      <div id="sim-controls-panel" style="background: #f8faf9; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-        <h3 style="margin-top: 0; font-size: 1.1rem; color: var(--kit-primary-color);"><i class="fa-solid fa-sliders"></i> Simulations-Parameter anpassen</h3>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
-          <div>
-            <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Wetterbedingungen:</label>
-            <select id="eval-weather" onchange="updateEvaluationChart()" style="width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem;">
-              <option value="sunny">☀️ Sonnig & Klar (Idealfall)</option>
-              <option value="cloudy">⛅ Wechselhaft / Leicht bewölkt</option>
-              <option value="overcast">☁️ Dauerhaft bewölkt (Diffuslicht)</option>
-            </select>
-          </div>
-
-          <div>
-            <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Ausrichtung Statische Zelle:</label>
-            <select id="eval-orientation" onchange="updateEvaluationChart()" style="width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem;">
-              <option value="south30">Süden 30° Neigung (Optimal)</option>
-              <option value="flat">Horizontale Montage (0° Flach)</option>
-              <option value="eastwest">Ost-West Abweichung (45° Gen Osten)</option>
-            </select>
-          </div>
-
-          <div>
-            <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Max. Modulleistung (P<sub>max</sub>): <span id="val-pmax" style="color: var(--kit-primary-color);">1000 mW</span></label>
-            <input type="range" id="eval-pmax" min="100" max="5000" step="100" value="1000" oninput="document.getElementById('val-pmax').textContent = this.value + ' mW'; updateEvaluationChart();" style="width: 100%; accent-color: var(--kit-primary-color);">
-          </div>
-
-          <div>
-            <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Eigenverbrauch Servos/ESP32: <span id="val-peigen" style="color: #e67e22;">150 mW</span></label>
-            <input type="range" id="eval-peigen" min="0" max="500" step="10" value="150" oninput="document.getElementById('val-peigen').textContent = this.value + ' mW'; updateEvaluationChart();" style="width: 100%; accent-color: #e67e22;">
-          </div>
-        </div>
-      </div>
-
-      <!-- Manuelle Eingabe & CSV Panel (standardmäßig versteckt) -->
-      <div id="manual-controls-panel" style="display: none; background: #f8faf9; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-        <h3 style="margin-top: 0; font-size: 1.1rem; color: var(--kit-primary-color);"><i class="fa-solid fa-file-csv"></i> Messwerte importieren oder manuell erfassen</h3>
-        <p style="font-size: 0.9rem; color: #555;">Trage hier deine im Praktikum gemessenen Leistungswerte (in mW) ein oder lade eine CSV-Datei hoch (Format: Uhrzeit, P_Statisch, P_Nachgeführt, Eigenverbrauch).</p>
-
-        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
-          <label class="download-link" style="cursor: pointer; padding: 8px 14px; font-size: 0.9rem; background: var(--kit-primary-color); color: #fff;">
-            <i class="fa-solid fa-upload"></i> CSV-Datei hochladen
-            <input type="file" id="csv-file-input" accept=".csv, .txt" onchange="handleCSVUpload(event)" style="display: none;">
-          </label>
-          <button onclick="exportCSVData()" class="download-link" style="cursor: pointer; padding: 8px 14px; font-size: 0.9rem; background: #fff;">
-            <i class="fa-solid fa-download"></i> Daten als CSV exportieren
-          </button>
-          <button onclick="addTableRow()" class="download-link" style="cursor: pointer; padding: 8px 14px; font-size: 0.9rem; background: #e3f2fd; color: #1976d2; border-color: #1976d2;">
-            <i class="fa-solid fa-plus"></i> Zeile hinzufügen
-          </button>
-          <button onclick="resetTableToDefault()" class="download-link" style="cursor: pointer; padding: 8px 14px; font-size: 0.9rem; background: #fff3e0; color: #e67e22; border-color: #e67e22;">
-            <i class="fa-solid fa-rotate-left"></i> Zurücksetzen
-          </button>
-        </div>
-
-        <div style="overflow-x: auto; max-height: 280px;">
-          <table id="measurements-table" style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.9rem;">
-            <thead>
-              <tr style="background: #e8f5e9; color: #2e7d32;">
-                <th style="padding: 8px; border: 1px solid #ccc;">Uhrzeit</th>
-                <th style="padding: 8px; border: 1px solid #ccc;">P Statisch (mW)</th>
-                <th style="padding: 8px; border: 1px solid #ccc;">P Nachgeführt Brutto (mW)</th>
-                <th style="padding: 8px; border: 1px solid #ccc;">Eigenverbrauch (mW)</th>
-                <th style="padding: 8px; border: 1px solid #ccc;">Aktion</th>
-              </tr>
-            </thead>
-            <tbody id="measurements-table-body">
-              <!-- Dynamische Tabellenzeilen -->
-            </tbody>
-          </table>
+        <div class="eval-pill-group" id="weather-btn-group" style="flex: 1; max-width: 480px; min-width: 260px;">
+          <button type="button" class="eval-pill-btn active" onclick="setWeatherPreset('sunny', this)">☀️ Sonnig (Klar)</button>
+          <button type="button" class="eval-pill-btn" onclick="setWeatherPreset('cloudy', this)">⛅ Wechselhaft</button>
+          <button type="button" class="eval-pill-btn" onclick="setWeatherPreset('overcast', this)">☁️ Bewölkt</button>
         </div>
       </div>
 
       <!-- Live Diagramm -->
-      <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 24px;">
-        <h3 style="margin-top: 0; text-align: center; color: #333; font-size: 1.1rem;">Tagesverlauf der Leistung P(t) [06:00 - 18:00 Uhr]</h3>
+      <div style="background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+          <h3 style="margin: 0; font-size: 1.05rem; color: #333; font-weight: 600;">
+            <i class="fa-solid fa-chart-line" style="color: var(--kit-primary-color);"></i> Erzeugte Solarleistung P(t) [06:00 – 18:00 Uhr]
+          </h3>
+          <span id="chart-mode-badge" style="font-size: 0.8rem; background: #e8f5e9; color: #2e7d32; font-weight: 600; padding: 4px 10px; border-radius: 20px;">
+            Simulation: Idealverlauf
+          </span>
+        </div>
         <div style="position: relative; height: 320px; width: 100%;">
           <canvas id="evalChart"></canvas>
         </div>
       </div>
 
-      <!-- KPI Ertrags-Karten -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+      <!-- STUFE 1 & 2 KPI-Ertragskarten -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 20px;">
+        <!-- Karte 1: Statisch -->
         <div style="background: #fff8e1; border: 1px solid #ffe082; border-radius: 10px; padding: 16px; text-align: center;">
           <div style="font-size: 0.85rem; color: #7f6000; font-weight: 600;">Statisch (Fixiert)</div>
-          <div id="kpi-statisch" style="font-size: 1.6rem; font-weight: 700; color: #d35400; margin: 6px 0;">0.00 mWh</div>
+          <div id="kpi-statisch" style="font-size: 1.6rem; font-weight: 700; color: #d35400; margin: 6px 0;">0.00 Wh</div>
           <div style="font-size: 0.78rem; color: #888;">Gesamtertrag Tagesverlauf</div>
         </div>
 
+        <!-- Karte 2: Nachgeführt Brutto -->
         <div style="background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 10px; padding: 16px; text-align: center;">
           <div style="font-size: 0.85rem; color: #1b5e20; font-weight: 600;">Nachgeführt (Brutto)</div>
-          <div id="kpi-brutto" style="font-size: 1.6rem; font-weight: 700; color: #2e7d32; margin: 6px 0;">0.00 mWh</div>
+          <div id="kpi-brutto" style="font-size: 1.6rem; font-weight: 700; color: #2e7d32; margin: 6px 0;">0.00 Wh</div>
           <div id="kpi-brutto-gain" style="font-size: 0.85rem; font-weight: 600; color: #2e7d32;">+0.0% Brutto-Mehrertrag</div>
         </div>
 
-        <div style="background: #e3f2fd; border: 1px solid #90caf9; border-radius: 10px; padding: 16px; text-align: center;">
+        <!-- Karte 3: Nachgeführt Netto (Erst bei Stufe 2 sichtbar) -->
+        <div id="kpi-netto-card" style="display: none; background: #e3f2fd; border: 1px solid #90caf9; border-radius: 10px; padding: 16px; text-align: center; animation: fadeIn 0.4s ease;">
           <div style="font-size: 0.85rem; color: #0d47a1; font-weight: 600;">Nachgeführt (Netto)</div>
-          <div id="kpi-netto" style="font-size: 1.6rem; font-weight: 700; color: #1565c0; margin: 6px 0;">0.00 mWh</div>
+          <div id="kpi-netto" style="font-size: 1.6rem; font-weight: 700; color: #1565c0; margin: 6px 0;">0.00 Wh</div>
           <div id="kpi-netto-gain" style="font-size: 0.85rem; font-weight: 600; color: #1565c0;">+0.0% Netto-Mehrertrag</div>
         </div>
       </div>
 
-      <!-- Amortisations- & Machbarkeitsbewertung -->
-      <div id="feasibility-badge" style="background: #f4f6f7; border-left: 5px solid #7f8c8d; padding: 16px 20px; border-radius: 8px; margin-bottom: 24px;">
-        <h4 id="feasibility-title" style="margin: 0 0 6px 0; color: #333;">Ergebnis-Analyse & Machbarkeit</h4>
-        <p id="feasibility-text" style="margin: 0; font-size: 0.95rem; line-height: 1.5; color: #555;">Werte werden berechnet...</p>
+      <!-- STUFE 2: Realitäts-Check Card -->
+      <div class="reality-check-card" id="reality-check-box">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+          <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 250px;">
+            <div style="background: #0d6efd; color: #fff; width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0;">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+            <div>
+              <div style="font-weight: 700; color: #0d47a1; font-size: 1rem;">
+                Stufe 2: Realitäts-Check (Motor-Eigenverbrauch)
+              </div>
+              <div style="font-size: 0.85rem; color: #4a6984; margin-top: 2px;">
+                Die beiden Servomotoren und der ESP32 verbrauchen Strom. Lohnt sich das Modell nach Abzug dieses Eigenverbrauchs?
+              </div>
+            </div>
+          </div>
+
+          <label style="display: inline-flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; font-weight: 600; font-size: 0.95rem; color: #0d47a1; background: #fff; padding: 8px 14px; border-radius: 8px; border: 1px solid #b8daff; box-shadow: 0 1px 4px rgba(0,0,0,0.05);">
+            <span>Eigenverbrauch abziehen</span>
+            <input type="checkbox" id="toggle-netto-switch" onchange="toggleNettoMode(this.checked)" style="width: 20px; height: 20px; cursor: pointer; accent-color: #0d6efd;">
+          </label>
+        </div>
+
+        <!-- Aufklappbares Realitäts-Ergebnis bei aktivem Checkbox -->
+        <div id="netto-details-box" style="display: none; margin-top: 16px; padding-top: 14px; border-top: 1px dashed #b8daff;">
+          <div id="feasibility-badge" style="background: #fff; border-left: 5px solid #7f8c8d; padding: 14px 18px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 12px;">
+            <h4 id="feasibility-title" style="margin: 0 0 6px 0; font-size: 0.98rem; color: #333;">Ergebnis-Analyse</h4>
+            <p id="feasibility-text" style="margin: 0; font-size: 0.9rem; line-height: 1.5; color: #555;">Werte werden berechnet...</p>
+          </div>
+
+          <!-- Didaktische Option: Schlafmodus / Code-Optimierung -->
+          <div style="background: #fff; border: 1px solid #d0e1fd; border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+            <div style="font-size: 0.88rem; color: #333; line-height: 1.4;">
+              <i class="fa-solid fa-code" style="color: #0d6efd; margin-right: 6px;"></i>
+              <strong>Code-Optimierung testen:</strong> Servos im Ruhezustand stromlos schalten (Schlafmodus, ~20 mW statt ~150 mW)
+            </div>
+            <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.88rem; font-weight: 600; color: #0d47a1; background: #f0f7ff; padding: 6px 12px; border-radius: 6px; border: 1px solid #c2dbfe;">
+              <input type="checkbox" id="toggle-sleep-mode" onchange="toggleSleepMode(this.checked)" style="width: 17px; height: 17px; cursor: pointer; accent-color: #0d6efd;">
+              <span>Sparmodus an</span>
+            </label>
+          </div>
+        </div>
       </div>
 
-      <!-- Reflexionsaufgaben für den Unterricht -->
-      <div class="intro-accordion">
-        <details>
-          <summary>Auswertung & Reflexionsfragen für den Unterricht</summary>
-          <div style="padding: 12px; font-size: 0.95rem; line-height: 1.6;">
+      <!-- STUFE 3: Detaillierte Analyse & Werkzeuge (Progressive Disclosure) -->
+      <div style="margin-top: 32px; margin-bottom: 12px;">
+        <h3 style="font-size: 1.15rem; color: var(--kit-primary-color); display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-layer-group"></i> Vertiefung & Detail-Werkzeuge (Stufe 3)
+        </h3>
+        <p style="font-size: 0.9rem; color: #666; margin-top: 4px;">
+          Öffne die folgenden Bereiche, um tiefergehende Parameter zu variieren, eigene Labormessungen zu erfassen oder die Schaltungstheorie zu studieren:
+        </p>
+      </div>
+
+      <div class="path-accordion">
+        
+        <!-- Detail 1: Erweiterte Parameter -->
+        <details id="details-params">
+          <summary><i class="fa-solid fa-sliders" style="color: var(--kit-primary-color);"></i> 1. Detaillierte Simulations-Parameter anpassen</summary>
+          <div class="path-content">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;">
+              <div>
+                <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Ausrichtung statische Vergleichszelle:</label>
+                <select id="eval-orientation" onchange="updateEvaluationChart()" style="width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem;">
+                  <option value="south30">Süden 30° Neigung (Optimal)</option>
+                  <option value="flat">Horizontale Montage (0° Flachdach)</option>
+                  <option value="eastwest">Ost-West Abweichung (45° Gen Osten)</option>
+                </select>
+              </div>
+
+              <div>
+                <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Max. Modulleistung (P<sub>max</sub>): <span id="val-pmax" style="color: var(--kit-primary-color); font-weight: bold;">1000 mW</span></label>
+                <input type="range" id="eval-pmax" min="100" max="5000" step="100" value="1000" oninput="document.getElementById('val-pmax').textContent = this.value + ' mW'; updateEvaluationChart();" style="width: 100%; accent-color: var(--kit-primary-color);">
+                <small style="color: #777;">100 mW (Mini) bis 5000 mW (5 W Panel)</small>
+              </div>
+
+              <div>
+                <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Eigenverbrauch Servos/ESP32: <span id="val-peigen" style="color: #e67e22; font-weight: bold;">150 mW</span></label>
+                <input type="range" id="eval-peigen" min="0" max="500" step="5" value="150" oninput="document.getElementById('val-peigen').textContent = this.value + ' mW'; const sc = document.getElementById('toggle-sleep-mode'); if (sc) sc.checked = (parseInt(this.value) <= 30); updateEvaluationChart();" style="width: 100%; accent-color: #e67e22;">
+                <small style="color: #777;">Dauerbetrieb: ~150 mW | Mit Sparmodus: ~20 mW</small>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Detail 2: Eigene Messdaten & CSV (Praktikum) -->
+        <details id="details-manual">
+          <summary><i class="fa-solid fa-table" style="color: #1976d2;"></i> 2. Eigene Messdaten erfassen & CSV-Import (Labor-Praktikum)</summary>
+          <div class="path-content">
+            <p style="font-size: 0.9rem; color: #555; margin-top: 0;">
+              Hier kannst du selbst gemessene Leistungswerte (in mW) aus deinem Schulversuch eintragen oder als CSV importieren, um sie im Diagramm oben zu visualisieren.
+            </p>
+
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center;">
+              <!-- Modus Switch Button -->
+              <button id="toggle-data-mode-btn" onclick="toggleDataMode()" class="start-button" style="width: auto; padding: 8px 16px; font-size: 0.9rem; background: #1976d2;">
+                <i class="fa-solid fa-chart-column"></i> Eigene Messwerte im Diagramm anzeigen
+              </button>
+
+              <label class="download-link" style="cursor: pointer; padding: 7px 12px; font-size: 0.85rem; background: var(--kit-primary-color); color: #fff;">
+                <i class="fa-solid fa-upload"></i> CSV laden
+                <input type="file" id="csv-file-input" accept=".csv, .txt" onchange="handleCSVUpload(event)" style="display: none;">
+              </label>
+
+              <button onclick="exportCSVData()" class="download-link" style="cursor: pointer; padding: 7px 12px; font-size: 0.85rem; background: #fff;">
+                <i class="fa-solid fa-download"></i> CSV Export
+              </button>
+
+              <button onclick="addTableRow()" class="download-link" style="cursor: pointer; padding: 7px 12px; font-size: 0.85rem; background: #e3f2fd; color: #1976d2; border-color: #1976d2;">
+                <i class="fa-solid fa-plus"></i> Zeile
+              </button>
+
+              <button onclick="resetTableToDefault()" class="download-link" style="cursor: pointer; padding: 7px 12px; font-size: 0.85rem; background: #fff3e0; color: #e67e22; border-color: #e67e22;">
+                <i class="fa-solid fa-rotate-left"></i> Reset
+              </button>
+            </div>
+
+            <div style="overflow-x: auto; max-height: 260px; border: 1px solid #e0e0e0; border-radius: 8px;">
+              <table id="measurements-table" style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.88rem;">
+                <thead>
+                  <tr style="background: #e8f5e9; color: #2e7d32;">
+                    <th style="padding: 8px; border: 1px solid #ddd;">Uhrzeit</th>
+                    <th style="padding: 8px; border: 1px solid #ddd;">P Statisch (mW)</th>
+                    <th style="padding: 8px; border: 1px solid #ddd;">P Nachgeführt (mW)</th>
+                    <th style="padding: 8px; border: 1px solid #ddd;">Eigenverbrauch (mW)</th>
+                    <th style="padding: 8px; border: 1px solid #ddd;">Löschen</th>
+                  </tr>
+                </thead>
+                <tbody id="measurements-table-body">
+                  <!-- Dynamische Tabellenzeilen -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <!-- Detail 3: Schaltung & Formel Messaufbau -->
+        <details id="details-measurement-setup">
+          <summary><i class="fa-solid fa-microchip" style="color: #e67e22;"></i> 3. Praxistipp: Schaltung & Leistungsmessung im Labor</summary>
+          <div class="path-content">
+            <p style="font-size: 0.95rem; line-height: 1.6; color: #333; margin-top: 0;">
+              Um die elektrische Leistung (<em>P = U &middot; I</em>) einer Solarzelle zu bestimmen, kann man die Spannung nicht im Leerlauf abgreifen, da ohne Last kein Strom fließt (<em>I = 0 A &rArr; P = 0 W</em>).
+            </p>
+
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center; margin: 16px 0;">
+              <!-- Formel Box -->
+              <div style="flex: 1; min-width: 280px; background: #fdfefe; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px;">
+                <h4 style="margin-top: 0; color: #2e7d32; font-size: 0.95rem;"><i class="fa-solid fa-calculator"></i> Das Messprinzip (Ohm'sches Gesetz)</h4>
+                <ol style="margin: 8px 0; padding-left: 20px; font-size: 0.88rem; line-height: 1.6; color: #444;">
+                  <li>Die Zelle wird über einen <strong>Lastwiderstand</strong> (R<sub>L</sub> &approx; 47 &Omega; bis 100 &Omega;) geschlossen.</li>
+                  <li>Der ESP32 misst die abfallende <strong>Spannung U</strong> am Lastwiderstand über einen analogen ADC-Pin.</li>
+                  <li>Aus <em>I = U / R<sub>L</sub></em> folgt die Leistung direkt zu:
+                    <div style="background: #e8f5e9; padding: 8px 12px; border-radius: 6px; text-align: center; font-weight: bold; margin-top: 6px; color: #1b5e20; font-size: 1.05rem;">
+                      P = U<sup>2</sup> / R<sub>L</sub>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              <!-- Platzhalter Fritzing Diagramm -->
+              <div style="flex: 1; min-width: 280px;">
+                <div style="background: #f8faf9; border: 2px dashed #94d3a2; border-radius: 10px; padding: 18px 14px; text-align: center;">
+                  <i class="fa-solid fa-project-diagram fa-2x" style="color: var(--kit-primary-color); margin-bottom: 8px;"></i>
+                  <h4 style="color: #2e7d32; margin: 0 0 4px 0; font-size: 0.95rem;">Schaltplan Messaufbau</h4>
+                  <p style="color: #666; font-size: 0.82rem; margin: 0 0 8px 0;">
+                    Solarzelle &bull; Lastwiderstand R<sub>L</sub> (50 &Omega;) &bull; ADC-Messpin (ESP32)
+                  </p>
+                  <span style="display: inline-block; font-size: 0.72rem; background: #fff; color: #666; border: 1px solid #ccc; border-radius: 4px; padding: 3px 6px;">
+                    Grafik <code>Fritzing_Messaufbau_Solarzelle.png</code>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Detail 4: Reflexionsaufgaben -->
+        <details id="details-reflexion">
+          <summary><i class="fa-solid fa-graduation-cap" style="color: #6c5ce7;"></i> 4. Auswertung & Reflexionsfragen für den Unterricht</summary>
+          <div class="path-content">
             <p><strong>Aufgabe 1: Kurvenverlauf vergleichen</strong><br>
             Begründe, warum die Leistungskurve der statischen Solarzelle eine Glockenkurve (Sinus-/Cosinus-Form) aufweist, während die nachgeführte Zelle über fast den gesamten Tagesverlauf eine nahezu konstante Helligkeit sieht.</p>
             
@@ -2022,7 +2142,7 @@ void loop() {
 
             <div class="infobox" style="margin-top: 16px;">
               <h4 style="margin-top: 0; color: var(--kit-primary-color);"><i class="fa-solid fa-lightbulb"></i> Musterlösung / Lehrkräfte-Hinweis</h4>
-              <ul style="margin: 0; padding-left: 20px;">
+              <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem; line-height: 1.6;">
                 <li><strong>Zu 1:</strong> Die statische Zelle sieht nur mittags einen senkrechten Lichteinfall (&cos;(0&deg;) = 1). Morgens und abends trifft das Licht in flachem Winkel auf. Die nachgeführte Zelle dreht sich stets rechtwinklig zur Sonne.</li>
                 <li><strong>Zu 2:</strong> Der Eigenverbrauch der Elektronik und Motoren skaliert nicht linear mit der Modulgröße. Bei Miniatur-Anlagen macht der Motorverbrauch einen großen Prozentsatz aus. Bei Großanlagen machen die Nachführ-Motoren nur einen Bruchteil des Gesamtertrags aus.</li>
                 <li><strong>Zu 3:</strong> Mechanischer Verschleiß, Windanfälligkeit/Sturmschäden, hohe Anschaffungskosten für Mechanik/Motoren und regelmäßige Wartungskosten.</li>
@@ -2030,6 +2150,7 @@ void loop() {
             </div>
           </div>
         </details>
+
       </div>
     </section>
 
@@ -2097,7 +2218,10 @@ void loop() {
     // Sektion 4: Auswertungstool JavaScript Logik
     // ==========================================
     let evalChartInstance = null;
-    let currentEvalMode = 'sim';
+    let currentEvalMode = 'sim'; // 'sim' oder 'manual'
+    let isNettoActive = false; // Stufe 2 Toggle
+    let isSleepMode = false; // Sparmodus Toggle
+    let currentWeather = 'sunny';
 
     let manualDataPoints = [
       { time: '06:00', pStat: 50,  pNach: 350, pEigen: 150 },
@@ -2115,46 +2239,88 @@ void loop() {
       { time: '18:00', pStat: 50,  pNach: 350, pEigen: 150 }
     ];
 
-    window.switchEvaluationMode = function(mode) {
-      currentEvalMode = mode;
-      const btnSim = document.getElementById('tab-btn-sim');
-      const btnManual = document.getElementById('tab-btn-manual');
-      const panelSim = document.getElementById('sim-controls-panel');
-      const panelManual = document.getElementById('manual-controls-panel');
-
-      if (mode === 'sim') {
-        btnSim.style.background = 'var(--kit-primary-color)';
-        btnSim.style.color = '#fff';
-        btnSim.style.borderColor = 'var(--kit-primary-color)';
-
-        btnManual.style.background = '#fff';
-        btnManual.style.color = '#555';
-        btnManual.style.borderColor = '#ccc';
-
-        panelSim.style.display = 'block';
-        panelManual.style.display = 'none';
-      } else {
-        btnManual.style.background = 'var(--kit-primary-color)';
-        btnManual.style.color = '#fff';
-        btnManual.style.borderColor = 'var(--kit-primary-color)';
-
-        btnSim.style.background = '#fff';
-        btnSim.style.color = '#555';
-        btnSim.style.borderColor = '#ccc';
-
-        panelSim.style.display = 'none';
-        panelManual.style.display = 'block';
-
-        renderManualTable();
+    window.setWeatherPreset = function(weather, btnElem) {
+      currentWeather = weather;
+      if (btnElem) {
+        document.querySelectorAll('#weather-btn-group .eval-pill-btn').forEach(btn => btn.classList.remove('active'));
+        btnElem.classList.add('active');
+      }
+      if (currentEvalMode === 'manual') {
+        setEvalMode('sim');
       }
       updateEvaluationChart();
     };
 
+    window.toggleSleepMode = function(checked) {
+      isSleepMode = checked;
+      const peigenInput = document.getElementById('eval-peigen');
+      const valPeigen = document.getElementById('val-peigen');
+      if (peigenInput) {
+        peigenInput.value = isSleepMode ? 20 : 150;
+        if (valPeigen) valPeigen.textContent = peigenInput.value + ' mW';
+      }
+      updateEvaluationChart();
+    };
+
+    window.toggleNettoMode = function(checked) {
+      isNettoActive = checked;
+      const nettoCard = document.getElementById('kpi-netto-card');
+      const nettoDetails = document.getElementById('netto-details-box');
+      const realityBox = document.getElementById('reality-check-box');
+
+      if (nettoCard) nettoCard.style.display = isNettoActive ? 'block' : 'none';
+      if (nettoDetails) nettoDetails.style.display = isNettoActive ? 'block' : 'none';
+      if (realityBox) {
+        if (isNettoActive) realityBox.classList.add('is-active');
+        else realityBox.classList.remove('is-active');
+      }
+
+      updateEvaluationChart();
+    };
+
+    window.setEvalMode = function(mode) {
+      currentEvalMode = mode;
+      const badge = document.getElementById('chart-mode-badge');
+      const toggleDataBtn = document.getElementById('toggle-data-mode-btn');
+
+      if (mode === 'manual') {
+        if (badge) {
+          badge.textContent = 'Messdaten: Praktikum (CSV/Tabelle)';
+          badge.style.background = '#e3f2fd';
+          badge.style.color = '#1976d2';
+        }
+        if (toggleDataBtn) {
+          toggleDataBtn.innerHTML = '<i class="fa-solid fa-arrow-rotate-left"></i> Zurück zur Simulation';
+          toggleDataBtn.style.background = '#2e7d32';
+        }
+        renderManualTable();
+      } else {
+        if (badge) {
+          badge.textContent = 'Simulation: Idealverlauf';
+          badge.style.background = '#e8f5e9';
+          badge.style.color = '#2e7d32';
+        }
+        if (toggleDataBtn) {
+          toggleDataBtn.innerHTML = '<i class="fa-solid fa-chart-column"></i> Eigene Messwerte im Diagramm anzeigen';
+          toggleDataBtn.style.background = '#1976d2';
+        }
+      }
+      updateEvaluationChart();
+    };
+
+    window.toggleDataMode = function() {
+      if (currentEvalMode === 'sim') {
+        setEvalMode('manual');
+      } else {
+        setEvalMode('sim');
+      }
+    };
+
     function generateSimulationData() {
-      const weather = document.getElementById('eval-weather').value;
-      const orientation = document.getElementById('eval-orientation').value;
-      const pMax = parseFloat(document.getElementById('eval-pmax').value);
-      const pEigen = parseFloat(document.getElementById('eval-peigen').value);
+      const weather = currentWeather;
+      const orientation = document.getElementById('eval-orientation') ? document.getElementById('eval-orientation').value : 'south30';
+      const pMax = parseFloat(document.getElementById('eval-pmax') ? document.getElementById('eval-pmax').value : 1000);
+      const pEigen = parseFloat(document.getElementById('eval-peigen') ? document.getElementById('eval-peigen').value : 150);
 
       const times = ['06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
       const dataStat = [];
@@ -2222,37 +2388,56 @@ void loop() {
         eNetto += (nettoValues[i] + nettoValues[i+1]) / 2;
       }
 
-      document.getElementById('kpi-statisch').textContent = (eStat / 1000).toFixed(2) + ' Wh';
-      document.getElementById('kpi-brutto').textContent = (eBrutto / 1000).toFixed(2) + ' Wh';
-      document.getElementById('kpi-netto').textContent = (eNetto / 1000).toFixed(2) + ' Wh';
+      const kpiStat = document.getElementById('kpi-statisch');
+      const kpiBrutto = document.getElementById('kpi-brutto');
+      const kpiNetto = document.getElementById('kpi-netto');
+      if (kpiStat) kpiStat.textContent = (eStat / 1000).toFixed(2) + ' Wh';
+      if (kpiBrutto) kpiBrutto.textContent = (eBrutto / 1000).toFixed(2) + ' Wh';
+      if (kpiNetto) kpiNetto.textContent = (eNetto / 1000).toFixed(2) + ' Wh';
 
       const bruttoGain = eStat > 0 ? (((eBrutto - eStat) / eStat) * 100) : 0;
       const nettoGain = eStat > 0 ? (((eNetto - eStat) / eStat) * 100) : 0;
 
-      document.getElementById('kpi-brutto-gain').textContent = (bruttoGain >= 0 ? '+' : '') + bruttoGain.toFixed(1) + '% Brutto-Mehrertrag';
-      document.getElementById('kpi-netto-gain').textContent = (nettoGain >= 0 ? '+' : '') + nettoGain.toFixed(1) + '% Netto-Mehrertrag';
+      const kpiBruttoGain = document.getElementById('kpi-brutto-gain');
+      const kpiNettoGain = document.getElementById('kpi-netto-gain');
+      if (kpiBruttoGain) {
+        kpiBruttoGain.textContent = (bruttoGain >= 0 ? '+' : '') + bruttoGain.toFixed(1) + '% Brutto-Mehrertrag';
+      }
+      if (kpiNettoGain) {
+        if (nettoGain >= 0) {
+          kpiNettoGain.textContent = '+' + nettoGain.toFixed(1) + '% Netto-Mehrertrag';
+          kpiNettoGain.style.color = '#1565c0';
+        } else {
+          kpiNettoGain.textContent = nettoGain.toFixed(1) + '% Netto-Verlust';
+          kpiNettoGain.style.color = '#d32f2f';
+        }
+      }
 
+      // Machbarkeitsampel aktualisieren
       const badge = document.getElementById('feasibility-badge');
       const title = document.getElementById('feasibility-title');
       const text = document.getElementById('feasibility-text');
 
-      if (nettoGain > 15) {
-        badge.style.borderLeftColor = '#27ae60';
-        badge.style.background = '#e8f8f5';
-        title.textContent = '🟢 Machbarkeit: Sehr empfehlenswert (+ ' + nettoGain.toFixed(1) + '% Netto)';
-        text.textContent = 'Der Netto-Energiegewinn übersteigt den Eigenverbrauch der Servos und des Mikrocontrollers deutlich. Die Nachführung lohnt sich unter diesen Bedingungen energetisch hervorragend!';
-      } else if (nettoGain > 0) {
-        badge.style.borderLeftColor = '#f39c12';
-        badge.style.background = '#fef9e7';
-        title.textContent = '🟡 Machbarkeit: Bedacht / Grenzwertig (+ ' + nettoGain.toFixed(1) + '% Netto)';
-        text.textContent = 'Der Netto-Mehrertrag ist positiv, aber gering. Der Eigenverbrauch des Nachführsystems frisst einen Großteil des zusätzlichen Solarertrags auf.';
-      } else {
-        badge.style.borderLeftColor = '#e74c3c';
-        badge.style.background = '#fdedec';
-        title.textContent = '🔴 Machbarkeit: Unrentabel (' + nettoGain.toFixed(1) + '% Netto)';
-        text.textContent = 'Der Eigenverbrauch der Motoren & Elektronik ist höher als der zusätzliche Energieertrag der Nachführung. Eine statische Ausrichtung ist in dieser Konfiguration energetisch sinnvoller!';
+      if (badge && title && text) {
+        if (nettoGain > 15) {
+          badge.style.borderLeftColor = '#27ae60';
+          badge.style.background = '#e8f8f5';
+          title.textContent = '🟢 Sehr lohnend (+ ' + nettoGain.toFixed(1) + '% Netto)';
+          text.textContent = 'Der solare Zusatzertrag übersteigt den Motor-Verbrauch deutlich. Die Nachführung bringt einen spürbaren energetischen Gewinn!';
+        } else if (nettoGain > 0) {
+          badge.style.borderLeftColor = '#f39c12';
+          badge.style.background = '#fef9e7';
+          title.textContent = '🟡 Grenzwertig (+ ' + nettoGain.toFixed(1) + '% Netto)';
+          text.textContent = 'Der Netto-Gewinn ist minimal. Der Strombedarf der Servos frisst den Großteil des zusätzlichen Sonnenlichts wieder auf.';
+        } else {
+          badge.style.borderLeftColor = '#e74c3c';
+          badge.style.background = '#fdedec';
+          title.textContent = '🔴 Energetisch unrentabel (' + nettoGain.toFixed(1) + '% Netto)';
+          text.textContent = 'Der Dauerbetrieb der Motoren verbraucht mehr Energie, als die Ausrichtung zusätzlich einbringt! Tipp: Im Sparmodus mit Servo-Schlafpausen oder bei größeren Panels dreht sich diese Bilanz ins Positive.';
+        }
       }
 
+      // Chart.js konfigurieren
       const canvasElem = document.getElementById('evalChart');
       if (!canvasElem) return;
       const ctx = canvasElem.getContext('2d');
@@ -2260,40 +2445,46 @@ void loop() {
         evalChartInstance.destroy();
       }
 
+      const datasets = [
+        {
+          label: 'Statisch (Fixiert) [mW]',
+          data: statValues,
+          borderColor: '#e67e22',
+          backgroundColor: 'rgba(230, 126, 34, 0.15)',
+          fill: true,
+          tension: 0.3,
+          borderWidth: 2.5
+        },
+        {
+          label: 'Nachgeführt Brutto [mW]',
+          data: bruttoValues,
+          borderColor: '#27ae60',
+          backgroundColor: 'rgba(39, 174, 96, 0.15)',
+          fill: true,
+          tension: 0.3,
+          borderWidth: 2.5
+        }
+      ];
+
+      // Netto nur einblenden, wenn Stufe 2 aktiv ist!
+      if (isNettoActive) {
+        datasets.push({
+          label: 'Nachgeführt Netto (abzgl. Eigenverbrauch) [mW]',
+          data: nettoValues,
+          borderColor: '#1976d2',
+          borderDash: [5, 5],
+          backgroundColor: 'rgba(25, 118, 210, 0.05)',
+          fill: true,
+          tension: 0.3,
+          borderWidth: 2.2
+        });
+      }
+
       evalChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
           labels: labels,
-          datasets: [
-            {
-              label: 'Statisch (Fixiert) [mW]',
-              data: statValues,
-              borderColor: '#e67e22',
-              backgroundColor: 'rgba(230, 126, 34, 0.15)',
-              fill: true,
-              tension: 0.3,
-              borderWidth: 2.5
-            },
-            {
-              label: 'Nachgeführt Brutto [mW]',
-              data: bruttoValues,
-              borderColor: '#27ae60',
-              backgroundColor: 'rgba(39, 174, 96, 0.15)',
-              fill: true,
-              tension: 0.3,
-              borderWidth: 2.5
-            },
-            {
-              label: 'Nachgeführt Netto (abzügl. Eigenverbrauch) [mW]',
-              data: nettoValues,
-              borderColor: '#2980b9',
-              borderDash: [5, 5],
-              backgroundColor: 'transparent',
-              fill: false,
-              tension: 0.3,
-              borderWidth: 2
-            }
-          ]
+          datasets: datasets
         },
         options: {
           responsive: true,
@@ -2323,7 +2514,11 @@ void loop() {
           },
           plugins: {
             legend: {
-              position: 'top'
+              position: 'top',
+              labels: {
+                boxWidth: 14,
+                padding: 12
+              }
             }
           }
         }
