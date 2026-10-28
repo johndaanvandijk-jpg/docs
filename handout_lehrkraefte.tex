@@ -1,0 +1,169 @@
+% ─────────────────────────────────────────────────────────────────────────────
+%  Handout – Erprobung NwT-Lernmodule | Lehrkräfte
+%  Veranstaltung: Montag, 07. Dezember 2026 | 15:30 Uhr | DLL am KIT
+% ─────────────────────────────────────────────────────────────────────────────
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage[margin=2cm, top=1.8cm, bottom=2cm]{geometry}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{fontawesome5}    % optional – nur wenn verfügbar; sonst Zeilen mit \fa... löschen
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  urlcolor=accent,
+  pdfborder={0 0 0}
+}
+
+\definecolor{primary}{RGB}{31, 50, 70}
+\definecolor{accent}{RGB}{0, 120, 110}
+\definecolor{accentlight}{RGB}{220, 245, 242}
+\definecolor{warn}{RGB}{180, 60, 40}
+\definecolor{lightgray}{RGB}{247, 248, 250}
+\definecolor{midgray}{RGB}{140, 150, 160}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+\newcommand{\linefill}{\rule{\linewidth}{0.4pt}}
+\newcommand{\sectionrule}{%
+  \vspace{2pt}{\color{accent}\rule{\linewidth}{1.5pt}}\vspace{4pt}}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+
+% ── KOPFZEILE ─────────────────────────────────────────────────────────────────
+{\LARGE \bfseries \color{primary} Erprobung digitaler NwT-Lernmodule}\\[3pt]
+{\large \color{accent} Einladung zur Pilotveranstaltung – Rückmeldung aus der Praxis}\\[6pt]
+\linefill\\[6pt]
+
+% ── LOGISTIK-BOX ──────────────────────────────────────────────────────────────
+\begin{tcolorbox}[
+  colback=accentlight,
+  colframe=accent,
+  arc=2mm,
+  boxrule=1pt,
+  top=6pt, bottom=6pt, left=10pt, right=10pt,
+  title={\bfseries\color{white} Termin \& Ort},
+  coltitle=white,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=accent, arc=1mm}
+]
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+  \textbf{Datum}   & Montag, 07.\ Dezember 2026 \\[2pt]
+  \textbf{Beginn}  & 15:30 Uhr (Ende gegen 17:30 Uhr) \\[2pt]
+  \textbf{Ort}     & \textbf{Digital Learning Lab (DLL)} am KIT \\
+                   & 1.\ Stock, InformatiKOM (Geb.\ 50.19, Raum 108 / Seminarraum 5) \\
+                   & Adenauerring 12, 76131 Karlsruhe \\[2pt]
+  \textbf{Für uns} & Snacks \& Getränke werden gestellt – vielen Dank für Ihren Weg!
+\end{tabularx}
+\end{tcolorbox}
+
+\vspace{10pt}
+
+% ── HINTERGRUND ───────────────────────────────────────────────────────────────
+{\large \bfseries \color{primary} Warum diese Veranstaltung?}
+\sectionrule
+
+Für NwT-Projekte gibt es Unterrichtseinheiten und Materialien –
+doch viele davon sind entweder \textbf{zu oberflächlich} für den konkreten Einsatz
+oder nur für eingeloggte Lehrkräfte zugänglich.
+Was fehlt, sind \textbf{praxisnahe, digital aufbereitete Lernbegleiter},
+die Schülerinnen und Schüler Schritt für Schritt durch ein Projekt führen –
+von der Theorie bis zum funktionierenden Ergebnis.
+
+\vspace{6pt}
+
+Genau das sollen die hier vorgestellten \textbf{Lernmodule} leisten:
+interaktive Webseiten, die Erklärungen, Simulationen, Codebeispiele
+und Aufgaben in einem didaktisch strukturierten Format vereinen.
+
+\vspace{10pt}
+
+% ── DIE MODULE ────────────────────────────────────────────────────────────────
+{\large \bfseries \color{primary} Die zwei Module}
+\sectionrule
+
+\begin{tcolorbox}[
+  colback=lightgray, colframe=midgray, arc=2mm,
+  boxrule=0.6pt, top=5pt, bottom=5pt, left=8pt, right=8pt
+]
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+  \textbf{Modul 1} & \textbf{Fotometer} \\
+                   & Arduino-basiertes Fotometer: Schaltungsaufbau, Messung von Lichtintensität,
+                     Python-Auswertung. \\[6pt]
+  \textbf{Modul 2} & \textbf{Wetterstation-App} \\
+                   & Netzwerkbasiertes Projekt: Sensoren, Datenübertragung über WLAN,
+                     Visualisierung auf einem lokalen Webserver. \\
+\end{tabularx}
+\end{tcolorbox}
+
+\vspace{4pt}
+{\small \color{midgray}
+Beide Module sind eigenständig und können unabhängig voneinander bearbeitet werden.}
+
+\vspace{10pt}
+
+% ── ABLAUF ────────────────────────────────────────────────────────────────────
+{\large \bfseries \color{primary} Ablauf des Nachmittags}
+\sectionrule
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{2.6cm}X@{}}
+  \toprule
+  15:30 – 15:45 & Begrüßung, kurze Vorstellung der Lernmodule \\
+  15:45 – 17:00 & \textbf{Freies Erkunden:} Wählen Sie ein Modul (oder beide) und arbeiten Sie sich in Ihrem eigenen Tempo vor. Hardware und Laptops stehen bereit. \\
+  17:00 – 17:20 & Ausfüllen des Evaluationsfragebogens \\
+  17:20 – 17:30 & Gemeinsame Diskussion, Austausch, Fragen \\
+  \bottomrule
+\end{tabularx}
+
+\vspace{10pt}
+
+% ── IHRE ROLLE ────────────────────────────────────────────────────────────────
+{\large \bfseries \color{primary} Ihre Rolle heute}
+\sectionrule
+
+Sie kommen mit einem einzigartigen Blickwinkel: Sie kennen NwT-Projekte aus dem Schulalltag.
+Ihre Rückmeldung ist deshalb besonders wertvoll – nicht als Lernende,
+sondern als \textbf{Expertinnen und Experten für das, was im Unterricht wirklich funktioniert}.
+
+\vspace{6pt}
+
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+  \item Probieren Sie die Module aus Lernenden- \emph{und} Lehrendenperspektive aus
+  \item Bewerten Sie: Würden Sie ein solches Modul im eigenen Unterricht einsetzen?
+  \item Notieren Sie konkrete Verbesserungsideen – sie fließen direkt in die Weiterentwicklung ein
+\end{itemize}
+
+\vspace{10pt}
+
+% ── FRAGEBOGEN-HINWEIS ────────────────────────────────────────────────────────
+\begin{tcolorbox}[
+  colback=lightgray, colframe=midgray, arc=2mm,
+  boxrule=0.6pt, top=5pt, bottom=5pt, left=8pt, right=8pt
+]
+{\bfseries Evaluation:} Am Ende erhalten Sie einen kurzen Fragebogen (ca.\ 15 Min.).
+Er ist anonym und fragt nach Verständlichkeit, Motivation, digitalen Elementen
+und der Relevanz der Inhalte für Ihren Unterricht.
+Ihre ehrliche Rückmeldung hilft dabei, die Module für den Einsatz im
+Lehramtsstudium und im Schulunterricht weiterzuentwickeln.
+\end{tcolorbox}
+
+\vspace{8pt}
+
+% ── FUSSZEILE ─────────────────────────────────────────────────────────────────
+\linefill\\[4pt]
+{\small \color{midgray}
+Piloterprobung NwT-Lernmodule $\cdot$ Dezember 2026 $\cdot$
+Digital Learning Lab (DLL), KIT Karlsruhe
+}
+
+\end{document}

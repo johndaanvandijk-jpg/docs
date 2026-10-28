@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Handout – NwT Lerneinheit Erprobung</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      background: #fff;
+      color: #1c3254;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      padding: 16mm 18mm 14mm 18mm;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    @media print {
+
+      html,
+      body {
+        background: #fff;
+      }
+
+      .page {
+        margin: 0;
+        padding: 14mm 16mm 12mm 16mm;
+      }
+
+      @page {
+        size: A4;
+        margin: 0;
+      }
+    }
+
+    /* ── Farben ──────────────────────────────────────────── */
+    :root {
+      --primary: #1c3254;
+      --accent: #1e7a62;
+      --accent-l: #e8f5f1;
+      --accent-b: rgba(30, 122, 98, 0.22);
+      --card: #f4f7fb;
+      --border: #d6e2ef;
+      --muted: #6b7f95;
+      --rule: #d0dbe8;
+    }
+
+    /* ── KOPFZEILE ───────────────────────────────────────── */
+    .header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      gap: 20px;
+    }
+
+    .header-left {
+      flex: 1;
+    }
+
+    .eyebrow {
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      margin-bottom: 5px;
+    }
+
+    .header-left h1 {
+      font-size: 21pt;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .header-left h1 .hl {
+      color: var(--accent);
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      padding-top: 4px;
+    }
+
+    .date-badge {
+      background: var(--accent-l);
+      border: 1px solid var(--accent-b);
+      border-radius: 8px;
+      padding: 6px 12px;
+      text-align: right;
+    }
+
+    .date-badge .db-day {
+      font-size: 14pt;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .date-badge .db-sub {
+      font-size: 8pt;
+      font-weight: 600;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    /* ── DIVIDER ─────────────────────────────────────────── */
+    .rule {
+      border: none;
+      border-top: 1.5px solid var(--rule);
+      margin: 12px 0;
+    }
+
+    .rule.thin {
+      border-top-width: 1px;
+      border-color: #e8eff7;
+      margin: 9px 0;
+    }
+
+    /* ── INTRO TEXT ──────────────────────────────────────── */
+    .intro {
+      font-size: 9.5pt;
+      color: #3a5272;
+      line-height: 1.6;
+      margin-bottom: 14px;
+      max-width: 100%;
+    }
+
+    /* ── HERO: Module + Screenshot-Stapel ───────────────── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 155px;
+      gap: 20px;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    .module-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mod-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 9px 13px;
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+    }
+
+    .mod-card .mn {
+      font-size: 17pt;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+      min-width: 18px;
+      padding-top: 1px;
+    }
+
+    .mod-card .minfo {
+      flex: 1;
+    }
+
+    .mod-card .mname {
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .mod-card .mdesc {
+      font-size: 8pt;
+      color: var(--muted);
+      margin-top: 1px;
+      line-height: 1.4;
+    }
+
+    /* ── Screenshot-Stapel ───────────────────────────────── */
+    .stack {
+      position: relative;
+      width: 155px;
+      height: 190px;
+      flex-shrink: 0;
+    }
+
+    .stack img {
+      position: absolute;
+      width: 135px;
+      border-radius: 7px;
+      box-shadow: 0 4px 16px rgba(28, 50, 84, 0.18);
+      border: 1px solid #d4dde8;
+      object-fit: cover;
+      object-position: top left;
+    }
+
+    .stack img:nth-child(1) {
+      top: 0;
+      left: 20px;
+      transform: rotate(-4deg);
+      z-index: 1;
+      opacity: 0.6;
+      height: 92px;
+    }
+
+    .stack img:nth-child(2) {
+      top: 30px;
+      left: 10px;
+      transform: rotate(2deg);
+      z-index: 2;
+      opacity: 0.8;
+      height: 92px;
+    }
+
+    .stack img:nth-child(3) {
+      top: 62px;
+      left: 0;
+      transform: rotate(-0.5deg);
+      z-index: 3;
+      height: 110px;
+    }
+
+    /* ── ABLAUF ──────────────────────────────────────────── */
+    .section-label {
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: var(--muted);
+      margin-bottom: 9px;
+    }
+
+    .ablauf {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 9px;
+      margin-bottom: 10px;
+    }
+
+    .step {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 10px 12px 10px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .step.main {
+      background: var(--accent-l);
+      border-color: var(--accent-b);
+      border-width: 1.5px;
+    }
+
+    .time-pill {
+      display: inline-block;
+      background: rgba(30, 122, 98, 0.1);
+      border: 1px solid rgba(30, 122, 98, 0.25);
+      color: var(--accent);
+      font-size: 7.5pt;
+      font-weight: 700;
+      border-radius: 20px;
+      padding: 2px 10px;
+      letter-spacing: 0.03em;
+    }
+
+    .step-emoji {
+      font-size: 18pt;
+      line-height: 1;
+      margin: 2px 0;
+    }
+
+    .step-name {
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.35;
+    }
+
+    .step-sub {
+      font-size: 7.5pt;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    /* ── STAT-KARTEN ─────────────────────────────────────── */
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+
+    .stat .big {
+      font-size: 20pt;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+      display: block;
+    }
+
+    .stat .slabel {
+      font-size: 8pt;
+      color: var(--muted);
+      margin-top: 3px;
+      line-height: 1.35;
+    }
+
+    /* ── INFOS UNTEN ─────────────────────────────────────── */
+    .info-row {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 14px;
+    }
+
+    .ic-label {
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .ic-val {
+      font-size: 8.5pt;
+      color: #3a5272;
+      line-height: 1.55;
+    }
+
+    .ic-val strong {
+      color: var(--primary);
+    }
+
+    ul.check {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.check li {
+      padding: 3px 0 3px 16px;
+      position: relative;
+      font-size: 8.5pt;
+      color: #3a5272;
+      line-height: 1.45;
+    }
+
+    ul.check li::before {
+      content: "›";
+      position: absolute;
+      left: 1px;
+      color: var(--accent);
+      font-weight: 900;
+      font-size: 12pt;
+      top: 0px;
+    }
+
+    /* ── HINWEIS-BOX (Verpflegung) ───────────────────────── */
+    .note-row {
+      background: var(--accent-l);
+      border: 1px solid var(--accent-b);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 8px 14px;
+      font-size: 8.5pt;
+      color: #2a5043;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .note-row strong {
+      color: var(--primary);
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--rule);
+      padding-top: 8px;
+      margin-top: auto;
+      font-size: 7.5pt;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-left">
+        <div class="eyebrow">Piloterprobung · NwT-Lernmodule</div>
+        <h1>NwT Lerneinheit<br><span class="hl">Erprobung</span></h1>
+      </div>
+      <div class="header-right">
+        <div class="date-badge">
+          <div class="db-day">07. Dez</div>
+          <div class="db-sub">Mo · 15:30 Uhr · DLL am KIT</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- INTRO TEXT -->
+    <p class="intro">
+      Für NwT-Projekte existieren Unterrichtseinheiten und Materialien – viele sind jedoch zu oberflächlich oder
+      nur für eingeloggte Lehrkräfte zugänglich. Die hier erprobten <strong>digitalen Lernmodule</strong> sollen diese
+      Lücke schließen:
+      interaktive Webseiten, die Theorie, Schaltungsaufbau und Codearbeit didaktisch strukturiert von Anfang bis zum
+      funktionierenden Ergebnis begleiten.
+    </p>
+
+    <!-- HERO: Module + Screenshots -->
+    <div class="hero">
+      <div class="module-row">
+        <div class="mod-card">
+          <span class="mn">1</span>
+          <div class="minfo">
+            <div class="mname">Fotometer</div>
+            <div class="mdesc">Arduino · Optik · analoge Sensorik · Python-Auswertung · Kalibrierkurve</div>
+          </div>
+        </div>
+        <div class="mod-card">
+          <span class="mn">2</span>
+          <div class="minfo">
+            <div class="mname">Wetterstation-App</div>
+            <div class="mdesc">ESP32 · WLAN · HTTP-Datenübertragung · lokaler Webserver · Visualisierung</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <img src="Media/Images/Promoscreen3.png" alt="Experiment: Fotometer">
+        <img src="Media/Images/promoscreen2.png" alt="Interaktive Kalibrierkurve">
+        <img src="Media/Images/promoscreen1.png" alt="Interaktiver Schaltplan">
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ABLAUF -->
+    <div class="section-label">Ablauf des Nachmittags</div>
+
+    <div class="ablauf">
+      <div class="step">
+        <div class="time-pill">15 Min</div>
+        <span class="step-emoji">☕</span>
+        <div class="step-name">Ankommen &<br>Einführung</div>
+      </div>
+
+      <div class="step main">
+        <div class="time-pill">~90 Min</div>
+        <span class="step-emoji">💻 🔧</span>
+        <div class="step-name">Modul erkunden &<br>Hardware aufbauen</div>
+        <div class="step-sub">Freie Modulwahl · eigenes Tempo<br>Hardware und Laptops bereit</div>
+      </div>
+
+      <div class="step">
+        <div class="time-pill">15 Min</div>
+        <span class="step-emoji">💬</span>
+        <div class="step-name">Feedback &<br>Diskussion</div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat">
+        <span class="big">2</span>
+        <div class="slabel">Module<br>zur Auswahl</div>
+      </div>
+      <div class="stat">
+        <span class="big">2h</span>
+        <div class="slabel">bis zum<br>Ergebnis</div>
+      </div>
+      <div class="stat">
+        <span class="big">0</span>
+        <div class="slabel">Vorwissen<br>erforderlich</div>
+      </div>
+    </div>
+
+    <!-- VERPFLEGUNG -->
+    <div class="note-row">
+      <strong>Verpflegung:</strong> Snacks und Getränke werden gestellt – herzlichen Dank für Ihren Weg!
+    </div>
+
+    <!-- ORT + ROLLE -->
+    <div class="info-row">
+      <div class="info-card">
+        <div class="ic-label">📍 Ort</div>
+        <div class="ic-val">
+          <strong>Digital Learning Lab (DLL)</strong> am KIT<br>
+          Geb. 50.19, Raum 108 / Seminarraum 5 · 1. Stock<br>
+          Adenauerring 12 · 76131 Karlsruhe
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="ic-label">🎯 Ihre Rolle</div>
+        <ul class="check">
+          <li>Module aus Lehrkraft-Perspektive testen</li>
+          <li>Kurzer anonymer Fragebogen am Ende</li>
+          <li>Ihr Feedback fließt direkt in die<br>Weiterentwicklung der Module ein</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <span>Piloterprobung NwT-Lernmodule · Dezember 2026</span>
+      <span>NwT Redaktion · KIT Karlsruhe</span>
+    </div>
+
+  </div>
+</body>
+
+</html>

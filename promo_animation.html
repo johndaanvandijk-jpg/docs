@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NwT Lernmodule · Promo-Video Animation Studio</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <style>
+    /* ==========================================================================
+       CSS VARIABLES & THEMES
+       ========================================================================== */
+    :root {
+      --kit-green: #009682;
+      --kit-green-light: #00c9ad;
+      --kit-glow: rgba(0, 150, 130, 0.4);
+      --accent-gold: #f59e0b;
+      --accent-cyan: #38bdf8;
+      
+      /* Studio Dark (Standard) */
+      --bg-canvas: #090e17;
+      --bg-card: rgba(18, 26, 43, 0.85);
+      --bg-card-border: rgba(255, 255, 255, 0.12);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --shadow-card: 0 16px 40px rgba(0, 0, 0, 0.5);
+      --grid-line: rgba(255, 255, 255, 0.035);
+
+      --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --anim-timing: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Light Theme */
+    body.theme-light {
+      --bg-canvas: #f8fafc;
+      --bg-card: rgba(255, 255, 255, 0.95);
+      --bg-card-border: rgba(0, 150, 130, 0.25);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --shadow-card: 0 16px 40px rgba(0, 100, 80, 0.1);
+      --grid-line: rgba(0, 150, 130, 0.05);
+    }
+
+    /* Chroma Green Screen (für transparente Overlays) */
+    body.theme-green {
+      --bg-canvas: #00ff00 !important;
+      --grid-line: transparent !important;
+    }
+
+    /* Chroma Blue Screen */
+    body.theme-blue {
+      --bg-canvas: #0000ff !important;
+      --grid-line: transparent !important;
+    }
+
+    /* ==========================================================================
+       RESET & BASE STYLES
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: var(--font-heading);
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease;
+    }
+
+    /* ==========================================================================
+       16:9 BROADCAST CANVAS CONTAINER
+       ========================================================================== */
+    #viewport-wrapper {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    #stage {
+      aspect-ratio: 16 / 9;
+      width: 100vw;
+      max-height: 100vh;
+      max-width: calc(100vh * (16 / 9));
+      height: auto;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-canvas);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 80px rgba(0, 0, 0, 0.8);
+      transition: background-color 0.3s ease;
+    }
+
+    /* Ambient background grid */
+    .canvas-bg-effects {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    body.theme-green .canvas-bg-effects,
+    body.theme-blue .canvas-bg-effects {
+      display: none;
+    }
+
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    .bg-glow-orb {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--kit-glow), transparent 70%);
+      filter: blur(120px);
+      opacity: 0.35;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       SCENE MANAGER
+       ========================================================================== */
+    .scene {
+      position: absolute;
+      inset: 0;
+      padding: 4% 6%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.96) translateY(15px);
+      transition: opacity 0.45s var(--anim-timing), transform 0.5s var(--anim-timing), visibility 0.45s;
+      pointer-events: none;
+    }
+
+    .scene.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+      pointer-events: all;
+    }
+
+    .scene.exit-left {
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.96) translateX(-50px);
+    }
+
+    .scene.exit-right {
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.96) translateX(50px);
+    }
+
+    /* Simple, Bold Headlines */
+    h1.scene-title-simple {
+      font-size: clamp(2.4rem, 4.4vw, 3.8rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .highlight-green {
+      color: var(--kit-green-light);
+      background: linear-gradient(135deg, #00c9ad 0%, #22c55e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .highlight-gold {
+      color: var(--accent-gold);
+      background: linear-gradient(135deg, #fbbf24 0%, #ea580c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    /* ==========================================================================
+       SZENE 1: INTRO (NwT Logo & Willkommen)
+       ========================================================================== */
+    .intro-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .intro-logo-glow-wrap {
+      position: relative;
+      width: clamp(140px, 16vw, 190px);
+      height: clamp(140px, 16vw, 190px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .intro-logo-glow-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -15px;
+      border-radius: 50%;
+      border: 3px dashed rgba(0, 201, 173, 0.4);
+      animation: rotateRing 25s linear infinite;
+    }
+
+    .intro-logo-glow-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -25px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--kit-glow), transparent 70%);
+      filter: blur(25px);
+    }
+
+    .intro-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      z-index: 2;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.6));
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 16px;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    @keyframes rotateRing {
+      100% { transform: rotate(360deg); }
+    }
+
+    .intro-sub-pill {
+      background: rgba(0, 150, 130, 0.18);
+      border: 1px solid var(--kit-green);
+      color: var(--kit-green-light);
+      padding: 8px 24px;
+      border-radius: 100px;
+      font-size: clamp(1rem, 1.4vw, 1.25rem);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      box-shadow: 0 0 24px rgba(0, 150, 130, 0.3);
+    }
+
+    /* ==========================================================================
+       SZENE 2: UNI-NWT ⟷ NWT LERNMODULE ⟷ SCHUL-NWT (Super Clean & Symbolisch)
+       ========================================================================== */
+    .triad-flow-container {
+      width: 100%;
+      max-width: 1040px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      margin-top: 10px;
+    }
+
+    /* Connecting Energy Rail with traveling light dot */
+    .triad-energy-rail {
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      right: 10%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+      z-index: 1;
+      transform: translateY(-50%);
+    }
+
+    .triad-energy-rail-glow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #38bdf8, var(--kit-green-light));
+      opacity: 0.5;
+    }
+
+    .triad-traveling-dot {
+      position: absolute;
+      top: -8px;
+      left: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 16px #fff, 0 0 30px var(--kit-green-light);
+      animation: travelBackAndForth 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+    }
+
+    @keyframes travelBackAndForth {
+      0% { left: 0%; transform: scale(0.9); }
+      50% { transform: scale(1.4); }
+      100% { left: calc(100% - 20px); transform: scale(0.9); }
+    }
+
+    /* The 3 Clean Blocks */
+    .triad-node {
+      position: relative;
+      z-index: 2;
+      background: var(--bg-card);
+      border: 2px solid var(--bg-card-border);
+      border-radius: 24px;
+      padding: clamp(24px, 3vw, 36px) clamp(28px, 3.5vw, 44px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(16px);
+      min-width: clamp(220px, 24vw, 280px);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .triad-node.node-center {
+      border-color: var(--kit-green-light);
+      background: linear-gradient(180deg, rgba(0, 150, 130, 0.22) 0%, rgba(18, 26, 43, 0.95) 100%);
+      box-shadow: 0 20px 50px rgba(0, 150, 130, 0.35);
+      transform: scale(1.08);
+    }
+
+    .triad-icon {
+      font-size: clamp(2.4rem, 3.5vw, 3.2rem);
+    }
+
+    .triad-logo-img {
+      width: clamp(60px, 7vw, 76px);
+      height: clamp(60px, 7vw, 76px);
+      object-fit: contain;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
+    }
+
+    .triad-label {
+      font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .triad-node.node-left .triad-label { color: #38bdf8; }
+    .triad-node.node-center .triad-label { color: var(--kit-green-light); }
+    .triad-node.node-right .triad-label { color: #22c55e; }
+
+    /* ==========================================================================
+       SZENE 3: DIE 4 MODULE MIT BACKGROUND-PFEIL & PROMOBILDERN
+       ========================================================================== */
+    .modules-flow-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Giant Background Progression Arrow spanning behind all 4 units */
+    .bg-progression-arrow-svg {
+      position: absolute;
+      top: 50%;
+      left: 2%;
+      width: 96%;
+      height: 90px;
+      transform: translateY(-50%);
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+
+    .modules-grid-new {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(14px, 1.6vw, 22px);
+      width: 100%;
+    }
+
+    .mod-screenshot-card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+      backdrop-filter: blur(14px);
+    }
+
+    .mod-screenshot-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--kit-green-light);
+    }
+
+    /* Image Wrapper */
+    .mod-img-frame {
+      width: 100%;
+      height: clamp(140px, 16vw, 195px);
+      background: #0b1320;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mod-img-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform 0.4s ease;
+    }
+
+    .mod-screenshot-card:hover .mod-img-frame img {
+      transform: scale(1.04);
+    }
+
+    /* Card Bottom: Number + Clean Title */
+    .mod-card-footer {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mod-number-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--kit-green);
+      color: #fff;
+      font-weight: 900;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(0, 150, 130, 0.3);
+    }
+
+    .mod-footer-text h3 {
+      font-size: clamp(0.95rem, 1.2vw, 1.12rem);
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    /* ==========================================================================
+       SZENE 4: DER ROTE FADEN (Modul 1 ➔ Modul 4)
+       ========================================================================== */
+    .thread-minimal-container {
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: 1fr auto 1.15fr;
+      align-items: center;
+      gap: 28px;
+      margin-top: 10px;
+    }
+
+    .thread-side-card {
+      background: var(--bg-card);
+      border: 2px solid var(--bg-card-border);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(14px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .thread-card-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .thread-card-title-row h3 {
+      font-size: clamp(1.2rem, 1.6vw, 1.45rem);
+      font-weight: 800;
+    }
+
+    .thread-card-badge {
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+    }
+
+    .thread-circuit-wrap {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 220px;
+    }
+
+    .thread-circuit-wrap svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Big Animated Transfer Arrow in Center */
+    .thread-middle-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .arrow-track {
+      width: clamp(70px, 9vw, 110px);
+      height: 6px;
+      background: linear-gradient(90deg, var(--kit-green-light), var(--accent-gold));
+      border-radius: 3px;
+      position: relative;
+      box-shadow: 0 0 16px var(--kit-glow);
+    }
+
+    .arrow-track::after {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 12px #fff, 0 0 24px var(--accent-gold);
+      animation: transferPacket 2s infinite ease-in-out;
+    }
+
+    .thread-solar-wrap {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      height: 220px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #solar-tracker-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ==========================================================================
+       SZENE 5: ZSL UNTERRICHTSEINHEITEN (Screenshot + 3 Bullets)
+       ========================================================================== */
+    .zsl-hero-container {
+      width: 100%;
+      max-width: 1080px;
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 32px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .zsl-screenshot-card {
+      background: var(--bg-card);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      max-height: 420px;
+      display: flex;
+    }
+
+    .zsl-screenshot-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top left;
+    }
+
+    .zsl-keypoints-box {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .zsl-keypoint-item {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 18px;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .zsl-kp-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(0, 150, 130, 0.2);
+      border: 1px solid var(--kit-green);
+      color: var(--kit-green-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .zsl-kp-text h4 {
+      font-size: clamp(1.1rem, 1.4vw, 1.25rem);
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* ==========================================================================
+       SZENE 6: DER TESTDURCHLAUF (2 Module im Fokus)
+       ========================================================================== */
+    .test-duo-container {
+      width: 100%;
+      max-width: 980px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 10px;
+    }
+
+    .test-duo-card {
+      background: var(--bg-card);
+      border: 2px solid var(--kit-green);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 16px 50px rgba(0, 150, 130, 0.3);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+    }
+
+    .test-duo-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .test-duo-img-wrap {
+      width: 100%;
+      height: clamp(200px, 22vw, 270px);
+      background: #090e17;
+      overflow: hidden;
+    }
+
+    .test-duo-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .test-duo-title-wrap {
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .test-duo-title-wrap h3 {
+      font-size: clamp(1.2rem, 1.6vw, 1.45rem);
+      font-weight: 800;
+    }
+
+    .test-duo-tag {
+      background: rgba(0, 150, 130, 0.2);
+      color: var(--kit-green-light);
+      border: 1px solid var(--kit-green);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .feedback-callout-pill {
+      margin-top: 24px;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--accent-gold);
+      color: #fff;
+      padding: 10px 28px;
+      border-radius: 100px;
+      font-size: clamp(1rem, 1.3vw, 1.2rem);
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 6px 25px rgba(245, 158, 11, 0.25);
+    }
+
+    .feedback-callout-pill i {
+      color: var(--accent-gold);
+      font-size: 1.3rem;
+    }
+
+    /* ==========================================================================
+       SZENE 7: 2 STUNDEN TIMELINE & PIZZA
+       ========================================================================== */
+    .session-minimal-container {
+      width: 100%;
+      max-width: 1080px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 10px;
+    }
+
+    .session-steps-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .session-step-box {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 20px;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .step-time-pill {
+      background: rgba(0, 150, 130, 0.2);
+      border: 1px solid var(--kit-green);
+      color: var(--kit-green-light);
+      padding: 4px 14px;
+      border-radius: 100px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .step-emoji {
+      font-size: 2.6rem;
+      margin: 4px 0;
+    }
+
+    .step-name {
+      font-size: clamp(1.05rem, 1.3vw, 1.25rem);
+      font-weight: 800;
+    }
+
+    /* Clean Fun Pizza Banner */
+    .pizza-highlight-banner {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(239, 68, 68, 0.2) 100%);
+      border: 2px solid var(--accent-gold);
+      border-radius: 22px;
+      padding: 20px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      box-shadow: 0 10px 35px rgba(245, 158, 11, 0.25);
+    }
+
+    .pizza-banner-emoji {
+      font-size: 3.2rem;
+      animation: pizzaBounce 2.2s infinite ease-in-out;
+    }
+
+    .pizza-banner-text {
+      font-size: clamp(1.3rem, 1.8vw, 1.7rem);
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .pizza-banner-text span {
+      color: var(--accent-gold);
+    }
+
+    @keyframes pizzaBounce {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(8deg); }
+    }
+
+    /* ==========================================================================
+       SZENE 8: CALL TO ACTION (Super Bold & Minimal)
+       ========================================================================== */
+    .cta-minimal-box {
+      background: var(--bg-card);
+      border: 2px solid var(--kit-green-light);
+      border-radius: 32px;
+      padding: clamp(36px, 4vw, 54px);
+      box-shadow: 0 20px 70px rgba(0, 150, 130, 0.4);
+      max-width: 820px;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .cta-big-btn {
+      background: linear-gradient(135deg, #00c9ad 0%, #009682 100%);
+      color: #fff;
+      font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+      font-weight: 900;
+      padding: 18px 48px;
+      border-radius: 100px;
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 10px 35px rgba(0, 201, 173, 0.6);
+      border: none;
+      text-decoration: none;
+      animation: pulseCta 2.5s infinite;
+    }
+
+    .cta-badges-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .cta-badge-item {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cta-badge-item i {
+      color: var(--kit-green-light);
+    }
+
+    /* Watermark */
+    .stage-watermark {
+      position: absolute;
+      top: 32px;
+      right: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 20;
+      opacity: 0.8;
+    }
+
+    .stage-watermark img {
+      height: 38px;
+      border-radius: 8px;
+    }
+
+    .stage-watermark span {
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    body.theme-green .stage-watermark,
+    body.theme-blue .stage-watermark {
+      display: none;
+    }
+
+    /* ==========================================================================
+       LOWER THIRD (Taste L)
+       ========================================================================== */
+    #lower-third {
+      position: absolute;
+      bottom: 60px;
+      left: 60px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(9, 14, 23, 0.92);
+      border-left: 6px solid var(--kit-green-light);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 14px 24px;
+      border-radius: 4px 14px 14px 4px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+      backdrop-filter: blur(12px);
+      z-index: 50;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.4s ease;
+      pointer-events: none;
+    }
+
+    #lower-third.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .lt-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--kit-green-light);
+      object-fit: cover;
+    }
+
+    .lt-text h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .lt-text p {
+      font-size: 0.85rem;
+      color: var(--kit-green-light);
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       DIRECTOR CONTROL DOCK
+       ========================================================================== */
+    #director-dock {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 10px 18px;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 1000;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+      backdrop-filter: blur(16px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Clean Recording Mode: Hide all UI */
+    body.clean-record-mode #director-dock {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-50%) translateY(40px);
+    }
+
+    #clean-mode-revealer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 24px;
+      z-index: 999;
+      display: none;
+    }
+
+    body.clean-record-mode #clean-mode-revealer {
+      display: block;
+    }
+
+    body.clean-record-mode #clean-mode-revealer:hover + #director-dock,
+    body.clean-record-mode #director-dock:hover {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .dock-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .dock-btn:hover {
+      background: rgba(0, 150, 130, 0.3);
+      border-color: var(--kit-green-light);
+      color: var(--kit-green-light);
+    }
+
+    .dock-btn.active {
+      background: var(--kit-green);
+      color: #fff;
+      border-color: var(--kit-green-light);
+    }
+
+    .dock-select {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .dock-select option {
+      background: #0f172a;
+      color: #fff;
+    }
+
+    .dock-divider {
+      width: 1px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Teleprompter Drawer */
+    #teleprompter-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(9, 14, 23, 0.95);
+      border-bottom: 2px solid var(--kit-green);
+      padding: 16px 32px;
+      z-index: 1001;
+      backdrop-filter: blur(14px);
+      transform: translateY(-100%);
+      transition: transform 0.35s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #teleprompter-drawer.open {
+      transform: translateY(0);
+    }
+
+    .prompter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--kit-green-light);
+    }
+
+    .prompter-text {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    /* Toast Notification */
+    #hotkey-toast {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-30px);
+      background: rgba(0, 150, 130, 0.92);
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    #hotkey-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="theme-dark">
+
+  <div id="viewport-wrapper">
+    <div id="stage">
+
+      <!-- Background Ambient FX -->
+      <div class="canvas-bg-effects">
+        <div class="bg-grid"></div>
+        <div class="bg-glow-orb"></div>
+      </div>
+
+      <!-- Watermark Top Right -->
+      <div class="stage-watermark">
+        <img src="Media/Images/NWTLOGO.png" alt="NwT Logo">
+        <span>NwT · Lernmodule</span>
+      </div>
+
+      <!-- ====================================================================
+           SZENE 1: INTRO (NwT Logo & Willkommen)
+           ==================================================================== -->
+      <section class="scene active" id="scene-1" data-title="1. Intro" data-script="Hallöchen liebe NwT Studis.">
+        <div class="intro-box">
+          <div class="intro-logo-glow-wrap">
+            <img src="Media/Images/NWTLOGO.png" alt="NwT Logo" class="intro-logo-img">
+          </div>
+
+          <h1 class="scene-title-simple" style="margin-bottom: 10px;">
+            NwT <span class="highlight-green">Lernmodule</span>
+          </h1>
+
+          <div class="intro-sub-pill">
+            Piloterprobung
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SZENE 2: UNI-NWT ⟷ NWT LERNMODULE ⟷ SCHUL-NWT (Symbolisch & Punkt-Animation)
+           ==================================================================== -->
+      <section class="scene" id="scene-2" data-title="2. Brücke" data-script="Über das letzte Jahr habe ich zusammen mit der NwT Redaktion probiert die Brücke von Uni-NwT zu Schul-NwT zu schlagen.">
+        
+        <div class="triad-flow-container">
+          <!-- Animated Energy Rail with traveling dot -->
+          <div class="triad-energy-rail">
+            <div class="triad-energy-rail-glow"></div>
+            <div class="triad-traveling-dot"></div>
+          </div>
+
+          <!-- Left: Uni-NwT -->
+          <div class="triad-node node-left">
+            <div class="triad-icon" style="color:#38bdf8;">
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div class="triad-label">Uni-NwT</div>
+          </div>
+
+          <!-- Center: NwT Lernmodule (Symbolisch in der Mitte) -->
+          <div class="triad-node node-center">
+            <img src="Media/Images/NWTLOGO.png" alt="NwT Logo" class="triad-logo-img">
+            <div class="triad-label">NwT Lernmodule</div>
+          </div>
+
+          <!-- Right: Schul-NwT -->
+          <div class="triad-node node-right">
+            <div class="triad-icon" style="color:#22c55e;">
+              <i class="fa-solid fa-school"></i>
+            </div>
+            <div class="triad-label">Schul-NwT</div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ====================================================================
+           SZENE 3: DIE 4 LERNMODULE (Mit Background-Pfeil & Promobildern)
+           ==================================================================== -->
+      <section class="scene" id="scene-3" data-title="3. Die 4 Module" data-script="Es wurden 4 Lernmodule erstellt mit denen man interaktiv durch ein Thema des NwT Curriculums geführt wird und am Ende ein funktionierendes Ergebnis hat.">
+        
+        <h1 class="scene-title-simple" style="margin-bottom: 20px;">
+          4 <span class="highlight-green">Lernmodule</span>
+        </h1>
+
+        <div class="modules-flow-wrapper">
+          <!-- Giant Background Progression Arrow SVG -->
+          <svg class="bg-progression-arrow-svg" viewBox="0 0 1000 100" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="flowArrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.3" />
+                <stop offset="50%" stop-color="#00c9ad" stop-opacity="0.6" />
+                <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.8" />
+              </linearGradient>
+            </defs>
+            <!-- Thick Arrow Spine -->
+            <path d="M 10 50 L 920 50" stroke="url(#flowArrowGrad)" stroke-width="24" stroke-linecap="round" />
+            <!-- Arrow Head -->
+            <polygon points="900,20 980,50 900,80" fill="#f59e0b" filter="drop-shadow(0 0 14px #f59e0b)" />
+          </svg>
+
+          <!-- The 4 Module Cards with User's Promo Screenshots -->
+          <div class="modules-grid-new">
+            <!-- Modul 1 -->
+            <div class="mod-screenshot-card">
+              <div class="mod-img-frame">
+                <img src="Media/promobilder/Modul1.png" alt="Modul 1: Fotometer">
+              </div>
+              <div class="mod-card-footer">
+                <div class="mod-number-badge">1</div>
+                <div class="mod-footer-text">
+                  <h3>Fotometer</h3>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modul 2 -->
+            <div class="mod-screenshot-card">
+              <div class="mod-img-frame">
+                <img src="Media/promobilder/modul2.png" alt="Modul 2: Wetterstation">
+              </div>
+              <div class="mod-card-footer">
+                <div class="mod-number-badge">2</div>
+                <div class="mod-footer-text">
+                  <h3>Wetterstation</h3>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modul 3 -->
+            <div class="mod-screenshot-card">
+              <div class="mod-img-frame">
+                <img src="Media/promobilder/modul3.png" alt="Modul 3: CAD & Gehäuse">
+              </div>
+              <div class="mod-card-footer">
+                <div class="mod-number-badge">3</div>
+                <div class="mod-footer-text">
+                  <h3>CAD &amp; Gehäuse</h3>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modul 4 -->
+            <div class="mod-screenshot-card">
+              <div class="mod-img-frame">
+                <img src="Media/promobilder/modul4.png" alt="Modul 4: Solarnachführung">
+              </div>
+              <div class="mod-card-footer">
+                <div class="mod-number-badge">4</div>
+                <div class="mod-footer-text">
+                  <h3>Solarnachführung</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ====================================================================
+           SZENE 4: DER ROTE FADEN (Modul 1 LDR ➔ Modul 4 Solarnachführung)
+           ==================================================================== -->
+      <section class="scene" id="scene-4" data-title="4. LDR ➔ Solarzelle" data-script="Die Einheiten bauen auch aufeinander auf, so wird zum Beispiel in Modul 1 die Verschaltung eines LDRs geübt, der dann später bei der automatischen Solarzelle in Modul 4 genutzt wird.">
+        
+        <h1 class="scene-title-simple" style="margin-bottom: 20px;">
+          Modul 1 <span class="highlight-gold">➔</span> Modul 4
+        </h1>
+
+        <div class="thread-minimal-container">
+          <!-- Left: Modul 1 LDR -->
+          <div class="thread-side-card">
+            <div class="thread-card-title-row">
+              <h3>Modul 1: LDR-Verschaltung</h3>
+              <span class="thread-card-badge" style="background:rgba(0,150,130,0.2); color:var(--kit-green-light); border:1px solid var(--kit-green);">Basis</span>
+            </div>
+            <div class="thread-circuit-wrap">
+              <svg viewBox="0 0 200 130">
+                <!-- 5V -->
+                <line x1="20" y1="20" x2="180" y2="20" stroke="#ef4444" stroke-width="2.5" />
+                <text x="25" y="16" fill="#ef4444" font-size="10" font-family="monospace">5V</text>
+
+                <!-- R1 -->
+                <line x1="80" y1="20" x2="80" y2="42" stroke="#fff" stroke-width="2" />
+                <rect x="72" y="42" width="16" height="26" fill="none" stroke="#38bdf8" stroke-width="2" rx="3" />
+                <text x="96" y="58" fill="#38bdf8" font-size="10" font-family="monospace">10 kΩ</text>
+
+                <!-- Tap -->
+                <line x1="80" y1="68" x2="80" y2="80" stroke="#fff" stroke-width="2" />
+                <line x1="80" y1="74" x2="160" y2="74" stroke="var(--kit-green-light)" stroke-width="2.5" />
+                <circle cx="80" cy="74" r="3.5" fill="var(--kit-green-light)" />
+                <text x="110" y="68" fill="var(--kit-green-light)" font-size="10" font-family="monospace">Analog In</text>
+
+                <!-- LDR -->
+                <circle cx="80" cy="98" r="14" fill="rgba(245,158,11,0.15)" stroke="var(--accent-gold)" stroke-width="2" />
+                <path d="M 74 98 Q 80 92 86 98" fill="none" stroke="var(--accent-gold)" stroke-width="1.5" />
+                <line x1="52" y1="84" x2="66" y2="94" stroke="var(--accent-gold)" stroke-width="1.5" stroke-dasharray="2,2" />
+                <line x1="56" y1="78" x2="70" y2="88" stroke="var(--accent-gold)" stroke-width="1.5" stroke-dasharray="2,2" />
+                <text x="102" y="102" fill="var(--accent-gold)" font-size="10" font-family="monospace">LDR</text>
+
+                <!-- GND -->
+                <line x1="80" y1="112" x2="80" y2="120" stroke="#fff" stroke-width="2" />
+                <line x1="60" y1="120" x2="100" y2="120" stroke="#64748b" stroke-width="3" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Middle Arrow -->
+          <div class="thread-middle-arrow">
+            <div class="arrow-track"></div>
+            <i class="fa-solid fa-bolt" style="color:var(--accent-gold); font-size:1.6rem;"></i>
+          </div>
+
+          <!-- Right: Modul 4 Solar Tracker Canvas -->
+          <div class="thread-side-card">
+            <div class="thread-card-title-row">
+              <h3>Modul 4: Automatische Solarzelle</h3>
+              <span class="thread-card-badge" style="background:rgba(245,158,11,0.2); color:var(--accent-gold); border:1px solid var(--accent-gold);">System</span>
+            </div>
+            <div class="thread-solar-wrap">
+              <canvas id="solar-tracker-canvas" width="420" height="220"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ====================================================================
+           SZENE 5: ZSL UNTERRICHTSEINHEITEN (Mit User-Screenshot zsl.png)
+           ==================================================================== -->
+      <section class="scene" id="scene-5" data-title="5. ZSL Unterrichtseinheiten" data-script="Die Themen wurden gezielt nach den tatsächlich im Unterricht geforderten Fähigkeiten ausgewählt und stützen sich direkt auf die vom ZSL erstellten Unterrichtseinheiten.">
+        
+        <h1 class="scene-title-simple" style="margin-bottom: 20px;">
+          <span class="highlight-green">ZSL</span> Unterrichtseinheiten
+        </h1>
+
+        <div class="zsl-hero-container">
+          <!-- Screenshot zsl.png -->
+          <div class="zsl-screenshot-card">
+            <img src="Media/promobilder/zsl.png" alt="ZSL Unterrichtseinheit">
+          </div>
+
+          <!-- 3 Simple Bullet Points -->
+          <div class="zsl-keypoints-box">
+            <div class="zsl-keypoint-item">
+              <div class="zsl-kp-icon"><i class="fa-solid fa-landmark"></i></div>
+              <div class="zsl-kp-text">
+                <h4>Offizieller Bildungsplan BW</h4>
+              </div>
+            </div>
+
+            <div class="zsl-keypoint-item">
+              <div class="zsl-kp-icon"><i class="fa-solid fa-bullseye"></i></div>
+              <div class="zsl-kp-text">
+                <h4>Geforderte Kernkompetenzen</h4>
+              </div>
+            </div>
+
+            <div class="zsl-keypoint-item">
+              <div class="zsl-kp-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+              <div class="zsl-kp-text">
+                <h4>Echte Schulpraxis</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ====================================================================
+           SZENE 6: DER TESTDURCHLAUF (2 Module im Fokus)
+           ==================================================================== -->
+      <section class="scene" id="scene-6" data-title="6. Testdurchlauf" data-script="Unser Plan ist es, 2 von den Lernmodulen zu testen und Feedback einzusammeln um diese zu verbessern und einfach zu schauen ob sie gut ankommen.">
+        
+        <h1 class="scene-title-simple" style="margin-bottom: 16px;">
+          Der <span class="highlight-green">Testdurchlauf</span>
+        </h1>
+
+        <div class="test-duo-container">
+          <!-- Modul 1 Card -->
+          <div class="test-duo-card">
+            <div class="test-duo-img-wrap">
+              <img src="Media/promobilder/Modul1.png" alt="Modul 1">
+            </div>
+            <div class="test-duo-title-wrap">
+              <h3>Modul 1: Fotometer</h3>
+              <span class="test-duo-tag">Test-Modul</span>
+            </div>
+          </div>
+
+          <!-- Modul 2 Card -->
+          <div class="test-duo-card">
+            <div class="test-duo-img-wrap">
+              <img src="Media/promobilder/modul2.png" alt="Modul 2">
+            </div>
+            <div class="test-duo-title-wrap">
+              <h3>Modul 2: Wetterstation</h3>
+              <span class="test-duo-tag">Test-Modul</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="feedback-callout-pill">
+          <i class="fa-solid fa-comments"></i>
+          <span>Ausprobieren &amp; Feedback geben</span>
+        </div>
+
+      </section>
+
+      <!-- ====================================================================
+           SZENE 7: 2 STUNDEN TIMELINE & PIZZA
+           ==================================================================== -->
+      <section class="scene" id="scene-7" data-title="7. Ablauf & Pizza" data-script="Innerhalb von 2 Stunden kann man sich die beiden Module entspannt anschauen und die vorbereiteten Materialien ausprobieren. Das Feedback kann dann im Gespräch mit uns oder schriftlich ausgetauscht werden. Für Verpflegung ist gesorgt!">
+        
+        <h1 class="scene-title-simple" style="margin-bottom: 20px;">
+          In <span class="highlight-green">2 Stunden</span> entspannt testen
+        </h1>
+
+        <div class="session-minimal-container">
+          <div class="session-steps-row">
+            <div class="session-step-box">
+              <div class="step-time-pill">15 Min</div>
+              <div class="step-emoji">☕</div>
+              <div class="step-name">Ankommen</div>
+            </div>
+
+            <div class="session-step-box">
+              <div class="step-time-pill">60 Min</div>
+              <div class="step-emoji">💻</div>
+              <div class="step-name">Modul testen</div>
+            </div>
+
+            <div class="session-step-box">
+              <div class="step-time-pill">30 Min</div>
+              <div class="step-emoji">🛠️</div>
+              <div class="step-name">Hardware</div>
+            </div>
+
+            <div class="session-step-box">
+              <div class="step-time-pill">15 Min</div>
+              <div class="step-emoji">💬</div>
+              <div class="step-name">Feedback</div>
+            </div>
+          </div>
+
+          <!-- Pizza & Catering Banner -->
+          <div class="pizza-highlight-banner">
+            <div class="pizza-banner-emoji">🍕</div>
+            <div class="pizza-banner-text">
+              Für <span>Verpflegung</span> ist gesorgt! ☕🥤
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ====================================================================
+           SZENE 8: CALL TO ACTION (Super Bold & Minimal)
+           ==================================================================== -->
+      <section class="scene" id="scene-8" data-title="8. Mach mit!" data-script="Für Verpflegung ist gesorgt und wir freuen uns über jeden der kommt und mit uns in den Austausch kommt!">
+        
+        <div class="cta-minimal-box">
+          <h1 class="scene-title-simple" style="margin-bottom:0;">
+            Sei dabei &amp; <span class="highlight-green">mach mit!</span>
+          </h1>
+
+          <div class="cta-badges-row">
+            <div class="cta-badge-item">
+              <i class="fa-solid fa-clock"></i>
+              <strong>Dauer: Nur 2 Stunden</strong>
+            </div>
+            <div class="cta-badge-item">
+              <i class="fa-solid fa-pizza-slice"></i>
+              <strong>Snacks &amp; Drinks inklusive</strong>
+            </div>
+            <div class="cta-badge-item">
+              <i class="fa-solid fa-microchip"></i>
+              <strong>Vorbereitete Hardware</strong>
+            </div>
+          </div>
+
+          <a href="#" class="cta-big-btn">
+            <i class="fa-solid fa-comments"></i> Wir freuen uns auf euch!
+          </a>
+        </div>
+
+      </section>
+
+      <!-- Keyable Lower Third (Taste L) -->
+      <div id="lower-third">
+        <img src="Media/Images/NWTLOGO.png" alt="NwT Logo" class="lt-avatar">
+        <div class="lt-text">
+          <h3>John van Dijk</h3>
+          <p>NwT-Redaktion · ZML (KIT)</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Unhide Trigger for Clean Recording Mode -->
+  <div id="clean-mode-revealer"></div>
+
+  <!-- Floating Director Control Dock -->
+  <div id="director-dock">
+    <select class="dock-select" id="scene-select" aria-label="Szene">
+      <option value="1">1. Intro</option>
+      <option value="2">2. Brücke</option>
+      <option value="3">3. 4 Module</option>
+      <option value="4">4. LDR ➔ Solar</option>
+      <option value="5">5. ZSL Einheiten</option>
+      <option value="6">6. Testdurchlauf</option>
+      <option value="7">7. 2h &amp; Pizza</option>
+      <option value="8">8. Mach mit!</option>
+    </select>
+
+    <button class="dock-btn" id="btn-prev" title="Zurück (Pfeil links)">
+      <i class="fa-solid fa-backward-step"></i>
+    </button>
+    <button class="dock-btn" id="btn-next" title="Vor (Pfeil rechts)">
+      <i class="fa-solid fa-forward-step"></i>
+    </button>
+
+    <div class="dock-divider"></div>
+
+    <button class="dock-btn" id="btn-autoplay" title="Autoplay (Leertaste)">
+      <i class="fa-solid fa-play"></i> <span id="autoplay-label">Autoplay</span>
+    </button>
+
+    <button class="dock-btn" id="btn-toggle-lower-third" title="Bauchbinde (L)">
+      <i class="fa-solid fa-id-card"></i> Name
+    </button>
+
+    <div class="dock-divider"></div>
+
+    <button class="dock-btn" id="btn-theme-cycle" title="Hintergrund Dark / Light / Green (B)">
+      <i class="fa-solid fa-palette"></i> <span id="theme-label">Dark</span>
+    </button>
+
+    <button class="dock-btn" id="btn-clean-mode" title="Clean Recording Mode (R)" style="background:rgba(239,68,68,0.2); border-color:#ef4444; color:#fca5a5;">
+      <i class="fa-solid fa-record-vinyl"></i> Rec [R]
+    </button>
+
+    <button class="dock-btn" id="btn-prompter" title="Skript (T)">
+      <i class="fa-solid fa-scroll"></i> Skript
+    </button>
+
+    <button class="dock-btn" id="btn-fullscreen" title="Vollbild (F)">
+      <i class="fa-solid fa-expand"></i>
+    </button>
+  </div>
+
+  <!-- Teleprompter Drawer -->
+  <div id="teleprompter-drawer">
+    <div class="prompter-header">
+      <span><i class="fa-solid fa-microphone"></i> Skript für Szene <span id="prompter-scene-num">1</span></span>
+      <span style="cursor:pointer;" id="prompter-close"><i class="fa-solid fa-xmark"></i> Schließen [T]</span>
+    </div>
+    <div class="prompter-text" id="prompter-text-body">
+      Hallöchen liebe NwT Studis...
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="hotkey-toast">Clean Recording Mode aktiv (Taste R zum Beenden)</div>
+
+  <script>
+    (function() {
+      const scenes = Array.from(document.querySelectorAll('.scene'));
+      const sceneSelect = document.getElementById('scene-select');
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+      const btnAutoplay = document.getElementById('btn-autoplay');
+      const autoplayLabel = document.getElementById('autoplay-label');
+      const btnCleanMode = document.getElementById('btn-clean-mode');
+      const btnThemeCycle = document.getElementById('btn-theme-cycle');
+      const themeLabel = document.getElementById('theme-label');
+      const btnToggleLowerThird = document.getElementById('btn-toggle-lower-third');
+      const lowerThird = document.getElementById('lower-third');
+      const btnPrompter = document.getElementById('btn-prompter');
+      const teleprompterDrawer = document.getElementById('teleprompter-drawer');
+      const prompterClose = document.getElementById('prompter-close');
+      const prompterSceneNum = document.getElementById('prompter-scene-num');
+      const prompterTextBody = document.getElementById('prompter-text-body');
+      const btnFullscreen = document.getElementById('btn-fullscreen');
+      const hotkeyToast = document.getElementById('hotkey-toast');
+
+      let currentSceneIndex = 0;
+      let autoplayTimer = null;
+      let isAutoplaying = false;
+      const sceneDurations = [7000, 9000, 10000, 12000, 10000, 9000, 10000, 9000];
+
+      const themes = ['theme-dark', 'theme-light', 'theme-green', 'theme-blue'];
+      const themeNames = ['Dark', 'Light', 'Green', 'Blue'];
+      let currentThemeIdx = 0;
+
+      function showToast(msg) {
+        hotkeyToast.textContent = msg;
+        hotkeyToast.classList.add('show');
+        setTimeout(() => hotkeyToast.classList.remove('show'), 2400);
+      }
+
+      function goToScene(index) {
+        if (index < 0) index = 0;
+        if (index >= scenes.length) index = scenes.length - 1;
+
+        scenes.forEach((sc, idx) => {
+          sc.classList.remove('active', 'exit-left', 'exit-right');
+          if (idx < index) sc.classList.add('exit-left');
+          else if (idx > index) sc.classList.add('exit-right');
+        });
+
+        currentSceneIndex = index;
+        const targetScene = scenes[currentSceneIndex];
+        targetScene.classList.add('active');
+
+        sceneSelect.value = (currentSceneIndex + 1).toString();
+        prompterSceneNum.textContent = (currentSceneIndex + 1);
+        prompterTextBody.innerHTML = targetScene.dataset.script || '';
+
+        if (currentSceneIndex === 3) {
+          initSolarCanvas();
+        }
+      }
+
+      btnPrev.addEventListener('click', () => {
+        stopAutoplay();
+        goToScene(currentSceneIndex - 1);
+      });
+
+      btnNext.addEventListener('click', () => {
+        stopAutoplay();
+        goToScene(currentSceneIndex + 1);
+      });
+
+      sceneSelect.addEventListener('change', (e) => {
+        stopAutoplay();
+        goToScene(parseInt(e.target.value, 10) - 1);
+      });
+
+      function startAutoplay() {
+        isAutoplaying = true;
+        autoplayLabel.textContent = 'Pause';
+        btnAutoplay.classList.add('active');
+        btnAutoplay.querySelector('i').className = 'fa-solid fa-pause';
+        showToast('Autoplay gestartet');
+
+        function runStep() {
+          const duration = sceneDurations[currentSceneIndex] || 8000;
+          autoplayTimer = setTimeout(() => {
+            if (!isAutoplaying) return;
+            if (currentSceneIndex < scenes.length - 1) {
+              goToScene(currentSceneIndex + 1);
+              runStep();
+            } else {
+              stopAutoplay();
+              showToast('Ende erreicht');
+            }
+          }, duration);
+        }
+        runStep();
+      }
+
+      function stopAutoplay() {
+        isAutoplaying = false;
+        clearTimeout(autoplayTimer);
+        autoplayLabel.textContent = 'Autoplay';
+        btnAutoplay.classList.remove('active');
+        btnAutoplay.querySelector('i').className = 'fa-solid fa-play';
+      }
+
+      btnAutoplay.addEventListener('click', () => {
+        if (isAutoplaying) stopAutoplay();
+        else startAutoplay();
+      });
+
+      function toggleCleanMode() {
+        const isClean = document.body.classList.toggle('clean-record-mode');
+        showToast(isClean ? 'Aufnahme-Modus: UI ausgeblendet (Taste R)' : 'UI wieder eingeblendet');
+      }
+      btnCleanMode.addEventListener('click', toggleCleanMode);
+
+      function cycleTheme() {
+        document.body.classList.remove(themes[currentThemeIdx]);
+        currentThemeIdx = (currentThemeIdx + 1) % themes.length;
+        document.body.classList.add(themes[currentThemeIdx]);
+        themeLabel.textContent = themeNames[currentThemeIdx];
+        showToast(`Hintergrund: ${themeNames[currentThemeIdx]}`);
+      }
+      btnThemeCycle.addEventListener('click', cycleTheme);
+
+      function toggleLowerThird() {
+        const isVis = lowerThird.classList.toggle('visible');
+        btnToggleLowerThird.classList.toggle('active', isVis);
+      }
+      btnToggleLowerThird.addEventListener('click', toggleLowerThird);
+
+      function togglePrompter() {
+        teleprompterDrawer.classList.toggle('open');
+      }
+      btnPrompter.addEventListener('click', togglePrompter);
+      prompterClose.addEventListener('click', togglePrompter);
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+      btnFullscreen.addEventListener('click', toggleFullscreen);
+
+      window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        switch (e.key) {
+          case 'ArrowRight':
+          case ' ':
+            e.preventDefault();
+            stopAutoplay();
+            goToScene(currentSceneIndex + 1);
+            break;
+          case 'ArrowLeft':
+            e.preventDefault();
+            stopAutoplay();
+            goToScene(currentSceneIndex - 1);
+            break;
+          case 'r': case 'R': toggleCleanMode(); break;
+          case 'b': case 'B': cycleTheme(); break;
+          case 'l': case 'L': toggleLowerThird(); break;
+          case 't': case 'T': togglePrompter(); break;
+          case 'f': case 'F': toggleFullscreen(); break;
+          case '1': case '2': case '3': case '4':
+          case '5': case '6': case '7': case '8':
+            stopAutoplay();
+            goToScene(parseInt(e.key, 10) - 1);
+            break;
+        }
+      });
+
+      // Solar Tracker Canvas Simulation
+      let solarCanvasInited = false;
+      function initSolarCanvas() {
+        if (solarCanvasInited) return;
+        solarCanvasInited = true;
+
+        const sCanvas = document.getElementById('solar-tracker-canvas');
+        if (!sCanvas) return;
+        const sCtx = sCanvas.getContext('2d');
+        const W = sCanvas.width;
+        const H = sCanvas.height;
+
+        let sunAngle = 0;
+        let panelAngle = 0;
+
+        function renderTracker() {
+          sCtx.clearRect(0, 0, W, H);
+
+          sunAngle += 0.02;
+          const arcR = 120;
+          const sunX = W / 2 + Math.cos(sunAngle) * arcR;
+          const sunY = H - 35 - Math.sin(sunAngle) * 80;
+
+          sCtx.save();
+          sCtx.fillStyle = '#fbbf24';
+          sCtx.shadowColor = '#fbbf24';
+          sCtx.shadowBlur = 20;
+          sCtx.beginPath();
+          sCtx.arc(sunX, Math.max(sunY, 25), 14, 0, Math.PI * 2);
+          sCtx.fill();
+          sCtx.restore();
+
+          const baseX = W / 2;
+          const baseY = H - 35;
+          const targetAngle = Math.atan2(Math.max(sunY, 25) - baseY, sunX - baseX) + Math.PI / 2;
+
+          panelAngle += (targetAngle - panelAngle) * 0.06;
+
+          // Stand
+          sCtx.fillStyle = '#334155';
+          sCtx.beginPath();
+          sCtx.moveTo(baseX - 30, baseY + 25);
+          sCtx.lineTo(baseX + 30, baseY + 25);
+          sCtx.lineTo(baseX + 10, baseY);
+          sCtx.lineTo(baseX - 10, baseY);
+          sCtx.closePath();
+          sCtx.fill();
+
+          // Panel & LDRs
+          sCtx.save();
+          sCtx.translate(baseX, baseY);
+          sCtx.rotate(panelAngle);
+
+          sCtx.fillStyle = '#64748b';
+          sCtx.fillRect(-5, -18, 10, 18);
+
+          sCtx.fillStyle = '#1e3a8a';
+          sCtx.strokeStyle = '#38bdf8';
+          sCtx.lineWidth = 2.5;
+          sCtx.fillRect(-65, -30, 130, 12);
+          sCtx.strokeRect(-65, -30, 130, 12);
+
+          // Divider Fin
+          sCtx.fillStyle = '#f87171';
+          sCtx.fillRect(-2, -45, 4, 15);
+
+          // Left LDR
+          sCtx.fillStyle = '#00c9ad';
+          sCtx.beginPath();
+          sCtx.arc(-30, -34, 5, 0, Math.PI * 2);
+          sCtx.fill();
+
+          // Right LDR
+          sCtx.beginPath();
+          sCtx.arc(30, -34, 5, 0, Math.PI * 2);
+          sCtx.fill();
+
+          sCtx.restore();
+
+          requestAnimationFrame(renderTracker);
+        }
+        renderTracker();
+      }
+
+      goToScene(0);
+    })();
+  </script>
+</body>
+</html>

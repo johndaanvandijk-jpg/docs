@@ -1,0 +1,193 @@
+% ─────────────────────────────────────────────────────────────────────────────
+%  Begründung des Evaluationsfragebogens – NwT-Lernmodule
+% ─────────────────────────────────────────────────────────────────────────────
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage[margin=2.0cm, top=1.8cm, bottom=2.0cm]{geometry}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\definecolor{primary}{RGB}{28, 50, 84}
+\definecolor{accent}{RGB}{30, 122, 98}
+\definecolor{lightgray}{RGB}{244, 247, 251}
+\definecolor{quotegray}{RGB}{90, 105, 120}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  urlcolor=accent,
+  pdfborder={0 0 0}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\newcommand{\sectionheader}[1]{%
+  \vspace{6pt}
+  {\large \bfseries \color{primary} #1}\\[-4pt]
+  {\color{accent}\rule{\linewidth}{1.5pt}}\vspace{2pt}
+}
+
+\newcommand{\quotebox}[2]{%
+  \begin{tcolorbox}[
+    colback=lightgray,
+    colframe=accent,
+    arc=1.5mm,
+    boxrule=0pt,
+    leftrule=3pt,
+    top=5pt, bottom=5pt, left=8pt, right=8pt
+  ]
+  {\small \textbf{\color{primary} #1}\\[2pt]
+  #2}
+  \end{tcolorbox}
+}
+
+\begin{document}
+
+% ── TITELKOPF ─────────────────────────────────────────────────────────────────
+{\LARGE \bfseries \color{primary} Begründung des Evaluationsfragebogens}\\[2pt]
+{\normalsize \color{quotegray} Aufbau, theoretische Konzepte und Literaturbelege der Teile A bis G (Fotometer \& Wetterstation)}\\[4pt]
+\rule{\linewidth}{0.6pt}
+
+% ── 1. AUFBAU & ÜBERSICHT ─────────────────────────────────────────────────────
+\sectionheader{1. Aufbau des Fragebogens \& theoretische Zuordnung}
+
+Der Fragebogen gliedert sich in sieben Bereiche (\textbf{Teil A bis G}) und kombiniert geschlossene fünfstufige Likert-Skalen mit offenen Freitextfragen. Während die Skalen eine direkte Einschätzung von Verständlichkeit, digitalen Hilfsmitteln, Hardware-Aufbau und Lernertrag ermöglichen, erfassen die offenen Fragen konkrete Überarbeitungshinweise für die Weiterentwicklung der Module.
+
+\vspace{4pt}
+\begin{tabularx}{\linewidth}{@{}l X X l@{}}
+\toprule
+\textbf{Abschnitt} & \textbf{Inhalt im Fragebogen} & \textbf{Zugrundeliegendes Konzept} & \textbf{Literatur} \\
+\midrule
+\textbf{Teil A} \newline {\small A1–A2} & Modulwahl \& Selbsteinschätzung des Vorwissens (5 Teilbereiche) & Bereichsexpertise, \textit{Expertise Reversal Effect}, Fähigkeitsselbstkonzept & Kalyuga (2007); \newline Wigfield \& Eccles (2000) \\
+\addlinespace[4pt]
+\textbf{Teil B} \newline {\small B1–B8} & Lernziele, Textverständlichkeit, Schwierigkeitsgrad, Konzeptverständnis & \textit{Intrinsic \& Extraneous Cognitive Load}, logische Gestaltung (\textit{Consistency}) & Klepsch et al. (2017); \newline Sweller et al. (2019); \newline Nieveen \& Folmer (2013) \\
+\addlinespace[4pt]
+\textbf{Teil C} \newline {\small C1–C3} & Bewertung der 9 interaktiven und visuellen Modulelemente & Multiple Repräsentationen (DeFT), \textit{ICAP-Framework}, \textit{Germane Load} & Ainsworth (2006); \newline Chi \& Wylie (2014) \\
+\addlinespace[4pt]
+\textbf{Teil D} \newline {\small D1–D5} & Breadboard-Aufbau, Code-Upload, Fehlersuche, Bearbeitungszeit & Praktikabilität (\textit{Actual Practicality}), \textit{Extraneous Load} durch Technik-Hürden & Nieveen \& Folmer (2013); \newline Klepsch et al. (2017) \\
+\addlinespace[4pt]
+\textbf{Teil E} \newline {\small E1–E6} & Subjektiver Lernzuwachs, Interesse, Relevanz für das Lehramt, Erklärfähigkeit & Intrinsische Motivation (KIM), Nützlichkeitswert (\textit{Utility Value}), TPACK & Wilde et al. (2009); \newline Wigfield \& Eccles (2000); \newline Mishra \& Koehler (2006) \\
+\addlinespace[4pt]
+\textbf{Teil F} \newline {\small F1–F3} & Übersichtlichkeit des Layouts, Browser-/Gerätekompatibilität & \textit{Interface Practicality}, Vermeidung von \textit{Extraneous Load} & Klepsch et al. (2017); \newline Nieveen \& Folmer (2013) \\
+\addlinespace[4pt]
+\textbf{Teil G} \newline {\small G1–G5} & Gesamturteil, Weiterempfehlung, offene Stärken-/Schwächenanalyse & Formative Evaluation, Weiterempfehlung als Motivationsindikator & Nieveen \& Folmer (2013); \newline Wilde et al. (2009) \\
+\bottomrule
+\end{tabularx}
+
+% ── 2. TEIL A–G ───────────────────────────────────────────────────────────────
+\sectionheader{2. Begründung der einzelnen Fragebogenteile}
+
+\subsection*{\color{primary} Teil A – Allgemeines \& Vorwissen (Items A1–A2)}
+\textbf{Fragebogen-Elemente:} Auswahl des bearbeiteten Moduls (\textbf{A1}) und vierstufige Selbsteinschätzung des Vorwissens in fünf Bereichen (\textbf{A2}: Elektronik, Microcontroller, Sensoren, WLAN/IoT, Datenauswertung).
+
+\textbf{Begründung:} Das Vorwissen bestimmt, wie stark Lernende auf kleinschrittige Anleitungen angewiesen sind. Nach dem \textbf{Expertise-Reversal-Effekt} (Kalyuga, 2007) schützen detaillierte Hilfestellungen Anfänger vor Überforderung, können bei Fortgeschrittenen jedoch überflüssig wirken. Zudem erfasst die Selbsteinschätzung das bereichsspezifische \textbf{Fähigkeitsselbstkonzept} (\textit{Ability Beliefs}; Wigfield \& Eccles, 2000). Über A2 lässt sich prüfen, ob der Schwierigkeitsgrad (B4) und die Hilfsmittel (C1) je nach Vorwissen unterschiedlich bewertet werden.
+
+\quotebox{Belege aus den Quellen}{
+$\bullet$ \textbf{Kalyuga (2007), S.~509:} \textit{„The reversal in the relative effectiveness of instructional methods as levels of learner knowledge in a domain change has been referred as an expertise reversal effect.“} \\
+\textit{(Paraphrase: Die relative Wirksamkeit von Instruktionsmethoden kehrt sich um, wenn sich das Wissensniveau der Lernenden in einem Bereich verändert.)}\\[3pt]
+$\bullet$ \textbf{Wigfield \& Eccles (2000), S.~70:} \textit{„Ability beliefs are defined as the individual’s perception of his or her current competence at a given activity.“} \\
+\textit{(Paraphrase: Fähigkeitsüberzeugungen beschreiben die subjektive Wahrnehmung der eigenen aktuellen Kompetenz in einem bestimmten Bereich.)}
+}
+
+\subsection*{\color{primary} Teil B – Verständlichkeit und Inhalt (Items B1–B8)}
+\textbf{Fragebogen-Elemente:} Erkennbarkeit der Lernziele (\textbf{B1}), Textverständlichkeit (\textbf{B2}), Erklärung der Fachbegriffe (\textbf{B3}), Schwierigkeitsgrad von \textit{viel zu leicht} bis \textit{viel zu schwer} (\textbf{B4}), logische Schrittfolge (\textbf{B5}), Verständnis der Kernkonzepte Kalibrierung bzw.\ IoT-Datenfluss (\textbf{B6, B7}) sowie schwierigster Modulteil als Freitext (\textbf{B8}).
+
+\textbf{Begründung:} Die Items trennen zwischen den Belastungsarten der \textbf{Cognitive Load Theory} (Klepsch et al., 2017; Sweller et al., 2019):
+\begin{itemize}[leftmargin=1.5em, itemsep=1pt, topsep=1pt]
+  \item \textbf{Extraneous Load \& logischer Aufbau (B1, B2, B3, B5):} Unklare Texte, unbekannte Fachbegriffe oder ein fehlender roter Faden erzeugen unnötige kognitive Belastung (\textit{Extraneous Load}). Gleichzeitig sichern klare Ziele und eine nachvollziehbare Schrittfolge die logische Gestaltung (\textit{Consistency}; Nieveen \& Folmer, 2013).
+  \item \textbf{Intrinsic Load (B4, B8):} Der Schwierigkeitsgrad ergibt sich aus der Komplexität des Themas im Verhältnis zum Vorwissen. B4 prüft diese Passung quantitativ, B8 benennt konkrete Verständnisprobleme.
+  \item \textbf{Konzeptverständnis (B6, B7):} Prüft, ob das jeweilige fachliche Kernprinzip (Kalibrierkurve in Modul 1, EVA-Prinzip/IoT-Kette in Modul 2) verstanden wurde.
+\end{itemize}
+
+\quotebox{Belege aus den Quellen}{
+$\bullet$ \textbf{Klepsch, Schmitz \& Seufert (2017), S.~2:} \textit{„While intrinsic load arises from the number of interrelated elements of the learning task, extraneous load is caused by the additional requirements that are produced by suboptimal instructional design and are not directly linked to the task.“}\\[3pt]
+$\bullet$ \textbf{Sweller, van Merriënboer \& Paas (2019), S.~262:} \textit{„Cognitive load is increased when unnecessary demands are imposed on the cognitive system. If cognitive load becomes too high, it hampers learning and transfer.“}\\[3pt]
+$\bullet$ \textbf{Nieveen \& Folmer (2013), in Plomp \& Nieveen (Part A), S.~153 (Tab.~2):} \textit{„Consistency (also referred to as construct validity): The intervention is ‚logically‘ designed.“}
+}
+
+\subsection*{\color{primary} Teil C – Digitale Elemente \& Interaktivität (Items C1–C3)}
+\textbf{Fragebogen-Elemente:} Bewertung der neun digitalen Elemente (\textbf{C1}: Simulationen/Schieberegler, Code-Beispiele mit Kopier-Button, Tooltips, Flip-Karten, Diagramme/Kennlinien, Schaltplan/Fritzing, Drag-and-Drop-Übung, Quiz, Fortschrittsbalken) sowie Freitextfragen zum hilfreichsten (\textbf{C2}) und zu verwirrenden Elementen (\textbf{C3}).
+
+\textbf{Begründung:}
+\begin{itemize}[leftmargin=1.5em, itemsep=1pt, topsep=1pt]
+  \item \textbf{Multiple Repräsentationen (Ainsworth, 2006):} \textit{Text, Diagramme/Kennlinien, Fritzing-Aufbau und Code} erfüllen im DeFT-Modell drei Funktionen: Sie ergänzen Informationen (\textit{complement}), die anschauliche Fritzing-Grafik beugt Fehlinterpretationen bei der Verkabelung vor (\textit{constrain}) und das Zusammenspiel fördert ein tieferes Gesamtverständnis (\textit{construct}).
+  \item \textbf{ICAP-Framework (Chi \& Wylie, 2014):} \textit{Schieberegler-Simulationen, Drag-and-Drop, Flip-Karten und Quizfragen} holen die Lernenden aus dem rein passiven Lesen in einen aktiven bzw.\ konstruktiven Arbeitsmodus, was zu höherem Lernertrag führt und die lernförderliche Verarbeitung (\textit{Germane Load}) unterstützt.
+  \item \textbf{Entlastung bei der Bedienung (Klepsch et al., 2017):} \textit{Tooltips, Kopier-Buttons für Code und Fortschrittsbalken} reduzieren Suchaufwand und Tippfehler. Item \textbf{C3} kontrolliert, ob einzelne Elemente eher abgelenkt oder verwirrt haben (\textit{Extraneous Load}).
+\end{itemize}
+
+\quotebox{Belege aus den Quellen}{
+$\bullet$ \textbf{Ainsworth (2006), S.~188:} \textit{„Ainsworth (1999) suggest there are three key functions of MERs: to complement, constrain and construct...“}\\[3pt]
+$\bullet$ \textbf{Chi \& Wylie (2014), S.~221 (Abb.~1 \& Tab.~1):} \textit{„The ICAP framework generates the hypothesis that predicts different levels of learning outcomes [...] Interactive > Constructive > Active > Passive.“}
+}
+
+\subsection*{\color{primary} Teil D – Praktische Durchführung (Items D1–D5)}
+\textbf{Fragebogen-Elemente:} Funktionieren des Hardware-Aufbaus (\textbf{D1}), Qualität der Bauanleitungen (\textbf{D2}), Gelingen des Code-Uploads (\textbf{D3}), fehlende Hilfen zur Fehlersuche (\textbf{D4}) und benötigte Bearbeitungszeit (\textbf{D5}).
+
+\textbf{Begründung:} Teil D überprüft die praktische Durchführbarkeit (\textbf{Actual Practicality}; Nieveen \& Folmer, 2013): Funktionieren Schaltungsaufbau und Code-Upload im vorgesehenen Zeitrahmen (D5)? Technische Probleme am Breadboard oder beim Microcontroller-Upload erzeugen hohe sachfremde Belastung (\textit{Extraneous Load}; Klepsch et al., 2017), die vom eigentlichen Lerninhalt ablenkt. Über D4 wird direkt abgefragt, welche konkreten Hilfestellungen bei der Fehlersuche ergänzt werden müssen.
+
+\quotebox{Belege aus den Quellen}{
+$\bullet$ \textbf{Nieveen \& Folmer (2013), in Plomp \& Nieveen (Part A), S.~153 (Tab.~2):} \textit{„Practicality – Expected: The intervention is expected to be usable in the settings for which it has been designed and developed. Actual: The intervention is usable in the settings for which it has been designed and developed.“}\\[3pt]
+$\bullet$ \textbf{Klepsch, Schmitz \& Seufert (2017), S.~6 (Tab.~1):} Paraphrase des Extraneous-Load-Items: \textit{„Die Darstellung/Gestaltung bei dieser Aufgabe war ungünstig/mühsam, um wirklich etwas zu lernen.“}
+}
+
+\subsection*{\color{primary} Teil E – Lernertrag \& Motivation (Items E1–E6)}
+\textbf{Fragebogen-Elemente:} Subjektiver Lernzuwachs (\textbf{E1}), Interesse am Thema (\textbf{E2}), Relevanz für den zukünftigen Lehrerberuf (\textbf{E3}), gewecktes Interesse für Elektronik/Programmierung/IoT (\textbf{E4}), Fähigkeit zur Erklärung der Grundprinzipien (\textbf{E5}) sowie wichtigste Erkenntnis (\textbf{E6}).
+
+\textbf{Begründung:}
+\begin{itemize}[leftmargin=1.5em, itemsep=1pt, topsep=1pt]
+  \item \textbf{Intrinsische Motivation \& Lernertrag (E1, E2, E4, E5):} Angelehnt an die \textbf{Kurzskala Intrinsische Motivation (KIM)} von Wilde et al. (2009) erfassen E2 und E4 das \textit{Interesse}, während E1 und E5 das \textit{Kompetenzerleben} sowie die \textit{Actual Effectiveness} (Nieveen \& Folmer, 2013) abbilden.
+  \item \textbf{Berufsrelevanz für das Lehramt (E3):} Im \textbf{Erwartungs-Wert-Modell} (Wigfield \& Eccles, 2000) beschreibt der \textit{Utility Value} (Nützlichkeitswert), wie stark eine Aufgabe für eigene zukünftige Ziele gebraucht wird. Für NwT-Lehramtsstudierende liegt dieser Nutzen im Aufbau praxisnaher technikdidaktischer Kompetenz im Sinne des \textbf{TPACK-Modells} (Mishra \& Koehler, 2006).
+\end{itemize}
+
+\quotebox{Belege aus den Quellen}{
+$\bullet$ \textbf{Wilde, Bätz, Kovaleva \& Urhahne (2009), S.~31–32:} \textit{„Die Kurzskala bildet die Faktoren Interesse/Vergnügen, wahrgenommene Kompetenz, wahrgenommene Wahlfreiheit und Druck/Anspannung mit je drei Items ab.“}\\[3pt]
+$\bullet$ \textbf{Wigfield \& Eccles (2000), S.~72:} \textit{„Utility value or usefulness refers to how a task fits into an individual’s future plans...“}\\[3pt]
+$\bullet$ \textbf{Mishra \& Koehler (2006), S.~1028:} \textit{„...developing of deeper understandings of the complex web of relationships between content, pedagogy, and technology and the contexts within which they function.“}\\[3pt]
+$\bullet$ \textbf{Nieveen \& Folmer (2013), in Plomp \& Nieveen (Part A), S.~153 (Tab.~2):} \textit{„Effectiveness – Actual: Using the intervention results in desired outcomes.“}
+}
+
+\subsection*{\color{primary} Teil F – Gestaltung \& Nutzererfahrung (Items F1–F3)}
+\textbf{Fragebogen-Elemente:} Übersichtlichkeit des Layouts (\textbf{F1}), technische Funktion auf dem Gerät/Browser (\textbf{F2}) und Verbesserungsvorschläge zur Benutzerführung (\textbf{F3}).
+
+\textbf{Begründung:} Ein unübersichtliches Layout oder Darstellungsfehler im Browser binden Aufmerksamkeit für die Navigation statt für den Inhalt (\textbf{Extraneous Cognitive Load}; Klepsch et al., 2017). Die Fragen prüfen die gestalterische und technische Gebrauchstauglichkeit der Benutzeroberfläche (\textit{Interface Practicality}; Nieveen \& Folmer, 2013).
+
+\quotebox{Belege aus den Quellen}{
+$\bullet$ \textbf{Klepsch, Schmitz \& Seufert (2017), S.~2:} \textit{„...extraneous load is caused by the additional requirements that are produced by suboptimal instructional design and are not directly linked to the task.“}\\[3pt]
+$\bullet$ \textbf{Nieveen \& Folmer (2013), in Plomp \& Nieveen (Part A), S.~158 (Tab.~2):} Überprüfung der Benutzeroberfläche (\textit{Interface}) zur Sicherung der Praktikabilität.
+}
+
+\subsection*{\color{primary} Teil G – Gesamtbewertung \& offene Rückmeldung (Items G1–G5)}
+\textbf{Fragebogen-Elemente:} Fünfstufige Gesamtbewertung (\textbf{G1}), Weiterempfehlung an Kommilitonen (\textbf{G2}) sowie offene Fragen zu Stärken (\textbf{G3}), Verbesserungsbedarf (\textbf{G4}) und weiteren Ideen (\textbf{G5}).
+
+\textbf{Begründung:} Die Weiterempfehlungsbereitschaft (G2) dient analog zur \textit{Free-Choice-Variable} (freiwillige Wiederholung/Empfehlung) als Außenkriterium für intrinsische Motivation und Zufriedenheit (Wilde et al., 2009). Die offenen Fragen G3–G5 liefern konkrete Ansatzpunkte zur Überarbeitung des Moduls im Sinne der \textbf{formativen Evaluation} (Nieveen \& Folmer, 2013).
+
+\quotebox{Belege aus den Quellen}{
+$\bullet$ \textbf{Nieveen \& Folmer (2013), in Plomp \& Nieveen (Part A), S.~155:} \textit{„The function of formative evaluation is ‚to improve‘. It focuses on uncovering the shortcomings of an object during its development process with the purpose of generating suggestions for improving it.“}\\[3pt]
+$\bullet$ \textbf{Wilde, Bätz, Kovaleva \& Urhahne (2009), S.~41:} \textit{„Die Frage nach der freiwilligen Wiederholung einer Tätigkeit gilt für gewöhnlich als zentraler Maßstab intrinsischer Motivation...“}
+}
+
+% ── 3. LITERATURVERZEICHNIS ───────────────────────────────────────────────────
+\sectionheader{3. Literaturverzeichnis}
+
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt, label={}]
+  \item \textbf{Ainsworth, S. (2006).} DeFT: A conceptual framework for considering learning with multiple representations. \textit{Learning and Instruction}, 16(3), 183–198. \url{https://doi.org/10.1016/j.learninstruc.2006.03.001}
+  \item \textbf{Chi, M. T. H., \& Wylie, R. (2014).} The ICAP framework: Linking cognitive engagement to active learning outcomes. \textit{Educational Psychologist}, 49(4), 219–243. \url{https://doi.org/10.1080/00461520.2014.965823}
+  \item \textbf{Kalyuga, S. (2007).} Expertise reversal effect and its implications for learner-tailored instruction. \textit{Educational Psychology Review}, 19(4), 509–539. \url{https://doi.org/10.1007/s10648-007-9054-3}
+  \item \textbf{Klepsch, M., Schmitz, F., \& Seufert, T. (2017).} Development and validation of two instruments measuring intrinsic, extraneous, and germane cognitive load. \textit{Frontiers in Psychology}, 8, 1997. \url{https://doi.org/10.3389/fpsyg.2017.01997}
+  \item \textbf{Mishra, P., \& Koehler, M. J. (2006).} Technological pedagogical content knowledge: A framework for teacher knowledge. \textit{Teachers College Record}, 108(6), 1017–1054. \url{https://doi.org/10.1111/j.1467-9620.2006.00684.x}
+  \item \textbf{Nieveen, N., \& Folmer, E. (2013).} Formative evaluation in educational design research. In T. Plomp \& N. Nieveen (Hrsg.), \textit{Educational Design Research – Part A: An Introduction} (S.~152–169). SLO.
+  \item \textbf{Sweller, J., van Merriënboer, J. J. G., \& Paas, F. (2019).} Cognitive architecture and instructional design: 20 years later. \textit{Educational Psychology Review}, 31(2), 261–292. \url{https://doi.org/10.1007/s10648-019-09465-5}
+  \item \textbf{Wigfield, A., \& Eccles, J. S. (2000).} Expectancy–value theory of achievement motivation. \textit{Contemporary Educational Psychology}, 25(1), 68–81. \url{https://doi.org/10.1006/ceps.1999.1015}
+  \item \textbf{Wilde, M., Bätz, K., Kovaleva, A., \& Urhahne, D. (2009).} Überprüfung einer Kurzskala intrinsischer Motivation (KIM). \textit{Zeitschrift für Didaktik der Naturwissenschaften}, 15, 31–45.
+\end{itemize}
+
+\end{document}
